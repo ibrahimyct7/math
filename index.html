@@ -3,107 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neural Hub | Cozy Forest</title>
+    <title>Neural Hub</title>
     
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-
     <style>
         :root {
-            /* Lighter, Warmer Forest Colors */
-            --bg-forest: #142616;
-            --panel-cozy: #1e3622;
-            --accent-mint: #c8e6c9;
+            --bg: #142616;
+            --panel: #1e3622;
             --cream: #f1f8e9;
-            --primary-green: #4caf50;
+            --mint: #c8e6c9;
+            --btn-dark: #0c1a0e;
             
-            /* Difficulty Colors */
-            --easy-color: #81c784;
-            --hard-color: #ffb74d;
-            --god-color: #e57373;
+            /* Portal Colors */
+            --c-math: #81c784;
+            --c-word: #64b5f6;
+            --c-color: #e57373;
+            --c-seq: #ffd54f;
             
-            --button-dark: #0c1a0e;
+            /* Diff Colors */
+            --easy: #a5d6a7;
+            --hard: #ffb74d;
+            --god: #ef5350;
         }
 
         body {
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-forest);
-            /* Soft Forest Pattern */
-            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 20px 20px;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; color: var(--cream);
-            overflow: hidden; -webkit-tap-highlight-color: transparent;
+            overflow: hidden; touch-action: manipulation;
         }
 
         #app {
-            background: var(--panel-cozy);
-            padding: 2.2rem 1.2rem;
+            background: var(--panel);
+            padding: 2rem 1rem;
             border-radius: 40px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             text-align: center;
-            width: 90%; max-width: 380px;
+            width: 92%; max-width: 380px;
             border: 1px solid rgba(255,255,255,0.1);
             position: relative;
-            transition: all 0.4s ease;
+            transition: transform 0.3s ease;
         }
-
-        /* Feedback Flashes */
-        .flash-right { background-color: #2e7d32 !important; transform: scale(1.02); }
-        .flash-wrong { background-color: #6a1b1b !important; }
 
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-        .shake { animation: shake 0.3s ease-in-out; }
-
-        .app-logo { width: 65px; height: 65px; border-radius: 20px; margin-bottom: 15px; border: 2px solid var(--primary-green); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-
-        #timer-container {
-            width: 100%; height: 8px; background: rgba(0,0,0,0.2); 
-            border-radius: 10px; margin-bottom: 20px; overflow: hidden; display: none;
-        }
-        #timer-bar { height: 100%; background: var(--primary-green); width: 100%; }
-
-        h1 { margin: 0; color: var(--accent-mint); font-size: 1.8rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        p { color: var(--accent-mint); opacity: 0.8; margin-bottom: 20px; font-size: 0.9rem; }
-
-        .v-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-
-        button {
-            padding: 18px; border: none; border-radius: 20px;
-            font-weight: 700; cursor: pointer; transition: 0.2s;
-            font-size: 1rem; width: 100%;
-            background: var(--button-dark); color: var(--accent-mint);
+        /* Portal Button Styling */
+        .portal-item {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; background: var(--btn-dark);
+            border-radius: 25px; padding: 10px 15px; margin-bottom: 12px;
             border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            box-sizing: border-box;
         }
 
-        button:active { transform: translateY(3px); box-shadow: none; }
+        .btn-main {
+            flex-grow: 1; padding: 15px; border: none; border-radius: 18px;
+            font-weight: 800; font-size: 1rem; cursor: pointer;
+            text-align: left; transition: 0.2s;
+        }
 
-        /* Level Specific Buttons */
-        .btn-easy { background: var(--easy-color) !important; color: #1b3320 !important; }
-        .btn-hard { background: var(--hard-color) !important; color: #3e2723 !important; }
-        .btn-god { background: var(--god-color) !important; color: #ffffff !important; }
+        /* Progress Circle */
+        .progress-box {
+            position: relative; width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            margin-left: 10px;
+        }
+        .progress-svg { transform: rotate(-90deg); width: 50px; height: 50px; }
+        .progress-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 4; }
+        .progress-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+        .progress-text { position: absolute; font-size: 0.65rem; font-weight: bold; color: var(--mint); }
+
+        /* Game UI */
+        #question-text { font-size: 3rem; margin: 15px 0; font-weight: 900; min-height: 120px; display: flex; align-items: center; justify-content: center; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        
+        button { cursor: pointer; font-family: inherit; }
+        .btn-choice {
+            padding: 16px; border: none; border-radius: 20px;
+            background: var(--btn-dark); color: var(--cream);
+            font-weight: 700; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.1);
+        }
 
         input[type="text"] {
-            width: 100%; padding: 20px; border-radius: 20px; border: 2px solid var(--primary-green);
-            background: var(--button-dark); color: var(--white); font-size: 1.6rem;
-            text-align: center; font-weight: bold; outline: none; margin-bottom: 12px;
+            width: 100%; max-width: 100%; box-sizing: border-box;
+            padding: 18px; border-radius: 20px; border: 2px solid var(--mint);
+            background: var(--btn-dark); color: white; font-size: 1.4rem;
+            text-align: center; font-weight: bold; outline: none; margin-bottom: 10px;
         }
 
-        .btn-portal { background: var(--primary-green); color: white; font-size: 1.1rem; }
-        .btn-secondary { background: transparent; color: var(--accent-mint); opacity: 0.6; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1); margin-top: 15px; box-shadow: none; }
+        /* Status colors */
+        .flash-correct { background-color: #2e7d32 !important; }
+        .flash-wrong { background-color: #8b0000 !important; }
+        .shake { animation: shake 0.4s ease; }
+        @keyframes shake { 0%, 100% {transform:translateX(0)} 25% {transform:translateX(-10px)} 75% {transform:translateX(10px)} }
 
-        #question-text { font-size: 3.5rem; margin: 10px 0; font-weight: 900; min-height: 130px; display: flex; align-items: center; justify-content: center; color: var(--cream); }
-        #feedback-area { font-size: 1.1rem; font-weight: bold; height: 35px; color: #ffd54f; margin-bottom: 5px; }
-        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--accent-mint); margin-bottom: 10px; font-weight: bold; }
+        #timer-container { width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 20px; overflow: hidden; display: none; }
+        #timer-bar { height: 100%; background: var(--mint); width: 100%; }
+
+        .btn-back { background: transparent; color: var(--mint); opacity: 0.6; border: 1px solid rgba(255,255,255,0.1); padding: 10px; margin-top: 15px; font-size: 0.8rem; border-radius: 12px; }
     </style>
 </head>
 <body>
@@ -112,231 +113,251 @@
     <div id="timer-container"><div id="timer-bar"></div></div>
 
     <div id="view-hub" class="view-section">
-        <img src="logo.png" class="app-logo" onerror="this.style.display='none'">
-        <h1>Neural Hub</h1>
-        <p>Your Brain's Cozy Gym</p>
-        <div class="v-list">
-            <button class="btn-portal" onclick="showPortal('math')">🔢 NUMBER LAB</button>
-            <button class="btn-portal" onclick="showPortal('word')">🔠 WORD GARDEN</button>
-            <button class="btn-portal" onclick="showPortal('logic')">🧩 PATTERN PATH</button>
+        <h1 style="color:var(--mint); margin-bottom:5px;">Neural Hub</h1>
+        <p style="opacity:0.6; margin-bottom:20px; font-size:0.9rem;">Work your brain daily.</p>
+        
+        <div class="v-list" id="portal-list">
+            <div class="portal-item">
+                <button class="btn-main" style="background:var(--c-math); color:#1b3320;" onclick="showPortal('math')">MATH</button>
+                <div class="progress-box" id="prog-math"></div>
+            </div>
+            <div class="portal-item">
+                <button class="btn-main" style="background:var(--c-word); color:#0d1b2a;" onclick="showPortal('word')">WORDS</button>
+                <div class="progress-box" id="prog-word"></div>
+            </div>
+            <div class="portal-item">
+                <button class="btn-main" style="background:var(--c-color); color:#2d0a0a;" onclick="showPortal('color')">COLOR CLASH</button>
+                <div class="progress-box" id="prog-color"></div>
+            </div>
+            <div class="portal-item">
+                <button class="btn-main" style="background:var(--c-seq); color:#2d240a;" onclick="showPortal('seq')">RECALL</button>
+                <div class="progress-box" id="prog-seq"></div>
+            </div>
         </div>
     </div>
 
-    <div id="view-portal-menu" class="view-section hidden">
-        <h1 id="portal-title">Exercise</h1>
-        <p>Which path will you take?</p>
-        <div id="op-list" class="v-list"></div>
-        <button class="btn-secondary" onclick="resetToHub()">← BACK TO HUB</button>
-    </div>
-
-    <div id="view-type" class="view-section hidden">
-        <h1>Select Pace</h1>
-        <p>Calm or Fast?</p>
-        <div class="v-list">
-            <button class="btn-easy" onclick="pickType('zen')">ZEN (No Timer)</button>
-            <button class="btn-hard" onclick="pickType('blitz')">BLITZ (Timed)</button>
-            <button class="btn-secondary" onclick="showPortal(currentPortal)">← BACK</button>
+    <div id="view-options" class="view-section hidden">
+        <h1 id="opt-title">Options</h1>
+        <div id="type-list" class="v-list" style="margin-top:20px;">
+            <button class="btn-choice" onclick="setOpt('type', 'zen')">ZEN (No Timer)</button>
+            <button class="btn-choice" style="background:#4e342e" onclick="setOpt('type', 'blitz')">BLITZ (Timed)</button>
         </div>
-    </div>
-
-    <div id="view-diff" class="view-section hidden">
-        <h1>Set Intensity</h1>
-        <div class="v-list">
-            <button class="btn-easy" onclick="startGame('easy')">SPROUT (Easy)</button>
-            <button class="btn-hard" onclick="startGame('hard')">TIMBER (Hard)</button>
-            <button class="btn-god" onclick="startGame('god')">OVERGROWTH (God)</button>
-            <button class="btn-secondary" onclick="pickType(selectedType)">← BACK</button>
+        <div id="diff-list" class="v-list hidden" style="margin-top:20px;">
+            <button class="btn-choice" style="color:var(--easy)" onclick="startGame('easy')">EASY</button>
+            <button class="btn-choice" style="color:var(--hard)" onclick="startGame('hard')">HARD</button>
+            <button class="btn-choice" style="color:var(--god)" onclick="startGame('god')">GOD MODE</button>
         </div>
+        <button class="btn-back" onclick="resetToHub()">← BACK</button>
     </div>
 
     <div id="view-game" class="view-section hidden">
-        <div class="stat-row">
-            <span>Q: <span id="q-count">1</span>/10</span>
-            <span id="score-count">SCORE: 0</span>
-        </div>
         <div id="question-text">--</div>
-        <div id="feedback-area"></div>
-        
-        <div id="input-container" class="v-list">
+        <div id="input-area" class="v-list">
             <div id="choices-area" class="v-list"></div>
             <div id="text-area" class="hidden">
-                <input type="text" id="answer-input" placeholder="Type here..." autocomplete="off">
-                <button class="btn-portal" onclick="submitTextAnswer()">SUBMIT</button>
+                <input type="text" id="answer-input" placeholder="Type answer..." autocomplete="off">
+                <button class="btn-choice" style="background:var(--primary-green)" onclick="checkText()">SUBMIT</button>
             </div>
         </div>
-        <button class="btn-secondary" onclick="resetToHub()">QUIT GAME</button>
+        <button class="btn-back" onclick="resetToHub()">QUIT</button>
     </div>
 
     <div id="view-results" class="view-section hidden">
-        <h1>Great Work!</h1>
-        <p style="font-size: 4rem; margin: 15px 0;"><span id="final-score">0</span>/10</p>
-        <button class="btn-portal" onclick="resetToHub()">RETURN HOME</button>
+        <h1>Finished</h1>
+        <p style="font-size: 4rem; margin: 10px 0;"><span id="res-score">0</span>/10</p>
+        <button class="btn-choice" style="width:100%" onclick="resetToHub()">CONTINUE</button>
     </div>
 </div>
 
 <script>
-    let currentPortal = '', selectedOp = '', selectedType = '', selectedDiff = '';
-    let currentScore = 0, questionNumber = 0, correctAnswer = '', timerInterval, timeLeft, maxTime;
-
-    // SIMPLE, RECOGNIZABLE WORDS
-    const simpleWords = [
-        "APPLE", "HOUSE", "WATER", "GRASS", "BREAD", "CHAIR", "TABLE", "STORM", "HAPPY", "LIGHT", 
-        "PHONE", "WATCH", "CLOCK", "PAPER", "NIGHT", "BOOKS", "SMILE", "RIVER", "TRAIN", "PLANE",
-        "STREET", "FLOWER", "GARDEN", "SCHOOL", "FRIEND", "COFFEE", "MUSIC", "PIZZA", "SHIRT", "SHOES",
-        "DOLLAR", "OCEAN", "WINDOW", "DOOR", "FLOOR", "CLOUD", "BIRDY", "MOUSE", "HORSE", "CANDY",
-        "TRUCK", "SPOON", "PLATE", "JUICE", "EARTH", "WORLD", "HEART", "DANCE", "CLEAN", "SLEEP",
-        "GREEN", "WHITE", "BLACK", "SMALL", "LARGE", "CHILD", "PARTY", "MOVIE", "LUNCH", "SUGAR"
-    ];
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(f, t, d) {
-        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination); o.type = t; o.frequency.value = f;
-        g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
-        o.start(); o.stop(audioCtx.currentTime + d);
-    }
+    let curPortal = '', curType = '', curDiff = '';
+    let curScore = 0, qNum = 0, correctAns = '', timerInt;
+    
+    const colors = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "PINK", "WHITE"];
+    const hex = ["#ff5252", "#448aff", "#4caf50", "#ffeb3b", "#ff9800", "#e91e63", "#ffffff"];
+    const simpleWords = ["HOUSE", "APPLE", "WATER", "BREAD", "SMILE", "CLOCK", "TRAIN", "CLOUD", "DOOR", "PAPER"];
 
     function resetToHub() {
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-hub').classList.remove('hidden');
         document.getElementById('app').className = '';
         document.getElementById('timer-container').style.display = 'none';
-        clearInterval(timerInterval);
+        clearInterval(timerInt);
+        drawProgress();
     }
 
     function showPortal(p) {
-        currentPortal = p;
+        curPortal = p;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-portal-menu').classList.remove('hidden');
-        const list = document.getElementById('op-list'); list.innerHTML = '';
-        const ops = p === 'math' ? ["Addition +", "Subtraction -", "Times ×", "Mixed ±×"] : p === 'word' ? ["Scramble", "Missing"] : ["Patterns"];
-        ops.forEach(o => {
-            const b = document.createElement('button'); b.innerText = o.toUpperCase();
-            b.onclick = () => { selectedOp = o; showType(); }; list.appendChild(b);
-        });
+        document.getElementById('view-options').classList.remove('hidden');
+        document.getElementById('type-list').classList.remove('hidden');
+        document.getElementById('diff-list').classList.add('hidden');
     }
 
-    function showType() {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-type').classList.remove('hidden');
-    }
-
-    function pickType(t) {
-        selectedType = t;
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-diff').classList.remove('hidden');
+    function setOpt(key, val) {
+        if(key === 'type') {
+            curType = val;
+            document.getElementById('type-list').classList.add('hidden');
+            document.getElementById('diff-list').classList.remove('hidden');
+        }
     }
 
     function startGame(d) {
-        selectedDiff = d; currentScore = 0; questionNumber = 1;
-        maxTime = d === 'god' ? 4 : d === 'hard' ? 8 : 15;
+        curDiff = d; curScore = 0; qNum = 1;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-game').classList.remove('hidden');
-        if(selectedType === 'blitz') document.getElementById('timer-container').style.display = 'block';
         nextQuestion();
     }
 
     function nextQuestion() {
-        if (questionNumber > 10) return showResults();
+        if(qNum > 10) return endRound();
         document.getElementById('app').className = '';
-        document.getElementById('feedback-area').innerText = '';
-        document.getElementById('q-count').innerText = questionNumber;
-        document.getElementById('score-count').innerText = `SCORE: ${currentScore}`;
-        document.getElementById('answer-input').value = '';
         document.getElementById('text-area').classList.add('hidden');
         document.getElementById('choices-area').classList.remove('hidden');
+        document.getElementById('choices-area').innerHTML = '';
+        
+        if(curPortal === 'math') genMath();
+        if(curPortal === 'word') genWord();
+        if(curPortal === 'color') genColor();
+        if(curPortal === 'seq') genSeq();
 
-        if (currentPortal === 'math') generateMath();
-        else if (currentPortal === 'word') generateWord();
-        else generateLogic();
-
-        if (selectedType === 'blitz') startTimer();
+        if(curType === 'blitz') startTimer();
     }
 
-    function generateMath() {
-        let range = selectedDiff === 'god' ? 500 : 100;
-        let op = selectedOp.toLowerCase(); if(op.includes('mixed')) op = ['add','sub','mul'][Math.floor(Math.random()*3)];
-        let n1, n2, sym;
-        if(op.includes('add')){ n1=rand(range); n2=rand(range); correctAnswer = n1+n2; sym='+'; }
-        else if(op.includes('sub')){ n1=rand(range)+10; n2=rand(n1); correctAnswer = n1-n2; sym='-'; }
-        else { n1=rand(selectedDiff==='god'?30:12)+1; n2=rand(12)+1; correctAnswer = n1*n2; sym='×'; }
-        document.getElementById('question-text').innerText = `${n1} ${sym} ${n2}`;
-        makeChoices(correctAnswer);
+    // --- GAME GENERATORS ---
+
+    function genMath() {
+        let r = curDiff === 'god' ? 500 : 100;
+        let n1 = Math.floor(Math.random()*r), n2 = Math.floor(Math.random()*r);
+        correctAns = n1 + n2;
+        document.getElementById('question-text').innerText = `${n1} + ${n2}`;
+        makeChoices(correctAns, 'num');
     }
 
-    function generateWord() {
-        document.getElementById('choices-area').classList.add('hidden');
+    function genWord() {
         document.getElementById('text-area').classList.remove('hidden');
-        let w = simpleWords[Math.floor(Math.random()*simpleWords.length)]; correctAnswer = w;
-        if(selectedOp.includes('Scramble')) {
-            let s = w.split('').sort(()=>Math.random()-0.5).join('');
-            while(s === w) s = w.split('').sort(()=>Math.random()-0.5).join('');
-            document.getElementById('question-text').innerText = s;
-        } else {
-            let i = Math.floor(Math.random()*w.length);
-            let d = w.split(''); d[i] = '_';
-            document.getElementById('question-text').innerText = d.join('');
-        }
+        document.getElementById('choices-area').classList.add('hidden');
+        let w = simpleWords[Math.floor(Math.random()*simpleWords.length)];
+        correctAns = w;
+        let s = w.split('').sort(()=>Math.random()-0.5).join('');
+        document.getElementById('question-text').innerText = s;
         document.getElementById('answer-input').focus();
     }
 
-    function generateLogic() {
-        let seq = [], r = rand(3), s = rand(10)+1;
-        if(r === 0) { let st = rand(8)+2; for(let i=0; i<4; i++) seq.push(s+(st*i)); correctAnswer = s+(st*4); }
-        else if(r === 1) { seq = [s, s+rand(3)+1]; for(let i=2; i<4; i++) seq.push(seq[i-1]+seq[i-2]); correctAnswer = seq[3]+seq[2]; }
-        else { let st = rand(4)+1; for(let i=0; i<4; i++) seq.push((st+i)*(st+i)); correctAnswer = (st+4)*(st+4); }
-        document.getElementById('question-text').style.fontSize = "2.5rem";
-        document.getElementById('question-text').innerText = seq.join(', ') + ', ?';
-        makeChoices(correctAnswer);
-    }
-
-    function makeChoices(c) {
-        let s = new Set([c]);
-        while(s.size < 4) { let f = c + (Math.floor(Math.random()*10)-5); if(f>=0 && f!=c) s.add(f); }
-        const area = document.getElementById('choices-area'); area.innerHTML = '';
-        Array.from(s).sort(()=>Math.random()-0.5).forEach(v => {
-            const b = document.createElement('button'); b.className = 'btn-choice'; b.innerText = v;
-            b.onclick = () => check(v, b); area.appendChild(b);
+    function genColor() {
+        let wordIdx = Math.floor(Math.random()*colors.length);
+        let colorIdx = Math.floor(Math.random()*colors.length);
+        correctAns = hex[colorIdx];
+        let q = document.getElementById('question-text');
+        q.innerText = colors[wordIdx];
+        q.style.color = hex[colorIdx];
+        
+        // Show hex color choices as colored boxes
+        let set = new Set([colorIdx]);
+        while(set.size < 4) set.add(Math.floor(Math.random()*colors.length));
+        Array.from(set).sort(()=>Math.random()-0.5).forEach(i => {
+            const b = document.createElement('button');
+            b.className = 'btn-choice';
+            b.style.backgroundColor = hex[i];
+            b.innerHTML = "&nbsp;";
+            b.onclick = () => check(hex[i]);
+            document.getElementById('choices-area').appendChild(b);
         });
     }
 
-    function submitTextAnswer() { check(document.getElementById('answer-input').value.toUpperCase().trim()); }
-
-    function check(v, btn) {
-        clearInterval(timerInterval);
-        document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
-        const app = document.getElementById('app');
+    function genSeq() {
+        let seq = [];
+        let len = curDiff === 'god' ? 6 : (curDiff === 'hard' ? 4 : 3);
+        for(let i=0; i<len; i++) seq.push(Math.floor(Math.random()*9));
         
-        if(String(v) === String(correctAnswer)) {
-            currentScore++; app.classList.add('flash-right');
-            playSound(600, 'sine', 0.1);
-            document.getElementById('feedback-area').innerText = "CORRECT!";
+        document.getElementById('question-text').innerText = seq.join(' ');
+        document.getElementById('choices-area').classList.add('hidden');
+        
+        setTimeout(() => {
+            document.getElementById('question-text').innerText = "?";
+            document.getElementById('choices-area').classList.remove('hidden');
+            correctAns = seq[Math.floor(Math.random()*len)];
+            document.getElementById('question-text').innerText = "Find: " + correctAns;
+            makeChoices(correctAns, 'num');
+        }, 1500);
+    }
+
+    // --- LOGIC ---
+
+    function makeChoices(c, mode) {
+        let s = new Set([c]);
+        while(s.size < 4) s.add(mode === 'num' ? c + (Math.floor(Math.random()*10)-5) : simpleWords[Math.floor(Math.random()*10)]);
+        Array.from(s).sort(()=>Math.random()-0.5).forEach(v => {
+            const b = document.createElement('button');
+            b.className = 'btn-choice'; b.innerText = v;
+            b.onclick = () => check(v);
+            document.getElementById('choices-area').appendChild(b);
+        });
+    }
+
+    function checkText() { check(document.getElementById('answer-input').value.toUpperCase().trim()); }
+
+    function check(v) {
+        clearInterval(timerInt);
+        const app = document.getElementById('app');
+        if(v == correctAns) {
+            curScore++;
+            app.classList.add('flash-correct');
         } else {
             app.classList.add('flash-wrong', 'shake');
-            playSound(120, 'square', 0.2);
-            document.getElementById('feedback-area').innerText = "WRONG! IT WAS: " + correctAnswer;
         }
-        questionNumber++; setTimeout(nextQuestion, 1600);
+        qNum++;
+        setTimeout(nextQuestion, 1000);
     }
 
     function startTimer() {
-        clearInterval(timerInterval); timeLeft = maxTime;
-        const bar = document.getElementById('timer-bar');
-        timerInterval = setInterval(() => {
-            timeLeft -= 0.05; bar.style.width = (timeLeft/maxTime)*100 + "%";
-            if(timeLeft <= 0) { clearInterval(timerInterval); check('TIMEOUT'); }
-        }, 50);
+        let t = curDiff === 'god' ? 3 : 7;
+        let left = t;
+        document.getElementById('timer-container').style.display = 'block';
+        timerInt = setInterval(() => {
+            left -= 0.1;
+            document.getElementById('timer-bar').style.width = (left/t)*100 + "%";
+            if(left <= 0) { clearInterval(timerInt); check('MISS'); }
+        }, 100);
     }
 
-    function showResults() {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+    function endRound() {
+        document.getElementById('view-game').classList.add('hidden');
         document.getElementById('view-results').classList.remove('hidden');
-        document.getElementById('final-score').innerText = currentScore;
+        document.getElementById('res-score').innerText = curScore;
+        saveProgress(curPortal, curScore);
     }
 
-    function rand(m) { return Math.floor(Math.random()*m); }
-    document.getElementById('answer-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') submitTextAnswer(); });
+    function saveProgress(p, score) {
+        let data = JSON.parse(localStorage.getItem('neural_stats') || '{}');
+        if(!data[p]) data[p] = { total: 0, correct: 0 };
+        data[p].total += 10;
+        data[p].correct += score;
+        localStorage.setItem('neural_stats', JSON.stringify(data));
+    }
+
+    function drawProgress() {
+        const stats = JSON.parse(localStorage.getItem('neural_stats') || '{}');
+        const portals = ['math', 'word', 'color', 'seq'];
+        
+        portals.forEach(p => {
+            const container = document.getElementById('prog-' + p);
+            let percent = 0;
+            if(stats[p]) percent = Math.round((stats[p].correct / stats[p].total) * 100);
+            
+            const dash = (percent / 100) * 126; // Circumference of circle (r=20) is ~126
+            container.innerHTML = `
+                <svg class="progress-svg">
+                    <circle class="progress-bg" cx="25" cy="25" r="20"></circle>
+                    <circle class="progress-bar" cx="25" cy="25" r="20" 
+                        style="stroke: var(--c-${p}); stroke-dasharray: 126; stroke-dashoffset: ${126 - dash};"></circle>
+                </svg>
+                <div class="progress-text">${percent}%</div>
+            `;
+        });
+    }
+
+    drawProgress();
 </script>
 </body>
 </html>
