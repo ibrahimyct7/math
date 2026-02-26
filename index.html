@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neural Hub | Pro Trainer</title>
+    <title>Neural Hub | Infinite Forest</title>
     
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
 
     <style>
         :root {
-            --bg-dark: #051408;
-            --panel-dark: #0a2610;
+            --bg-dark: #040d06;
+            --panel-dark: #0a1f0f;
             --primary-green: #2e7d32;
             --accent-mint: #a5d6a7;
             --white: #e8f5e9;
-            --error-red: #c62828;
+            --error-red: #7f1d1d;
             --button-dark: #121212;
-            --focus-gold: #ffd740;
+            --gold: #ffd740;
         }
 
         body {
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-dark);
-            background-image: radial-gradient(var(--panel-dark) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-image: radial-gradient(var(--panel-dark) 1.5px, transparent 1.5px);
+            background-size: 25px 25px;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; color: var(--white);
             overflow: hidden; -webkit-tap-highlight-color: transparent;
@@ -33,67 +33,68 @@
 
         #app {
             background: var(--panel-dark);
-            padding: 2rem 1.2rem;
-            border-radius: 35px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            padding: 2.5rem 1.5rem;
+            border-radius: 40px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
             text-align: center;
-            width: 90%; max-width: 380px;
-            border: 1px solid rgba(255,255,255,0.05);
+            width: 90%; max-width: 400px;
+            border: 2px solid rgba(165, 214, 167, 0.1);
             position: relative;
-            display: flex; flex-direction: column; align-items: center;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* Feedback Flashes */
+        .flash-right { background-color: #143a18 !important; }
+        .flash-wrong { background-color: #4a0c0c !important; }
 
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
         }
-        .shake { animation: shake 0.3s ease-in-out; }
+        .shake { animation: shake 0.4s ease-in-out; }
 
-        .app-logo { width: 60px; height: 60px; border-radius: 15px; margin-bottom: 10px; border: 2px solid var(--primary-green); }
+        .app-logo { width: 70px; height: 70px; border-radius: 20px; margin-bottom: 15px; border: 2px solid var(--primary-green); }
 
         #timer-container {
-            width: 100%; height: 6px; background: rgba(255,255,255,0.1); 
-            border-radius: 10px; margin-bottom: 20px; overflow: hidden; display: none;
+            width: 100%; height: 6px; background: rgba(255,255,255,0.05); 
+            border-radius: 10px; margin-bottom: 25px; overflow: hidden; display: none;
         }
-        #timer-bar { height: 100%; background: var(--primary-green); width: 100%; }
+        #timer-bar { height: 100%; background: var(--primary-green); width: 100%; transition: width 0.1s linear; }
 
-        h1 { margin: 0; color: var(--accent-mint); font-size: 1.6rem; letter-spacing: 1px; }
-        p { color: var(--accent-mint); opacity: 0.7; margin-bottom: 15px; font-size: 0.85rem; }
+        h1 { margin: 0; color: var(--accent-mint); font-size: 1.8rem; letter-spacing: 1px; }
+        p { color: var(--accent-mint); opacity: 0.6; margin-bottom: 20px; font-size: 0.9rem; }
 
-        .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .v-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
         button {
-            padding: 16px; border: none; border-radius: 18px;
+            padding: 18px; border: none; border-radius: 22px;
             font-weight: 700; cursor: pointer; transition: 0.2s;
-            font-size: 1rem; width: 100%;
+            font-size: 1.1rem; width: 100%;
             background: var(--button-dark); color: var(--accent-mint);
-            border: 1px solid var(--primary-green);
+            border: 1px solid rgba(46, 125, 50, 0.5);
         }
 
         button:active { transform: scale(0.96); background: var(--primary-green); color: white; }
 
-        /* Text Input Styling */
         input[type="text"] {
-            width: 100%; padding: 18px; border-radius: 18px; border: 2px solid var(--primary-green);
-            background: var(--button-dark); color: var(--white); font-size: 1.4rem;
-            text-align: center; font-weight: bold; outline: none; margin-bottom: 15px;
-            box-sizing: border-box;
+            width: 100%; padding: 20px; border-radius: 20px; border: 2px solid var(--primary-green);
+            background: var(--button-dark); color: var(--white); font-size: 1.6rem;
+            text-align: center; font-weight: bold; outline: none; margin-bottom: 12px;
         }
-        input[type="text"]:focus { border-color: var(--focus-gold); }
 
-        .btn-portal { background: #1b5e20; border: none; color: white; margin-bottom: 15px; padding: 22px; font-size: 1.2rem; }
-        .btn-choice { font-size: 1.4rem; color: var(--white); border-color: rgba(255,255,255,0.1); }
-        .btn-secondary { background: transparent; color: var(--accent-mint); opacity: 0.6; margin-top: 15px; font-size: 0.8rem; border: 1px solid rgba(165,214,167,0.1); }
+        .btn-portal { background: var(--primary-green); color: white; border: none; font-size: 1.2rem; }
+        .btn-choice { font-size: 1.6rem; color: var(--white); }
+        .btn-secondary { background: transparent; color: var(--accent-mint); opacity: 0.5; font-size: 0.8rem; border: 1px solid rgba(165,214,167,0.1); margin-top: 15px; }
 
-        .correct { background: var(--primary-green) !important; color: white !important; }
-        .wrong { background: var(--error-red) !important; color: white !important; }
-
-        #question-text { font-size: 2.8rem; margin: 15px 0; font-weight: 900; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;}
-        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--accent-mint); margin-bottom: 10px; font-weight: bold;}
+        #question-text { font-size: 3.2rem; margin: 10px 0; font-weight: 900; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;}
+        #feedback-area { font-size: 1.1rem; font-weight: bold; height: 40px; margin-bottom: 10px; color: var(--gold); }
+        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--accent-mint); margin-bottom: 15px; font-weight: bold; opacity: 0.8;}
     </style>
 </head>
 <body>
@@ -104,7 +105,7 @@
     <div id="view-hub" class="view-section">
         <img src="logo.png" class="app-logo" onerror="this.style.display='none'">
         <h1>Neural Hub</h1>
-        <p>Brain Vitality Trainer</p>
+        <p>Keep your edge.</p>
         <div class="v-list">
             <button class="btn-portal" onclick="showPortal('math')">🔢 NUMBER LAB</button>
             <button class="btn-portal" onclick="showPortal('word')">🔠 LINGO LEXICON</button>
@@ -113,18 +114,17 @@
     </div>
 
     <div id="view-portal-menu" class="view-section hidden">
-        <h1 id="portal-title">Portal</h1>
-        <p>Choose your exercise</p>
+        <h1 id="portal-title">Exercise</h1>
+        <p>Select training path</p>
         <div id="op-list" class="v-list"></div>
-        <button class="btn-secondary" onclick="resetToHub()">← BACK TO HUB</button>
+        <button class="btn-secondary" onclick="resetToHub()">← BACK</button>
     </div>
 
     <div id="view-type" class="view-section hidden">
-        <h1>Challenge Type</h1>
-        <p>Pick your pace</p>
+        <h1>Pace</h1>
         <div class="v-list">
-            <button style="background: var(--primary-green); color: white;" onclick="pickType('zen')">ZEN FLOW (No Timer)</button>
-            <button style="background: #4e342e; color: white;" onclick="pickType('blitz')">BLITZ PULSE (Timed)</button>
+            <button style="background: var(--primary-green); color: white;" onclick="pickType('zen')">ZEN FLOW (Relaxed)</button>
+            <button style="background: #3e2723; color: white;" onclick="pickType('blitz')">BLITZ PULSE (Timed)</button>
             <button class="btn-secondary" onclick="showPortal(currentPortal)">← BACK</button>
         </div>
     </div>
@@ -134,7 +134,7 @@
         <div class="v-list">
             <button onclick="startGame('easy')">SPROUT (Easy)</button>
             <button onclick="startGame('hard')">TIMBER (Hard)</button>
-            <button style="background: #000; border: 1px solid #ff5252; color: #ff5252;" onclick="startGame('god')">OVERGROWTH (God)</button>
+            <button style="background: #000; color: #ff5252; border: 1px solid #ff5252;" onclick="startGame('god')">OVERGROWTH (God)</button>
             <button class="btn-secondary" onclick="pickType(selectedType)">← BACK</button>
         </div>
     </div>
@@ -142,26 +142,25 @@
     <div id="view-game" class="view-section hidden">
         <div class="stat-row">
             <span>Q: <span id="q-count">1</span>/10</span>
-            <span id="game-label">MODAL</span>
-            <span>SCORE: <span id="score-count">0</span></span>
+            <span id="score-count">SCORE: 0</span>
         </div>
         <div id="question-text">--</div>
+        <div id="feedback-area"></div>
         
-        <div id="input-area" class="v-list">
-            <div id="choices" class="v-list"></div>
-            <div id="text-input-wrap" class="hidden">
-                <input type="text" id="answer-input" placeholder="Type answer..." autocomplete="off">
+        <div id="input-container" class="v-list">
+            <div id="choices-area" class="v-list"></div>
+            <div id="text-area" class="hidden">
+                <input type="text" id="answer-input" placeholder="..." autocomplete="off" spellcheck="false">
                 <button class="btn-portal" onclick="submitTextAnswer()">SUBMIT</button>
             </div>
         </div>
-
-        <button class="btn-secondary" onclick="resetToHub()">QUIT TO HOME</button>
+        <button class="btn-secondary" onclick="resetToHub()">QUIT GAME</button>
     </div>
 
     <div id="view-results" class="view-section hidden">
-        <h1>Round Done</h1>
-        <p style="font-size: 3rem; margin: 10px 0; color: white;"><span id="final-score">0</span>/10</p>
-        <button style="background: var(--primary-green); color: white;" onclick="resetToHub()">HUB HOME</button>
+        <h1>Session Over</h1>
+        <p style="font-size: 4rem; margin: 20px 0; color: white;"><span id="final-score">0</span>/10</p>
+        <button class="btn-portal" onclick="resetToHub()">BACK TO HUB</button>
     </div>
 </div>
 
@@ -169,30 +168,14 @@
     let currentPortal = '', selectedOp = '', selectedType = '', selectedDiff = '';
     let currentScore = 0, questionNumber = 0, correctAnswer = '', timerInterval, timeLeft, maxTime;
 
-    const portals = {
-        math: { title: "Number Lab", ops: ["Add +", "Sub -", "Mul ×", "Mixed ±×"] },
-        word: { title: "Lingo Lexicon", ops: ["Scramble", "Missing Letter"] },
-        logic: { title: "Pattern Pulse", ops: ["Sequences"] }
-    };
-
-    // MASSIVE WORD LIST
     const words = [
-        "FOREST", "EMERALD", "BRAIN", "LOGIC", "MATH", "GROWTH", "FLOW", "NEURAL", "FOCUS", "SHARP", "SMART", "LEVEL",
-        "VALLEY", "QUANTUM", "MEMORY", "SYSTEM", "THINK", "SOLVE", "FAST", "MIND", "GENIUS", "STREAK", "ENERGY", "BRIGHT",
-        "STORM", "WISDOM", "REASON", "PUZZLE", "GARDEN", "BRANCH", "THOUGHT", "STREAM", "OXYGEN", "PLANET", "COSMOS",
-        "NATURE", "SPIRIT", "ACTION", "SQUARE", "SILENT", "ANIMAL", "ACTIVE", "WONDER", "BRIDGE", "CHANCE", "CREATE",
-        "DREAMY", "EXPERT", "FUTURE", "GLOBAL", "HAPPEN", "IMPACT", "JOURNEY", "KINDLY", "LAUNCH", "MOMENT", "NOTICE",
-        "OBJECT", "PLAYER", "RECENT", "SELECT", "TARGET", "UNIQUE", "VISION", "WEALTH", "YELLOW", "ZEPHYR", "ADVENT",
-        "BEYOND", "CENTER", "DETAIL", "EFFORT", "FLIGHT", "GENTLE", "HEIGHT", "INSIDE", "JUNGLE", "KNIGHT", "LEGEND",
-        "MASTER", "NARROW", "ORCHID", "PATTERN", "QUARTZ", "RHYTHM", "SIGNAL", "THEORY", "UPWARD", "VESSEL", "WIZARD"
+        "ACTIVE", "ADVICE", "ANIMAL", "ANSWER", "APPLE", "AROUND", "BASKET", "BEAUTY", "BEFORE", "BETTER", "BOTTLE", "BRIDGE", "BRIGHT", "BROKEN", "BUTTON", "CAMERA", "CANCER", "CANDLE", "CENTER", "CHANCE", "CHANGE", "CHURCH", "CIRCLE", "COFFEE", "COLUMN", "COMMON", "CORNER", "COTTON", "COUPLE", "COURSE", "DANGER", "DARKER", "DECIDE", "DEGREE", "DESIGN", "DESIRE", "DETAIL", "DEVICE", "DINNER", "DOCTOR", "DOLLAR", "DOUBLE", "DURING", "EITHER", "ENERGY", "ENGINE", "ENOUGH", "EXCEPT", "EXPECT", "EXPERT", "FAMILY", "FATHER", "FELLOW", "FIGURE", "FINGER", "FINISH", "FLOWER", "FOLLOW", "FOREST", "FORGET", "FORMER", "FRIEND", "GARDEN", "GENTLE", "GROUND", "HAPPEN", "HEALTH", "HEAVEN", "HEIGHT", "HIDDEN", "HOCKEY", "HOLDER", "HOLLOW", "HUNTER", "IGNORE", "IMPACT", "IMPORT", "INCOME", "INDOOR", "INJURY", "INSIDE", "INTENT", "ISLAND", "ITSELF", "JACKET", "JERSEY", "JORDAN", "JOURNEY", "JOYFUL", "JUDGED", "JUNGLE", "KEEPER", "KETTLE", "KICKER", "KIDNEY", "KINDLY", "KNIGHT", "LADDER", "LANDED", "LATELY", "LATEST", "LAUGHED", "LAUNCH", "LEADER", "LEAGUE", "LEARNED", "LEGEND", "LETTER", "LIGHTER", "LIKELY", "LISTEN", "LITTLE", "LIVING", "LOVELY", "LUMBER", "MAGNET", "MAKING", "MANNER", "MARKET", "MASTER", "MATTER", "MEMORY", "MENTAL", "METHOD", "MIDDLE", "MINUTE", "MIRROR", "MOBILE", "MODERN", "MOMENT", "MONKEY", "MOTHER", "MOUNTAIN", "MOVING", "MUSEUM", "MYSELF", "NARROW", "NATIVE", "NATURE", "NEARLY", "NEPHEW", "NERVOUS", "NETWORK", "NEUTRAL", "NEWEST", "NICKEL", "NIGHTS", "NOTICE", "NUMBER", "OBJECT", "OFFICE", "OFFSET", "ONLINE", "OPTION", "ORANGE", "ORDERS", "OTHERS", "OUTPUT", "OXFORD", "OXYGEN", "PACKET", "PALACE", "PARENT", "PARKED", "PARTLY", "PATENT", "PEOPLE", "PERIOD", "PERMIT", "PHRASE", "PICKED", "PILLOW", "PLANET", "PLAYER", "PLEASE", "POCKET", "POLICE", "POLICY", "POWDER", "PRAYER", "PREFER", "PRETTY", "PRINCE", "PRISON", "PROFIT", "PROPER", "PUBLIC", "PUZZLE", "QUARTZ", "QUEBEC", "QUICKLY", "QUIETLY", "QUIVER", "RABBIT", "RATHER", "READER", "REASON", "RECENT", "RECORD", "REGION", "REJECT", "REMAIN", "REMOTE", "REPORT", "RESCUE", "RESULT", "RETAIL", "RETAIN", "RETURN", "REVEAL", "REVIEW", "REWARD", "RHYTHM", "RIBBON", "RIDING", "RISING", "RITUAL", "ROBOTS", "ROCKET", "RUBBER", "RUGGED", "RUNNER", "SAFETY", "SALARY", "SAMPLE", "SAVING", "SCENES", "SCHOOL", "SCREEN", "SEARCH", "SEASON", "SECOND", "SECRET", "SECTOR", "SELECT", "SELLER", "SENIOR", "SERIES", "SETTLE", "SEVERE", "SHADOW", "SHARED", "SHARPEN", "SHEEPS", "SHELVE", "SHERIF", "SHIELD", "SHORTS", "SHOULD", "SIGNAL", "SILENT", "SILVER", "SIMPLY", "SINGLE", "SISTER", "SLEEPY", "SLIGHT", "SLOWLY", "SMILED", "SMOOTH", "SOCIAL", "SOFTLY", "SOLVED", "SOURCE", "SPIRIT", "SPOKEN", "SPREAD", "SPRING", "SQUARE", "STABLE", "STAGES", "STAIRS", "STANDS", "STATED", "STATIC", "STATUS", "STAYED", "STEADY", "STOLEN", "STREAK", "STREAM", "STREET", "STRESS", "STRICT", "STRONG", "STUDIO", "SUBMIT", "SUDDEN", "SUFFER", "SUMMER", "SUMMIT", "SUPPLY", "SURELY", "SURVEY", "SWITCH", "SYMBOL", "SYSTEM", "TABLES", "TALENT", "TARGET", "TAUGHT", "TENANT", "TENDER", "THANKS", "THEORY", "THINGS", "THOUGHT", "THREAD", "THREAT", "THRILL", "THROUGH", "TICKET", "TIMELY", "TIMING", "TOWARD", "TRAVEL", "TREATY", "TRENCH", "TRIBAL", "TRICKS", "TROPHY", "TRUSTS", "TWELVE", "TWENTY", "TYPING", "UNIQUE", "UNITED", "UNLESS", "UPDATE", "UPHOLD", "UPON", "UPWARD", "URGENT", "USAGES", "USEFUL", "VACANT", "VALLEY", "VALUES", "VARIED", "VECTOR", "VELVET", "VESSEL", "VICTOR", "VIEWED", "VIRTUE", "VISION", "VISUAL", "VOICES", "VOLUME", "WALKER", "WALLET", "WANTED", "WARNER", "WASTED", "WATERS", "WEALTH", "WEEKLY", "WEIGHT", "WHOLLY", "WINDOW", "WINNER", "WINTER", "WIZARD", "WORKER", "WRIGHT", "WRITER", "YELLOW", "YOUNGER", "ZEPHYR", "ZIGZAG", "ZODIAC"
     ];
 
-    // Sound Synth
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(f, t, d) {
         const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.type = t; o.frequency.value = f;
+        o.connect(g); g.connect(audioCtx.destination); o.type = t; o.frequency.value = f;
         g.gain.setValueAtTime(0.1, audioCtx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
         o.start(); o.stop(audioCtx.currentTime + d);
@@ -201,23 +184,20 @@
     function resetToHub() {
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-hub').classList.remove('hidden');
+        document.getElementById('app').className = '';
         document.getElementById('timer-container').style.display = 'none';
         clearInterval(timerInterval);
     }
 
-    function showPortal(pKey) {
-        currentPortal = pKey;
+    function showPortal(p) {
+        currentPortal = p;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        const view = document.getElementById('view-portal-menu');
-        view.classList.remove('hidden');
-        document.getElementById('portal-title').innerText = portals[pKey].title;
-        const list = document.getElementById('op-list');
-        list.innerHTML = '';
-        portals[pKey].ops.forEach(op => {
-            const btn = document.createElement('button');
-            btn.innerText = op.toUpperCase();
-            btn.onclick = () => { selectedOp = op; showType(); };
-            list.appendChild(btn);
+        document.getElementById('view-portal-menu').classList.remove('hidden');
+        const list = document.getElementById('op-list'); list.innerHTML = '';
+        const ops = p === 'math' ? ["Add +", "Sub -", "Mul ×", "Mixed ±×"] : p === 'word' ? ["Scramble", "Missing Letter"] : ["Logic Sequence"];
+        ops.forEach(o => {
+            const b = document.createElement('button'); b.innerText = o.toUpperCase();
+            b.onclick = () => { selectedOp = o; showType(); }; list.appendChild(b);
         });
     }
 
@@ -226,37 +206,31 @@
         document.getElementById('view-type').classList.remove('hidden');
     }
 
-    function pickType(type) {
-        selectedType = type;
+    function pickType(t) {
+        selectedType = t;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-diff').classList.remove('hidden');
     }
 
-    function startGame(diff) {
-        selectedDiff = diff; currentScore = 0; questionNumber = 1;
-        maxTime = (diff === 'god' ? 4.5 : (diff === 'hard' ? 8 : 15));
-        if(currentPortal === 'word') maxTime += 5; // Extra time for typing
-        
+    function startGame(d) {
+        selectedDiff = d; currentScore = 0; questionNumber = 1;
+        maxTime = d === 'god' ? 4 : d === 'hard' ? 8 : 15;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-game').classList.remove('hidden');
-        document.getElementById('game-label').innerText = `${selectedOp.toUpperCase()} | ${selectedType.toUpperCase()}`;
-        
         if(selectedType === 'blitz') document.getElementById('timer-container').style.display = 'block';
-        else document.getElementById('timer-container').style.display = 'none';
-        
         nextQuestion();
     }
 
     function nextQuestion() {
         if (questionNumber > 10) return showResults();
-        document.getElementById('q-count').innerText = questionNumber;
-        document.getElementById('score-count').innerText = currentScore;
         
-        // Reset Inputs
-        document.getElementById('choices').classList.remove('hidden');
-        document.getElementById('text-input-wrap').classList.add('hidden');
+        document.getElementById('app').className = '';
+        document.getElementById('feedback-area').innerText = '';
+        document.getElementById('q-count').innerText = questionNumber;
+        document.getElementById('score-count').innerText = `SCORE: ${currentScore}`;
         document.getElementById('answer-input').value = '';
-        document.getElementById('question-text').style.fontSize = "2.8rem";
+        document.getElementById('text-area').classList.add('hidden');
+        document.getElementById('choices-area').classList.remove('hidden');
 
         if (currentPortal === 'math') generateMath();
         else if (currentPortal === 'word') generateWord();
@@ -266,126 +240,78 @@
     }
 
     function generateMath() {
-        let n1, n2, symbol, range = (selectedDiff === 'god' ? 999 : 100);
-        let op = selectedOp.toLowerCase();
-        if(op.includes('mixed')) op = ['add','sub','mul'][Math.floor(Math.random()*3)];
-
-        if(op.includes('add')){ n1=rand(range); n2=rand(range); correctAnswer = n1+n2; symbol='+'; }
-        else if(op.includes('sub')){ n1=rand(range)+10; n2=rand(n1); correctAnswer = n1-n2; symbol='-'; }
-        else { n1=rand(selectedDiff==='god'?40:12)+1; n2=rand(12)+1; correctAnswer = n1*n2; symbol='×'; }
-        
-        document.getElementById('question-text').innerText = `${n1}${symbol}${n2}`;
+        let range = selectedDiff === 'god' ? 999 : 100;
+        let op = selectedOp.toLowerCase(); if(op.includes('mixed')) op = ['add','sub','mul'][Math.floor(Math.random()*3)];
+        let n1, n2, sym;
+        if(op.includes('add')){ n1=rand(range); n2=rand(range); correctAnswer = n1+n2; sym='+'; }
+        else if(op.includes('sub')){ n1=rand(range)+10; n2=rand(n1); correctAnswer = n1-n2; sym='-'; }
+        else { n1=rand(selectedDiff==='god'?40:12)+1; n2=rand(12)+1; correctAnswer = n1*n2; sym='×'; }
+        document.getElementById('question-text').innerText = `${n1} ${sym} ${n2}`;
         makeChoices(correctAnswer);
     }
 
     function generateWord() {
-        document.getElementById('choices').classList.add('hidden');
-        document.getElementById('text-input-wrap').classList.remove('hidden');
-        document.getElementById('answer-input').focus();
-        
-        let word = words[Math.floor(Math.random()*words.length)];
-        correctAnswer = word;
-        
+        document.getElementById('choices-area').classList.add('hidden');
+        document.getElementById('text-area').classList.remove('hidden');
+        let w = words[Math.floor(Math.random()*words.length)]; correctAnswer = w;
         if(selectedOp.includes('Scramble')) {
-            let scrambled = word;
-            while(scrambled === word) scrambled = word.split('').sort(()=>Math.random()-0.5).join('');
-            document.getElementById('question-text').style.fontSize = "2rem";
-            document.getElementById('question-text').innerText = scrambled;
+            let s = w.split('').sort(()=>Math.random()-0.5).join('');
+            document.getElementById('question-text').innerText = s;
         } else {
-            let idx = Math.floor(Math.random()*word.length);
-            let display = word.split(''); display[idx] = '_';
-            document.getElementById('question-text').innerText = display.join(' ');
+            let i = Math.floor(Math.random()*w.length);
+            let d = w.split(''); d[i] = '_';
+            document.getElementById('question-text').innerText = d.join('');
         }
+        document.getElementById('answer-input').focus();
     }
 
     function generateLogic() {
-        let seq = [], ruleType = rand(4);
-        let start = rand(10)+1;
-        
-        if(ruleType === 0) { // Linear
-            let step = rand(8)+2;
-            for(let i=0; i<4; i++) seq.push(start + (step*i));
-            correctAnswer = start + (step*4);
-        } else if(ruleType === 1) { // Alternating
-            let s1 = rand(5)+1, s2 = rand(5)+1;
-            seq.push(start);
-            seq.push(seq[0]+s1);
-            seq.push(seq[1]+s2);
-            seq.push(seq[2]+s1);
-            correctAnswer = seq[3]+s2;
-        } else if(ruleType === 2) { // Fibonacci-ish
-            seq = [start, start + rand(3)+1];
-            for(let i=2; i<4; i++) seq.push(seq[i-1] + seq[i-2]);
-            correctAnswer = seq[3] + seq[2];
-        } else { // Squares
-            let s = rand(5)+1;
-            for(let i=0; i<4; i++) seq.push((s+i)*(s+i));
-            correctAnswer = (s+4)*(s+4);
-        }
-
-        document.getElementById('question-text').style.fontSize = "2rem";
+        let seq = [], r = rand(3), s = rand(10)+1;
+        if(r === 0) { let st = rand(8)+2; for(let i=0; i<4; i++) seq.push(s+(st*i)); correctAnswer = s+(st*4); }
+        else if(r === 1) { seq = [s, s+rand(3)+1]; for(let i=2; i<4; i++) seq.push(seq[i-1]+seq[i-2]); correctAnswer = seq[3]+seq[2]; }
+        else { let st = rand(4)+1; for(let i=0; i<4; i++) seq.push((st+i)*(st+i)); correctAnswer = (st+4)*(st+4); }
+        document.getElementById('question-text').style.fontSize = "2.2rem";
         document.getElementById('question-text').innerText = seq.join(', ') + ', ?';
         makeChoices(correctAnswer);
     }
 
-    function makeChoices(correct) {
-        let set = new Set([correct]);
-        while(set.size < 4) {
-            let fake = correct + (Math.floor(Math.random()*10)-5);
-            if(fake >= 0 && fake != correct) set.add(fake);
-        }
-        const area = document.getElementById('choices');
-        area.innerHTML = '';
-        Array.from(set).sort(()=>Math.random()-0.5).forEach(val => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-choice';
-            btn.innerText = val;
-            btn.onclick = () => check(val, btn);
-            area.appendChild(btn);
+    function makeChoices(c) {
+        let s = new Set([c]);
+        while(s.size < 4) { let f = c + (Math.floor(Math.random()*10)-5); if(f>=0 && f!=c) s.add(f); }
+        const area = document.getElementById('choices-area'); area.innerHTML = '';
+        Array.from(s).sort(()=>Math.random()-0.5).forEach(v => {
+            const b = document.createElement('button'); b.className = 'btn-choice'; b.innerText = v;
+            b.onclick = () => check(v, b); area.appendChild(b);
         });
     }
 
-    function submitTextAnswer() {
-        let val = document.getElementById('answer-input').value.toUpperCase().trim();
-        check(val, document.getElementById('answer-input'));
-    }
+    function submitTextAnswer() { check(document.getElementById('answer-input').value.toUpperCase().trim()); }
 
-    function check(val, element) {
+    function check(v, btn) {
         clearInterval(timerInterval);
         document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
+        const app = document.getElementById('app');
         
-        if(val == correctAnswer) {
-            currentScore++; playSound(600, 'sine', 0.2);
-            if(element) element.classList.add('correct');
+        if(String(v) === String(correctAnswer)) {
+            currentScore++; app.classList.add('flash-right');
+            playSound(600, 'sine', 0.1); playSound(800, 'sine', 0.1);
+            document.getElementById('feedback-area').innerText = "EXCELLENT! +1";
         } else {
-            playSound(150, 'square', 0.3);
-            if(element) element.classList.add('wrong');
-            
-            // Show correct answer if it's a choice button
-            document.querySelectorAll('.btn-choice').forEach(b => { if(b.innerText == correctAnswer) b.classList.add('correct'); });
-            
-            // For text input, show correct answer in the question text
-            if(currentPortal === 'word') document.getElementById('question-text').innerHTML += `<br><span style="font-size:1rem; color:var(--accent-mint)">ANSWER: ${correctAnswer}</span>`;
-            
-            document.getElementById('app').classList.add('shake');
-            setTimeout(()=>document.getElementById('app').classList.remove('shake'), 400);
+            app.classList.add('flash-wrong', 'shake');
+            playSound(100, 'square', 0.3);
+            document.querySelectorAll('.btn-choice').forEach(b => { if(b.innerText == correctAnswer) b.style.backgroundColor = "var(--primary-green)"; });
+            document.getElementById('feedback-area').innerText = "WRONG! IT WAS: " + correctAnswer;
         }
-        questionNumber++;
-        setTimeout(nextQuestion, 1500);
+        setTimeout(() => app.classList.remove('shake'), 400);
+        questionNumber++; setTimeout(nextQuestion, 1800);
     }
 
     function startTimer() {
-        clearInterval(timerInterval);
-        timeLeft = maxTime;
+        clearInterval(timerInterval); timeLeft = maxTime;
         const bar = document.getElementById('timer-bar');
         timerInterval = setInterval(() => {
-            timeLeft -= 0.05;
-            bar.style.width = (timeLeft/maxTime)*100 + "%";
-            if(timeLeft <= 0) {
-                clearInterval(timerInterval);
-                playSound(100, 'sawtooth', 0.4);
-                check('TIMEOUT', null);
-            }
+            timeLeft -= 0.05; bar.style.width = (timeLeft/maxTime)*100 + "%";
+            if(timeLeft <= 0) { clearInterval(timerInterval); check('TIMEOUT'); }
         }, 50);
     }
 
@@ -395,12 +321,8 @@
         document.getElementById('final-score').innerText = currentScore;
     }
 
-    function rand(max) { return Math.floor(Math.random()*max); }
-
-    // Listen for Enter Key on text input
-    document.getElementById('answer-input').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') submitTextAnswer();
-    });
+    function rand(m) { return Math.floor(Math.random()*m); }
+    document.getElementById('answer-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') submitTextAnswer(); });
 </script>
 </body>
 </html>
