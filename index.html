@@ -3,84 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neural Hub | Infinite Forest</title>
+    <title>Neural Hub | Cozy Forest</title>
     
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
 
     <style>
         :root {
-            --bg-dark: #040d06;
-            --panel-dark: #0a1f0f;
-            --primary-green: #2e7d32;
-            --accent-mint: #a5d6a7;
-            --white: #e8f5e9;
-            --error-red: #7f1d1d;
-            --button-dark: #121212;
-            --gold: #ffd740;
+            /* Lighter, Warmer Forest Colors */
+            --bg-forest: #142616;
+            --panel-cozy: #1e3622;
+            --accent-mint: #c8e6c9;
+            --cream: #f1f8e9;
+            --primary-green: #4caf50;
+            
+            /* Difficulty Colors */
+            --easy-color: #81c784;
+            --hard-color: #ffb74d;
+            --god-color: #e57373;
+            
+            --button-dark: #0c1a0e;
         }
 
         body {
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(var(--panel-dark) 1.5px, transparent 1.5px);
-            background-size: 25px 25px;
+            background-color: var(--bg-forest);
+            /* Soft Forest Pattern */
+            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; color: var(--white);
+            min-height: 100vh; color: var(--cream);
             overflow: hidden; -webkit-tap-highlight-color: transparent;
         }
 
         #app {
-            background: var(--panel-dark);
-            padding: 2.5rem 1.5rem;
+            background: var(--panel-cozy);
+            padding: 2.2rem 1.2rem;
             border-radius: 40px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             text-align: center;
-            width: 90%; max-width: 400px;
-            border: 2px solid rgba(165, 214, 167, 0.1);
+            width: 90%; max-width: 380px;
+            border: 1px solid rgba(255,255,255,0.1);
             position: relative;
-            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s ease;
         }
 
         /* Feedback Flashes */
-        .flash-right { background-color: #143a18 !important; }
-        .flash-wrong { background-color: #4a0c0c !important; }
+        .flash-right { background-color: #2e7d32 !important; transform: scale(1.02); }
+        .flash-wrong { background-color: #6a1b1b !important; }
 
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-10px); }
-            40% { transform: translateX(10px); }
-            60% { transform: translateX(-10px); }
-            80% { transform: translateX(10px); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
-        .shake { animation: shake 0.4s ease-in-out; }
+        .shake { animation: shake 0.3s ease-in-out; }
 
-        .app-logo { width: 70px; height: 70px; border-radius: 20px; margin-bottom: 15px; border: 2px solid var(--primary-green); }
+        .app-logo { width: 65px; height: 65px; border-radius: 20px; margin-bottom: 15px; border: 2px solid var(--primary-green); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 
         #timer-container {
-            width: 100%; height: 6px; background: rgba(255,255,255,0.05); 
-            border-radius: 10px; margin-bottom: 25px; overflow: hidden; display: none;
+            width: 100%; height: 8px; background: rgba(0,0,0,0.2); 
+            border-radius: 10px; margin-bottom: 20px; overflow: hidden; display: none;
         }
-        #timer-bar { height: 100%; background: var(--primary-green); width: 100%; transition: width 0.1s linear; }
+        #timer-bar { height: 100%; background: var(--primary-green); width: 100%; }
 
-        h1 { margin: 0; color: var(--accent-mint); font-size: 1.8rem; letter-spacing: 1px; }
-        p { color: var(--accent-mint); opacity: 0.6; margin-bottom: 20px; font-size: 0.9rem; }
+        h1 { margin: 0; color: var(--accent-mint); font-size: 1.8rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        p { color: var(--accent-mint); opacity: 0.8; margin-bottom: 20px; font-size: 0.9rem; }
 
         .v-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
         button {
-            padding: 18px; border: none; border-radius: 22px;
+            padding: 18px; border: none; border-radius: 20px;
             font-weight: 700; cursor: pointer; transition: 0.2s;
-            font-size: 1.1rem; width: 100%;
+            font-size: 1rem; width: 100%;
             background: var(--button-dark); color: var(--accent-mint);
-            border: 1px solid rgba(46, 125, 50, 0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
         }
 
-        button:active { transform: scale(0.96); background: var(--primary-green); color: white; }
+        button:active { transform: translateY(3px); box-shadow: none; }
+
+        /* Level Specific Buttons */
+        .btn-easy { background: var(--easy-color) !important; color: #1b3320 !important; }
+        .btn-hard { background: var(--hard-color) !important; color: #3e2723 !important; }
+        .btn-god { background: var(--god-color) !important; color: #ffffff !important; }
 
         input[type="text"] {
             width: 100%; padding: 20px; border-radius: 20px; border: 2px solid var(--primary-green);
@@ -88,13 +98,12 @@
             text-align: center; font-weight: bold; outline: none; margin-bottom: 12px;
         }
 
-        .btn-portal { background: var(--primary-green); color: white; border: none; font-size: 1.2rem; }
-        .btn-choice { font-size: 1.6rem; color: var(--white); }
-        .btn-secondary { background: transparent; color: var(--accent-mint); opacity: 0.5; font-size: 0.8rem; border: 1px solid rgba(165,214,167,0.1); margin-top: 15px; }
+        .btn-portal { background: var(--primary-green); color: white; font-size: 1.1rem; }
+        .btn-secondary { background: transparent; color: var(--accent-mint); opacity: 0.6; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1); margin-top: 15px; box-shadow: none; }
 
-        #question-text { font-size: 3.2rem; margin: 10px 0; font-weight: 900; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;}
-        #feedback-area { font-size: 1.1rem; font-weight: bold; height: 40px; margin-bottom: 10px; color: var(--gold); }
-        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--accent-mint); margin-bottom: 15px; font-weight: bold; opacity: 0.8;}
+        #question-text { font-size: 3.5rem; margin: 10px 0; font-weight: 900; min-height: 130px; display: flex; align-items: center; justify-content: center; color: var(--cream); }
+        #feedback-area { font-size: 1.1rem; font-weight: bold; height: 35px; color: #ffd54f; margin-bottom: 5px; }
+        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--accent-mint); margin-bottom: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -105,36 +114,37 @@
     <div id="view-hub" class="view-section">
         <img src="logo.png" class="app-logo" onerror="this.style.display='none'">
         <h1>Neural Hub</h1>
-        <p>Keep your edge.</p>
+        <p>Your Brain's Cozy Gym</p>
         <div class="v-list">
             <button class="btn-portal" onclick="showPortal('math')">🔢 NUMBER LAB</button>
-            <button class="btn-portal" onclick="showPortal('word')">🔠 LINGO LEXICON</button>
-            <button class="btn-portal" onclick="showPortal('logic')">🧩 PATTERN PULSE</button>
+            <button class="btn-portal" onclick="showPortal('word')">🔠 WORD GARDEN</button>
+            <button class="btn-portal" onclick="showPortal('logic')">🧩 PATTERN PATH</button>
         </div>
     </div>
 
     <div id="view-portal-menu" class="view-section hidden">
         <h1 id="portal-title">Exercise</h1>
-        <p>Select training path</p>
+        <p>Which path will you take?</p>
         <div id="op-list" class="v-list"></div>
-        <button class="btn-secondary" onclick="resetToHub()">← BACK</button>
+        <button class="btn-secondary" onclick="resetToHub()">← BACK TO HUB</button>
     </div>
 
     <div id="view-type" class="view-section hidden">
-        <h1>Pace</h1>
+        <h1>Select Pace</h1>
+        <p>Calm or Fast?</p>
         <div class="v-list">
-            <button style="background: var(--primary-green); color: white;" onclick="pickType('zen')">ZEN FLOW (Relaxed)</button>
-            <button style="background: #3e2723; color: white;" onclick="pickType('blitz')">BLITZ PULSE (Timed)</button>
+            <button class="btn-easy" onclick="pickType('zen')">ZEN (No Timer)</button>
+            <button class="btn-hard" onclick="pickType('blitz')">BLITZ (Timed)</button>
             <button class="btn-secondary" onclick="showPortal(currentPortal)">← BACK</button>
         </div>
     </div>
 
     <div id="view-diff" class="view-section hidden">
-        <h1>Intensity</h1>
+        <h1>Set Intensity</h1>
         <div class="v-list">
-            <button onclick="startGame('easy')">SPROUT (Easy)</button>
-            <button onclick="startGame('hard')">TIMBER (Hard)</button>
-            <button style="background: #000; color: #ff5252; border: 1px solid #ff5252;" onclick="startGame('god')">OVERGROWTH (God)</button>
+            <button class="btn-easy" onclick="startGame('easy')">SPROUT (Easy)</button>
+            <button class="btn-hard" onclick="startGame('hard')">TIMBER (Hard)</button>
+            <button class="btn-god" onclick="startGame('god')">OVERGROWTH (God)</button>
             <button class="btn-secondary" onclick="pickType(selectedType)">← BACK</button>
         </div>
     </div>
@@ -150,7 +160,7 @@
         <div id="input-container" class="v-list">
             <div id="choices-area" class="v-list"></div>
             <div id="text-area" class="hidden">
-                <input type="text" id="answer-input" placeholder="..." autocomplete="off" spellcheck="false">
+                <input type="text" id="answer-input" placeholder="Type here..." autocomplete="off">
                 <button class="btn-portal" onclick="submitTextAnswer()">SUBMIT</button>
             </div>
         </div>
@@ -158,9 +168,9 @@
     </div>
 
     <div id="view-results" class="view-section hidden">
-        <h1>Session Over</h1>
-        <p style="font-size: 4rem; margin: 20px 0; color: white;"><span id="final-score">0</span>/10</p>
-        <button class="btn-portal" onclick="resetToHub()">BACK TO HUB</button>
+        <h1>Great Work!</h1>
+        <p style="font-size: 4rem; margin: 15px 0;"><span id="final-score">0</span>/10</p>
+        <button class="btn-portal" onclick="resetToHub()">RETURN HOME</button>
     </div>
 </div>
 
@@ -168,15 +178,21 @@
     let currentPortal = '', selectedOp = '', selectedType = '', selectedDiff = '';
     let currentScore = 0, questionNumber = 0, correctAnswer = '', timerInterval, timeLeft, maxTime;
 
-    const words = [
-        "ACTIVE", "ADVICE", "ANIMAL", "ANSWER", "APPLE", "AROUND", "BASKET", "BEAUTY", "BEFORE", "BETTER", "BOTTLE", "BRIDGE", "BRIGHT", "BROKEN", "BUTTON", "CAMERA", "CANCER", "CANDLE", "CENTER", "CHANCE", "CHANGE", "CHURCH", "CIRCLE", "COFFEE", "COLUMN", "COMMON", "CORNER", "COTTON", "COUPLE", "COURSE", "DANGER", "DARKER", "DECIDE", "DEGREE", "DESIGN", "DESIRE", "DETAIL", "DEVICE", "DINNER", "DOCTOR", "DOLLAR", "DOUBLE", "DURING", "EITHER", "ENERGY", "ENGINE", "ENOUGH", "EXCEPT", "EXPECT", "EXPERT", "FAMILY", "FATHER", "FELLOW", "FIGURE", "FINGER", "FINISH", "FLOWER", "FOLLOW", "FOREST", "FORGET", "FORMER", "FRIEND", "GARDEN", "GENTLE", "GROUND", "HAPPEN", "HEALTH", "HEAVEN", "HEIGHT", "HIDDEN", "HOCKEY", "HOLDER", "HOLLOW", "HUNTER", "IGNORE", "IMPACT", "IMPORT", "INCOME", "INDOOR", "INJURY", "INSIDE", "INTENT", "ISLAND", "ITSELF", "JACKET", "JERSEY", "JORDAN", "JOURNEY", "JOYFUL", "JUDGED", "JUNGLE", "KEEPER", "KETTLE", "KICKER", "KIDNEY", "KINDLY", "KNIGHT", "LADDER", "LANDED", "LATELY", "LATEST", "LAUGHED", "LAUNCH", "LEADER", "LEAGUE", "LEARNED", "LEGEND", "LETTER", "LIGHTER", "LIKELY", "LISTEN", "LITTLE", "LIVING", "LOVELY", "LUMBER", "MAGNET", "MAKING", "MANNER", "MARKET", "MASTER", "MATTER", "MEMORY", "MENTAL", "METHOD", "MIDDLE", "MINUTE", "MIRROR", "MOBILE", "MODERN", "MOMENT", "MONKEY", "MOTHER", "MOUNTAIN", "MOVING", "MUSEUM", "MYSELF", "NARROW", "NATIVE", "NATURE", "NEARLY", "NEPHEW", "NERVOUS", "NETWORK", "NEUTRAL", "NEWEST", "NICKEL", "NIGHTS", "NOTICE", "NUMBER", "OBJECT", "OFFICE", "OFFSET", "ONLINE", "OPTION", "ORANGE", "ORDERS", "OTHERS", "OUTPUT", "OXFORD", "OXYGEN", "PACKET", "PALACE", "PARENT", "PARKED", "PARTLY", "PATENT", "PEOPLE", "PERIOD", "PERMIT", "PHRASE", "PICKED", "PILLOW", "PLANET", "PLAYER", "PLEASE", "POCKET", "POLICE", "POLICY", "POWDER", "PRAYER", "PREFER", "PRETTY", "PRINCE", "PRISON", "PROFIT", "PROPER", "PUBLIC", "PUZZLE", "QUARTZ", "QUEBEC", "QUICKLY", "QUIETLY", "QUIVER", "RABBIT", "RATHER", "READER", "REASON", "RECENT", "RECORD", "REGION", "REJECT", "REMAIN", "REMOTE", "REPORT", "RESCUE", "RESULT", "RETAIL", "RETAIN", "RETURN", "REVEAL", "REVIEW", "REWARD", "RHYTHM", "RIBBON", "RIDING", "RISING", "RITUAL", "ROBOTS", "ROCKET", "RUBBER", "RUGGED", "RUNNER", "SAFETY", "SALARY", "SAMPLE", "SAVING", "SCENES", "SCHOOL", "SCREEN", "SEARCH", "SEASON", "SECOND", "SECRET", "SECTOR", "SELECT", "SELLER", "SENIOR", "SERIES", "SETTLE", "SEVERE", "SHADOW", "SHARED", "SHARPEN", "SHEEPS", "SHELVE", "SHERIF", "SHIELD", "SHORTS", "SHOULD", "SIGNAL", "SILENT", "SILVER", "SIMPLY", "SINGLE", "SISTER", "SLEEPY", "SLIGHT", "SLOWLY", "SMILED", "SMOOTH", "SOCIAL", "SOFTLY", "SOLVED", "SOURCE", "SPIRIT", "SPOKEN", "SPREAD", "SPRING", "SQUARE", "STABLE", "STAGES", "STAIRS", "STANDS", "STATED", "STATIC", "STATUS", "STAYED", "STEADY", "STOLEN", "STREAK", "STREAM", "STREET", "STRESS", "STRICT", "STRONG", "STUDIO", "SUBMIT", "SUDDEN", "SUFFER", "SUMMER", "SUMMIT", "SUPPLY", "SURELY", "SURVEY", "SWITCH", "SYMBOL", "SYSTEM", "TABLES", "TALENT", "TARGET", "TAUGHT", "TENANT", "TENDER", "THANKS", "THEORY", "THINGS", "THOUGHT", "THREAD", "THREAT", "THRILL", "THROUGH", "TICKET", "TIMELY", "TIMING", "TOWARD", "TRAVEL", "TREATY", "TRENCH", "TRIBAL", "TRICKS", "TROPHY", "TRUSTS", "TWELVE", "TWENTY", "TYPING", "UNIQUE", "UNITED", "UNLESS", "UPDATE", "UPHOLD", "UPON", "UPWARD", "URGENT", "USAGES", "USEFUL", "VACANT", "VALLEY", "VALUES", "VARIED", "VECTOR", "VELVET", "VESSEL", "VICTOR", "VIEWED", "VIRTUE", "VISION", "VISUAL", "VOICES", "VOLUME", "WALKER", "WALLET", "WANTED", "WARNER", "WASTED", "WATERS", "WEALTH", "WEEKLY", "WEIGHT", "WHOLLY", "WINDOW", "WINNER", "WINTER", "WIZARD", "WORKER", "WRIGHT", "WRITER", "YELLOW", "YOUNGER", "ZEPHYR", "ZIGZAG", "ZODIAC"
+    // SIMPLE, RECOGNIZABLE WORDS
+    const simpleWords = [
+        "APPLE", "HOUSE", "WATER", "GRASS", "BREAD", "CHAIR", "TABLE", "STORM", "HAPPY", "LIGHT", 
+        "PHONE", "WATCH", "CLOCK", "PAPER", "NIGHT", "BOOKS", "SMILE", "RIVER", "TRAIN", "PLANE",
+        "STREET", "FLOWER", "GARDEN", "SCHOOL", "FRIEND", "COFFEE", "MUSIC", "PIZZA", "SHIRT", "SHOES",
+        "DOLLAR", "OCEAN", "WINDOW", "DOOR", "FLOOR", "CLOUD", "BIRDY", "MOUSE", "HORSE", "CANDY",
+        "TRUCK", "SPOON", "PLATE", "JUICE", "EARTH", "WORLD", "HEART", "DANCE", "CLEAN", "SLEEP",
+        "GREEN", "WHITE", "BLACK", "SMALL", "LARGE", "CHILD", "PARTY", "MOVIE", "LUNCH", "SUGAR"
     ];
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(f, t, d) {
         const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
         o.connect(g); g.connect(audioCtx.destination); o.type = t; o.frequency.value = f;
-        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        g.gain.setValueAtTime(0.05, audioCtx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
         o.start(); o.stop(audioCtx.currentTime + d);
     }
@@ -194,7 +210,7 @@
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-portal-menu').classList.remove('hidden');
         const list = document.getElementById('op-list'); list.innerHTML = '';
-        const ops = p === 'math' ? ["Add +", "Sub -", "Mul ×", "Mixed ±×"] : p === 'word' ? ["Scramble", "Missing Letter"] : ["Logic Sequence"];
+        const ops = p === 'math' ? ["Addition +", "Subtraction -", "Times ×", "Mixed ±×"] : p === 'word' ? ["Scramble", "Missing"] : ["Patterns"];
         ops.forEach(o => {
             const b = document.createElement('button'); b.innerText = o.toUpperCase();
             b.onclick = () => { selectedOp = o; showType(); }; list.appendChild(b);
@@ -223,7 +239,6 @@
 
     function nextQuestion() {
         if (questionNumber > 10) return showResults();
-        
         document.getElementById('app').className = '';
         document.getElementById('feedback-area').innerText = '';
         document.getElementById('q-count').innerText = questionNumber;
@@ -240,12 +255,12 @@
     }
 
     function generateMath() {
-        let range = selectedDiff === 'god' ? 999 : 100;
+        let range = selectedDiff === 'god' ? 500 : 100;
         let op = selectedOp.toLowerCase(); if(op.includes('mixed')) op = ['add','sub','mul'][Math.floor(Math.random()*3)];
         let n1, n2, sym;
         if(op.includes('add')){ n1=rand(range); n2=rand(range); correctAnswer = n1+n2; sym='+'; }
         else if(op.includes('sub')){ n1=rand(range)+10; n2=rand(n1); correctAnswer = n1-n2; sym='-'; }
-        else { n1=rand(selectedDiff==='god'?40:12)+1; n2=rand(12)+1; correctAnswer = n1*n2; sym='×'; }
+        else { n1=rand(selectedDiff==='god'?30:12)+1; n2=rand(12)+1; correctAnswer = n1*n2; sym='×'; }
         document.getElementById('question-text').innerText = `${n1} ${sym} ${n2}`;
         makeChoices(correctAnswer);
     }
@@ -253,9 +268,10 @@
     function generateWord() {
         document.getElementById('choices-area').classList.add('hidden');
         document.getElementById('text-area').classList.remove('hidden');
-        let w = words[Math.floor(Math.random()*words.length)]; correctAnswer = w;
+        let w = simpleWords[Math.floor(Math.random()*simpleWords.length)]; correctAnswer = w;
         if(selectedOp.includes('Scramble')) {
             let s = w.split('').sort(()=>Math.random()-0.5).join('');
+            while(s === w) s = w.split('').sort(()=>Math.random()-0.5).join('');
             document.getElementById('question-text').innerText = s;
         } else {
             let i = Math.floor(Math.random()*w.length);
@@ -270,7 +286,7 @@
         if(r === 0) { let st = rand(8)+2; for(let i=0; i<4; i++) seq.push(s+(st*i)); correctAnswer = s+(st*4); }
         else if(r === 1) { seq = [s, s+rand(3)+1]; for(let i=2; i<4; i++) seq.push(seq[i-1]+seq[i-2]); correctAnswer = seq[3]+seq[2]; }
         else { let st = rand(4)+1; for(let i=0; i<4; i++) seq.push((st+i)*(st+i)); correctAnswer = (st+4)*(st+4); }
-        document.getElementById('question-text').style.fontSize = "2.2rem";
+        document.getElementById('question-text').style.fontSize = "2.5rem";
         document.getElementById('question-text').innerText = seq.join(', ') + ', ?';
         makeChoices(correctAnswer);
     }
@@ -294,16 +310,14 @@
         
         if(String(v) === String(correctAnswer)) {
             currentScore++; app.classList.add('flash-right');
-            playSound(600, 'sine', 0.1); playSound(800, 'sine', 0.1);
-            document.getElementById('feedback-area').innerText = "EXCELLENT! +1";
+            playSound(600, 'sine', 0.1);
+            document.getElementById('feedback-area').innerText = "CORRECT!";
         } else {
             app.classList.add('flash-wrong', 'shake');
-            playSound(100, 'square', 0.3);
-            document.querySelectorAll('.btn-choice').forEach(b => { if(b.innerText == correctAnswer) b.style.backgroundColor = "var(--primary-green)"; });
+            playSound(120, 'square', 0.2);
             document.getElementById('feedback-area').innerText = "WRONG! IT WAS: " + correctAnswer;
         }
-        setTimeout(() => app.classList.remove('shake'), 400);
-        questionNumber++; setTimeout(nextQuestion, 1800);
+        questionNumber++; setTimeout(nextQuestion, 1600);
     }
 
     function startTimer() {
