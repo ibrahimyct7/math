@@ -11,13 +11,18 @@
 
     <style>
         :root {
-            --bg: #0d1a0f; --panel: #162b1a; --cream: #f1f8e9; --mint: #a5d6a7; --btn-dark: #081209;
+            --bg: #0d1a0f;
+            --panel: #162b1a;
+            --cream: #f1f8e9;
+            --mint: #a5d6a7;
+            --btn-dark: #081209;
+            /* Portal Colors */
             --math: #4caf50; --word: #2196f3; --color: #ff5722; --seq: #ffeb3b; --patt: #9c27b0;
             --easy: #a5d6a7; --hard: #ffb74d; --god: #f44336;
         }
 
         body {
-            margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: var(--bg); color: var(--cream);
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
             overflow: hidden; touch-action: manipulation;
@@ -28,10 +33,10 @@
             box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
             width: 92%; max-width: 380px; border: 1px solid rgba(255,255,255,0.08);
             position: relative; transition: background-color 0.3s;
-            pointer-events: auto !important; /* Ensure touch is always on */
         }
 
         #global-rank { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--seq); margin-bottom: 15px; text-transform: uppercase; }
+
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
@@ -43,8 +48,9 @@
         .btn-main {
             flex-grow: 1; padding: 16px; border: none; border-radius: 18px;
             font-weight: 800; font-size: 1rem; cursor: pointer; text-align: left;
-            display: flex; align-items: center; gap: 15px;
+            display: flex; align-items: center; gap: 15px; letter-spacing: 1px;
         }
+        
         .sym { font-family: serif; font-size: 1.4rem; font-weight: bold; width: 25px; text-align: center; }
 
         .prog-box { position: relative; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; margin-left: 10px; }
@@ -53,14 +59,15 @@
         .prog-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
         .prog-txt { position: absolute; font-size: 0.65rem; font-weight: 800; color: var(--mint); }
 
-        .game-header { font-size: 0.75rem; font-weight: 800; color: var(--mint); margin-bottom: 10px; opacity: 0.8; }
-        #q-text { font-size: 2.2rem; margin: 15px 0; font-weight: 900; min-height: 130px; display: flex; align-items: center; justify-content: center; }
-        
-        .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-        button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
-        button:disabled { opacity: 0.5; cursor: default; }
+        .game-header { font-size: 0.75rem; font-weight: 800; color: var(--mint); margin-bottom: 10px; opacity: 0.8; letter-spacing: 1px; }
 
-        .btn-choice { padding: 18px; border-radius: 22px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
+        #q-text { font-size: 2.2rem; margin: 15px 0; font-weight: 900; min-height: 130px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        
+        button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
+        .btn-choice { padding: 16px; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
+        .btn-choice:disabled { opacity: 0.8; }
+
         input[type="text"] { width: 100%; padding: 18px; border-radius: 20px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.3rem; text-align: center; outline: none; margin-bottom: 10px; box-sizing: border-box; }
 
         .f-right { background-color: #1b4d21 !important; }
@@ -71,7 +78,7 @@
         #timer-box { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; }
         #timer-bar { height: 100%; background: var(--mint); width: 100%; }
         
-        .btn-nav { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 12px; font-size: 0.8rem; border-radius: 15px; font-weight: bold; margin-top: 10px; width: 100%; pointer-events: auto !important; }
+        .btn-nav { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 12px; font-size: 0.8rem; border-radius: 15px; font-weight: bold; margin-top: 10px; width: 100%; }
     </style>
 </head>
 <body>
@@ -93,7 +100,7 @@
     </div>
 
     <div id="v-math-ops" class="view-section hidden">
-        <h1>Select Operation</h1>
+        <h1 style="font-size:1.2rem;">Select Operation</h1>
         <div class="v-list" style="margin-top:20px;">
             <button class="btn-choice" onclick="pickMathOp('add')">ADDITION +</button>
             <button class="btn-choice" onclick="pickMathOp('sub')">SUBTRACTION -</button>
@@ -104,16 +111,16 @@
     </div>
 
     <div id="v-opt" class="view-section hidden">
-        <h1>Challenge Pace</h1>
-        <div class="v-list" style="margin-top:20px;">
+        <h1 id="opt-title" style="font-size:1.2rem;">Challenge Pace</h1>
+        <div id="type-list" class="v-list" style="margin-top:20px;">
             <button class="btn-choice" onclick="setOpt('relaxed')">RELAXED</button>
             <button class="btn-choice" style="background:#3e2723; color:white" onclick="setOpt('timed')">TIMED</button>
-            <button class="btn-nav" onclick="backFromPace()">← BACK</button>
+            <button class="btn-nav" id="back-from-type" onclick="resetHub()">← BACK</button>
         </div>
     </div>
 
     <div id="v-diff" class="view-section hidden">
-        <h1>Difficulty</h1>
+        <h1 style="font-size:1.2rem;">Difficulty</h1>
         <div class="v-list" style="margin-top:20px;">
             <button class="btn-choice" style="color:var(--easy)" onclick="start('easy')">EASY</button>
             <button class="btn-choice" style="color:var(--hard)" onclick="start('hard')">HARD</button>
@@ -138,7 +145,7 @@
     <div id="v-res" class="view-section hidden">
         <h1 id="res-emoji" style="font-size:4rem; margin:0;">🏆</h1>
         <h2 id="res-title">Test Complete</h2>
-        <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span>/10</p>
+        <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span><span style="font-size:1.5rem">/10</span></p>
         <div class="v-list">
             <button class="btn-choice" style="background:var(--math); color:black;" onclick="tryAgain()">TRY AGAIN</button>
             <button class="btn-nav" onclick="resetHub()">BACK TO HUB</button>
@@ -149,9 +156,10 @@
 <script>
     let curP = '', curM = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt;
     let sessionWords = [];
+
     const names = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "WHITE"];
     const vColors = ["#FF0000", "#0000FF", "#00FF00", "#FFFF00", "#FF9800", "#FFFFFF"];
-    const wordBank = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR"];
+    const wordBank = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR", "STREET", "FLOWER", "GARDEN", "COFFEE", "MUSIC", "PIZZA", "SHIRT"];
 
     const aCtx = new (window.AudioContext || window.webkitAudioContext)();
     function play(f, t, d) {
@@ -162,34 +170,29 @@
         o.start(); o.stop(aCtx.currentTime + d);
     }
 
-    function unlockUI() {
-        clearInterval(tInt);
-        document.querySelectorAll('button, input').forEach(el => {
-            el.disabled = false;
-            el.style.pointerEvents = 'auto';
-        });
-        document.getElementById('app').className = '';
-        document.getElementById('timer-box').style.display = 'none';
-    }
+    function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
 
     function resetHub() {
-        unlockUI();
+        clearInterval(tInt);
+        document.querySelectorAll('button, input').forEach(el => el.disabled = false);
+        document.getElementById('ans-in').value = '';
+        document.getElementById('app').className = '';
+        document.getElementById('timer-box').style.display = 'none';
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-hub').classList.remove('hidden');
         drawProg();
     }
 
     function tryAgain() {
-        unlockUI();
         curS = 0; qN = 1;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-game').classList.remove('hidden');
-        if (curP === 'word') sessionWords = [...wordBank].sort(()=>Math.random()-0.5).slice(0, 10);
+        if (curP === 'word') sessionWords = shuffle([...wordBank]).slice(0, 10);
         nextQ();
     }
 
     function goPortal(p) {
-        curP = p; 
+        curP = p; sessionWords = shuffle([...wordBank]).slice(0, 10);
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         if (p === 'math') { document.getElementById('v-math-ops').classList.remove('hidden'); }
         else { document.getElementById('v-opt').classList.remove('hidden'); }
@@ -199,12 +202,6 @@
         curM = op;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-opt').classList.remove('hidden');
-    }
-
-    function backFromPace() {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        if(curP === 'math') document.getElementById('v-math-ops').classList.remove('hidden');
-        else document.getElementById('v-hub').classList.remove('hidden');
     }
 
     function setOpt(t) {
@@ -218,9 +215,14 @@
         document.getElementById('v-opt').classList.remove('hidden');
     }
 
+    function backFromPace() {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        if(curP === 'math') document.getElementById('v-math-ops').classList.remove('hidden');
+        else document.getElementById('v-hub').classList.remove('hidden');
+    }
+
     function start(d) {
         curD = d; curS = 0; qN = 1;
-        sessionWords = [...wordBank].sort(()=>Math.random()-0.5).slice(0, 10);
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-game').classList.remove('hidden');
         nextQ();
@@ -228,7 +230,8 @@
 
     function nextQ() {
         if(qN > 10) return end();
-        unlockUI(); // Force unlock every question
+        document.getElementById('app').className = '';
+        document.querySelectorAll('button, input').forEach(el => el.disabled = false);
         document.getElementById('q-cur').innerText = qN;
         document.getElementById('text-area').classList.add('hidden');
         document.getElementById('choices').classList.remove('hidden');
@@ -237,21 +240,21 @@
         document.getElementById('q-text').style.color = 'var(--cream)';
 
         if(curP === 'math') genMath();
-        else if(curP === 'word') genWord();
-        else if(curP === 'color') genColor();
-        else if(curP === 'seq') genSeq();
-        else genPatt();
+        if(curP === 'word') genWord();
+        if(curP === 'color') genColor();
+        if(curP === 'seq') genSeq();
+        if(curP === 'patt') genPatt();
 
         if(curT === 'timed') startT();
     }
 
     function genMath() {
         let r = curD === 'god' ? 500 : 100;
-        let op = curM === 'mix' ? ['add','sub','mul'][Math.floor(Math.random()*3)] : curM;
+        let op = curM === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : curM;
         let n1, n2, sym;
-        if(op === 'add'){ n1=rand(r); n2=rand(r); cAns=n1+n2; sym='+'; }
-        else if(op === 'sub'){ n1=rand(r)+10; n2=rand(n1); cAns=n1-n2; sym='-'; }
-        else { n1=rand(curD==='god'?30:12)+1; n2=rand(12)+1; cAns=n1*n2; sym='×'; }
+        if(op === 'add') { n1 = rand(r); n2 = rand(r); cAns = n1 + n2; sym = '+'; }
+        else if(op === 'sub') { n1 = rand(r) + 10; n2 = rand(n1); cAns = n1 - n2; sym = '-'; }
+        else { n1 = rand(curD === 'god' ? 30 : 12) + 1; n2 = rand(12) + 1; cAns = n1 * n2; sym = '×'; }
         document.getElementById('q-text').innerText = `${n1} ${sym} ${n2}`;
         makeChoices(cAns, 'num');
     }
@@ -260,7 +263,8 @@
         document.getElementById('text-area').classList.remove('hidden');
         document.getElementById('choices').classList.add('hidden');
         let w = sessionWords[qN - 1]; cAns = w;
-        document.getElementById('q-text').innerText = w.split('').sort(()=>Math.random()-0.5).join('');
+        let s = w.split('').sort(()=>Math.random()-0.5).join('');
+        document.getElementById('q-text').innerText = s;
         document.getElementById('ans-in').focus();
     }
 
@@ -270,10 +274,13 @@
         cAns = vColors[cI];
         let q = document.getElementById('q-text'); q.innerText = names[wI]; q.style.color = vColors[cI];
         let set = new Set([cI, wI]); while(set.size < 4) set.add(rand(vColors.length));
-        Array.from(set).forEach(i => {
-            const b = document.createElement('button'); b.className = 'btn-choice'; 
-            b.style.backgroundColor = vColors[i]; b.innerHTML = "&nbsp;"; 
-            b.onclick = () => check(vColors[i]); document.getElementById('choices').appendChild(b);
+        
+        // SHUFFLE APPLIED HERE
+        shuffle(Array.from(set)).forEach(i => {
+            const b = document.createElement('button');
+            b.className = 'btn-choice'; b.style.backgroundColor = vColors[i];
+            b.innerHTML = "&nbsp;"; b.onclick = () => check(vColors[i]);
+            document.getElementById('choices').appendChild(b);
         });
     }
 
@@ -284,12 +291,16 @@
         document.getElementById('q-text').innerText = seq.join(' ');
         document.getElementById('choices').classList.add('hidden');
         setTimeout(() => {
-            document.getElementById('q-text').innerText = "???";
+            document.getElementById('q-text').innerText = "RECALL?";
             document.getElementById('choices').classList.remove('hidden');
-            let set = new Set([sStr]); while(set.size < 4) set.add((parseInt(sStr)+rand(100)).toString());
-            Array.from(set).forEach(v => {
-                const b = document.createElement('button'); b.className = 'btn-choice'; 
-                b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
+            let set = new Set([sStr]);
+            while(set.size < 4) set.add((parseInt(sStr)+rand(100)).toString());
+            
+            // SHUFFLE APPLIED HERE
+            shuffle(Array.from(set)).forEach(v => {
+                const b = document.createElement('button');
+                b.className = 'btn-choice'; b.innerText = v;
+                b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
             });
         }, 1500);
     }
@@ -306,9 +317,12 @@
             let seq = [sym.repeat(count), sym.repeat(count+1), sym.repeat(count+2)]; cAns = sym.repeat(count+3);
             qArea.innerText = seq.join(' ') + ' ?';
             let set = new Set([cAns]); while(set.size < 4) set.add(sym.repeat(rand(7)+1));
-            Array.from(set).forEach(v => {
-                const b = document.createElement('button'); b.className = 'btn-choice'; 
-                b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
+            
+            // SHUFFLE APPLIED HERE
+            shuffle(Array.from(set)).forEach(v => {
+                const b = document.createElement('button');
+                b.className = 'btn-choice'; b.innerText = v;
+                b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
             });
         }
     }
@@ -316,13 +330,16 @@
     function makeChoices(c, m) {
         let s = new Set([c]);
         while(s.size < 4) s.add(m === 'num' ? c + (rand(11)-5) : wordBank[rand(wordBank.length)]);
-        Array.from(s).forEach(v => {
-            const b = document.createElement('button'); b.className = 'btn-choice'; 
-            b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
+        
+        // SHUFFLE APPLIED HERE
+        shuffle(Array.from(s)).forEach(v => {
+            const b = document.createElement('button');
+            b.className = 'btn-choice'; b.innerText = v;
+            b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
         });
     }
 
-    function checkText() { if(document.getElementById('ans-in').value !== "") check(document.getElementById('ans-in').value.toUpperCase().trim()); }
+    function checkText() { check(document.getElementById('ans-in').value.toUpperCase().trim()); }
 
     function check(v) {
         clearInterval(tInt);
@@ -332,8 +349,9 @@
             curS++; app.classList.add('f-right'); play(600, 'sine', 0.1); qText.innerText = "CORRECT!";
         } else {
             app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2);
-            let dAns = cAns; if(curP === 'color') dAns = names[vColors.indexOf(cAns)];
-            qText.innerText = "WRONG! WAS: " + dAns; qText.style.color = "#ff8a80";
+            let displayAns = cAns;
+            if(curP === 'color') displayAns = names[vColors.indexOf(cAns)];
+            qText.innerText = "WRONG! WAS: " + displayAns; qText.style.color = "#ff8a80";
         }
         qN++; setTimeout(nextQ, 1500);
     }
@@ -348,7 +366,6 @@
     }
 
     function end() {
-        unlockUI();
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-res').classList.remove('hidden');
         document.getElementById('res-score').innerText = curS;
@@ -358,23 +375,25 @@
     }
 
     function save(p, s) {
-        let d = JSON.parse(localStorage.getItem('neu_v7') || '{}');
-        if(!d[p]) d[p] = { t: 0, c: 0 }; d[p].t += 10; d[p].c += s;
-        localStorage.setItem('neu_v7', JSON.stringify(d));
+        let d = JSON.parse(localStorage.getItem('neu_hub_final_vFinal') || '{}');
+        if(!d[p]) d[p] = { t: 0, c: 0 };
+        d[p].t += 10; d[p].c += s;
+        localStorage.setItem('neu_hub_final_vFinal', JSON.stringify(d));
     }
 
     function drawProg() {
-        const d = JSON.parse(localStorage.getItem('neu_v7') || '{}');
-        let tP = 0;
+        const d = JSON.parse(localStorage.getItem('neu_hub_final_vFinal') || '{}');
+        let totalP = 0;
         ['math','word','color','seq','patt'].forEach(p => {
             const c = document.getElementById('p-' + p);
-            let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0; tP += pct;
+            let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0;
+            totalP += pct;
             let off = 126 - (pct / 100) * 126;
             c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
         });
-        let avg = tP / 5, r = "SEEDLING";
-        if(avg > 25) r = "SPROUT"; if(avg > 50) r = "SCHOLAR"; if(avg > 75) r = "SAGE"; if(avg > 90) r = "HUB MASTER";
-        document.getElementById('global-rank').innerText = "RANK: " + r;
+        let avg = totalP / 5;
+        let rank = avg > 90 ? "HUB MASTER" : avg > 75 ? "SAGE" : avg > 50 ? "SCHOLAR" : avg > 25 ? "SPROUT" : "SEEDLING";
+        document.getElementById('global-rank').innerText = "RANK: " + rank;
     }
 
     function rand(m) { return Math.floor(Math.random() * m); }
