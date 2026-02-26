@@ -3,125 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Flow | God Mode</title>
+    <title>Math Flow | Brain Trainer</title>
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1hdGggRmxvdyIsCiAgInNob3J0X25hbWUiIjogIk1hdGgiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI2YwZjhmZiIsCiAgInRoZW1lX2NvbG9yIjogIiM0Q0FGNTAiCn0=">
     <style>
         :root {
-            --primary-green: #1b5e20;
-            --accent-green: #4caf50;
-            --bg-light: #f1f8e9;
+            --primary-green: #2e7d32;
+            --light-green: #e8f5e9;
             --white: #ffffff;
+            --accent: #4caf50;
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-light);
-            background-image: radial-gradient(var(--accent-green) 0.5px, transparent 0.5px), radial-gradient(var(--accent-green) 0.5px, var(--bg-light) 0.5px);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-green);
+            background-image:  linear-gradient(30deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(150deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(30deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(150deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(60deg, #a5d6a7 25%, transparent 25.5%, transparent 75%, #a5d6a7 75%, #a5d6a7), linear-gradient(60deg, #a5d6a7 25%, transparent 25.5%, transparent 75%, #a5d6a7 75%, #a5d6a7);
+            background-size: 80px 140px;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
+            color: var(--primary-green);
         }
 
         #app {
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.95);
             padding: 2rem;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
             width: 90%;
-            max-width: 420px;
-            position: relative;
+            max-width: 400px;
+            backdrop-filter: blur(5px);
         }
 
-        /* Timer Bar */
-        #timer-container {
-            width: 100%;
-            height: 6px;
-            background: #eee;
-            border-radius: 3px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            display: none;
-        }
-        #timer-bar {
-            height: 100%;
-            background: var(--accent-green);
-            width: 100%;
-            transition: width 0.1s linear;
-        }
+        h1 { margin-top: 0; font-size: 2rem; }
 
-        h1 { color: var(--primary-green); margin-top: 0; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
         button {
-            padding: 16px;
-            font-size: 1rem;
+            padding: 15px;
+            font-size: 1.1rem;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
             font-weight: bold;
-            transition: all 0.2s;
         }
 
-        .btn-mode { background: var(--primary-green); color: white; width: 100%; }
-        .btn-diff { background: var(--accent-green); color: white; }
+        .btn-mode {
+            background: var(--primary-green);
+            color: white;
+        }
+
         .btn-choice {
-            background: white;
-            border: 2px solid #e0e0e0;
+            background: var(--white);
+            border: 2px solid var(--accent);
             color: var(--primary-green);
             width: 100%;
-            margin-bottom: 8px;
-            font-size: 1.2rem;
+            margin-bottom: 10px;
         }
-        
-        .correct { background: #c8e6c9 !important; border-color: #4caf50 !important; }
-        .wrong { background: #ffcdd2 !important; border-color: #f44336 !important; }
+
+        button:active { transform: scale(0.95); }
 
         .hidden { display: none; }
-        #question-text { font-size: 3rem; margin: 15px 0; font-weight: 800; }
-        #stats { font-weight: bold; color: #666; margin-bottom: 5px; }
+
+        #question-text { font-size: 2.5rem; margin: 20px 0; }
+
+        #feedback { font-weight: bold; height: 1.2rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div id="timer-container"><div id="timer-bar"></div></div>
-
     <div id="menu">
         <h1>Math Flow</h1>
-        <p>Choose your operation:</p>
+        <p>Pick your challenge:</p>
         <div class="menu-grid">
-            <button class="btn-mode" onclick="pickMode('add')">Addition +</button>
-            <button class="btn-mode" onclick="pickMode('sub')">Subtraction -</button>
-            <button class="btn-mode" onclick="pickMode('mul')">Times ×</button>
-            <button class="btn-mode" onclick="pickMode('mix')">Mixed ±×</button>
-        </div>
-    </div>
-
-    <div id="diff-menu" class="hidden">
-        <h1>Difficulty</h1>
-        <div class="menu-grid">
-            <button class="btn-diff" style="background:#81c784" onclick="startGame('easy')">EASY<br><small>15s</small></button>
-            <button class="btn-diff" style="background:#4caf50" onclick="startGame('hard')">HARD<br><small>8s</small></button>
-            <button class="btn-diff" style="background:#1b5e20" onclick="startGame('god')">GOD LEVEL<br><small>4s</small></button>
-            <button class="btn-mode" onclick="showMenu()" style="grid-column: span 2; background:#666">Back</button>
+            <button class="btn-mode" onclick="startGame('add')">Addition (+)</button>
+            <button class="btn-mode" onclick="startGame('sub')">Subtraction (-)</button>
+            <button class="btn-mode" onclick="startGame('mul')">Multiplication (×)</button>
+            <button class="btn-mode" onclick="startGame('mix')">Mixed (±×)</button>
         </div>
     </div>
 
     <div id="game" class="hidden">
-        <div id="stats">Q: <span id="q-count">1</span>/10 | Score: <span id="score-count">0</span></div>
-        <div id="question-text">--</div>
-        <div id="choices"></div>
+        <div id="stats">Question: <span id="q-count">1</span>/10</div>
+        <div id="question-text">0 + 0</div>
+        <div id="feedback"></div>
+        <div id="choices">
+            </div>
     </div>
 
     <div id="results" class="hidden">
-        <h2 id="result-title">Finish!</h2>
-        <p style="font-size: 2rem;">Score: <span id="final-score">0</span>/10</p>
+        <h2>Round Complete!</h2>
+        <p style="font-size: 1.5rem;">Score: <span id="final-score">0</span>/10</p>
         <button class="btn-mode" onclick="showMenu()">Play Again</button>
     </div>
 </div>
@@ -130,87 +111,49 @@
     let currentScore = 0;
     let questionNumber = 0;
     let correctAnswer = 0;
-    let selectedMode = '';
-    let selectedDiff = '';
-    let timerInterval;
-    let timeLeft;
-    let maxTime;
+    let gameMode = '';
 
-    const config = {
-        easy: { time: 15, range: 20, mulRange: 10 },
-        hard: { time: 8, range: 100, mulRange: 15 },
-        god:  { time: 4, range: 999, mulRange: 50 }
-    };
-
-    function showMenu() {
-        document.querySelectorAll('#app > div').forEach(d => d.classList.add('hidden'));
-        document.getElementById('menu').classList.remove('hidden');
-        document.getElementById('timer-container').style.display = 'none';
-        clearInterval(timerInterval);
-    }
-
-    function pickMode(mode) {
-        selectedMode = mode;
-        document.getElementById('menu').classList.add('hidden');
-        document.getElementById('diff-menu').classList.remove('hidden');
-    }
-
-    function startGame(diff) {
-        selectedDiff = diff;
+    function startGame(mode) {
+        gameMode = mode;
         currentScore = 0;
         questionNumber = 1;
-        maxTime = config[diff].time;
-        
-        document.getElementById('diff-menu').classList.add('hidden');
+        document.getElementById('menu').classList.add('hidden');
+        document.getElementById('results').classList.add('hidden');
         document.getElementById('game').classList.remove('hidden');
-        document.getElementById('timer-container').style.display = 'block';
         nextQuestion();
     }
 
     function nextQuestion() {
-        if (questionNumber > 10) return showResults();
+        if (questionNumber > 10) {
+            showResults();
+            return;
+        }
         
         document.getElementById('q-count').innerText = questionNumber;
-        document.getElementById('score-count').innerText = currentScore;
+        document.getElementById('feedback').innerText = '';
         
-        let type = selectedMode === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : selectedMode;
+        let type = gameMode === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : gameMode;
         let n1, n2, symbol;
-        let range = config[selectedDiff].range;
-        let mulRange = config[selectedDiff].mulRange;
 
         if (type === 'add') {
-            n1 = Math.floor(Math.random() * range) + 1;
-            n2 = Math.floor(Math.random() * range) + 1;
-            correctAnswer = n1 + n2; symbol = '+';
+            n1 = Math.floor(Math.random() * 90) + 1;
+            n2 = Math.floor(Math.random() * (99 - n1)); // Ensures sum <= 99
+            correctAnswer = n1 + n2;
+            symbol = '+';
         } else if (type === 'sub') {
-            n1 = Math.floor(Math.random() * range) + 10;
+            n1 = Math.floor(Math.random() * 90) + 10;
             n2 = Math.floor(Math.random() * n1);
-            correctAnswer = n1 - n2; symbol = '-';
+            correctAnswer = n1 - n2;
+            symbol = '-';
         } else {
-            n1 = Math.floor(Math.random() * mulRange) + 1;
+            n1 = Math.floor(Math.random() * 12) + 1;
             n2 = Math.floor(Math.random() * 12) + 1;
-            correctAnswer = n1 * n2; symbol = '×';
+            correctAnswer = n1 * n2;
+            symbol = '×';
         }
 
         document.getElementById('question-text').innerText = `${n1} ${symbol} ${n2}`;
         generateChoices(correctAnswer);
-        startTimer();
-    }
-
-    function startTimer() {
-        clearInterval(timerInterval);
-        timeLeft = maxTime;
-        const bar = document.getElementById('timer-bar');
-        
-        timerInterval = setInterval(() => {
-            timeLeft -= 0.1;
-            bar.style.width = (timeLeft / maxTime) * 100 + "%";
-            
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                handleTimeout();
-            }
-        }, 100);
     }
 
     function generateChoices(correct) {
@@ -221,60 +164,46 @@
             if (fake >= 0 && fake !== correct) choices.add(fake);
         }
 
-        const area = document.getElementById('choices');
-        area.innerHTML = '';
+        const choicesArea = document.getElementById('choices');
+        choicesArea.innerHTML = '';
         Array.from(choices).sort(() => Math.random() - 0.5).forEach(val => {
             const btn = document.createElement('button');
             btn.className = 'btn-choice';
             btn.innerText = val;
-            btn.onclick = () => checkAnswer(val, btn);
-            area.appendChild(btn);
+            btn.onclick = () => checkAnswer(val);
+            choicesArea.appendChild(btn);
         });
     }
 
-    function checkAnswer(selected, btn) {
-        clearInterval(timerInterval);
-        const allBtns = document.querySelectorAll('.btn-choice');
-        allBtns.forEach(b => b.disabled = true);
-
+    function checkAnswer(selected) {
+        const feedback = document.getElementById('feedback');
         if (selected === correctAnswer) {
             currentScore++;
-            btn.classList.add('correct');
+            feedback.innerText = "Correct! ✨";
+            feedback.style.color = "green";
         } else {
-            btn.classList.add('wrong');
-            showCorrect();
+            feedback.innerText = `Incorrect! Answer: ${correctAnswer}`;
+            feedback.style.color = "red";
         }
 
         questionNumber++;
         setTimeout(nextQuestion, 1000);
     }
 
-    function handleTimeout() {
-        const allBtns = document.querySelectorAll('.btn-choice');
-        allBtns.forEach(b => b.disabled = true);
-        showCorrect();
-        questionNumber++;
-        setTimeout(nextQuestion, 1500);
-    }
-
-    function showCorrect() {
-        const allBtns = document.querySelectorAll('.btn-choice');
-        allBtns.forEach(b => {
-            if (parseInt(b.innerText) === correctAnswer) b.classList.add('correct');
-        });
-    }
-
     function showResults() {
         document.getElementById('game').classList.add('hidden');
-        document.getElementById('timer-container').style.display = 'none';
         document.getElementById('results').classList.remove('hidden');
         document.getElementById('final-score').innerText = currentScore;
-        
-        let title = "Nice Work!";
-        if (currentScore === 10) title = "Perfect Score! 🧠";
-        if (currentScore < 5) title = "Keep Practicing!";
-        if (selectedDiff === 'god' && currentScore > 8) title = "LEGENDARY! 🔥";
-        document.getElementById('result-title').innerText = title;
+    }
+
+    function showMenu() {
+        document.getElementById('results').classList.add('hidden');
+        document.getElementById('menu').classList.remove('hidden');
+    }
+
+    // Service Worker for "Add to Home Screen"
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
     }
 </script>
 </body>
