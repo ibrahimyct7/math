@@ -2,158 +2,258 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Flow | Brain Trainer</title>
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1hdGggRmxvdyIsCiAgInNob3J0X25hbWUiIjogIk1hdGgiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI2YwZjhmZiIsCiAgInRoZW1lX2NvbG9yIjogIiM0Q0FGNTAiCn0=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Math Flow | Deep Forest</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="manifest" href='data:application/json,{"name":"Math Flow","short_name":"Math","start_url":".","display":"standalone","background_color":"#051408","theme_color":"#0a2610"}'>
+
     <style>
         :root {
+            --bg-dark: #051408;
+            --panel-dark: #0a2610;
             --primary-green: #2e7d32;
-            --light-green: #e8f5e9;
-            --white: #ffffff;
-            --accent: #4caf50;
+            --accent-mint: #a5d6a7;
+            --white: #e8f5e9;
+            --error-red: #c62828;
+            --button-dark: #121212;
+            --exit-gray: #37474f;
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-green);
-            background-image:  linear-gradient(30deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(150deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(30deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(150deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(60deg, #a5d6a7 25%, transparent 25.5%, transparent 75%, #a5d6a7 75%, #a5d6a7), linear-gradient(60deg, #a5d6a7 25%, transparent 25.5%, transparent 75%, #a5d6a7 75%, #a5d6a7);
-            background-size: 80px 140px;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(var(--panel-dark) 1px, transparent 1px);
+            background-size: 30px 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: var(--primary-green);
+            min-height: 100vh;
+            color: var(--white);
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #app {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--panel-dark);
+            padding: 2rem 1.5rem;
+            border-radius: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             text-align: center;
-            width: 90%;
-            max-width: 400px;
-            backdrop-filter: blur(5px);
+            width: 88%;
+            max-width: 380px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        h1 { margin-top: 0; font-size: 2rem; }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+        /* Centering all main sections */
+        .view-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        .shake { animation: shake 0.3s ease-in-out; }
+
+        .app-logo { width: 70px; height: 70px; border-radius: 18px; margin-bottom: 10px; border: 2px solid var(--primary-green); }
+
+        #timer-container {
+            width: 100%; height: 6px; background: rgba(255,255,255,0.1); 
+            border-radius: 10px; margin-bottom: 20px; overflow: hidden; display: none;
+        }
+        #timer-bar { height: 100%; background: var(--primary-green); width: 100%; }
+
+        h1 { margin: 0; color: var(--accent-mint); font-size: 1.8rem; }
+        p { color: var(--accent-mint); opacity: 0.7; margin-bottom: 20px; font-size: 0.9rem; }
+
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
 
         button {
-            padding: 15px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
-            font-weight: bold;
+            padding: 16px; border: none; border-radius: 18px;
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+            font-size: 1rem; width: 100%;
         }
 
-        .btn-mode {
-            background: var(--primary-green);
-            color: white;
+        .btn-mode { 
+            background: var(--button-dark); color: var(--accent-mint); 
+            border: 1px solid var(--primary-green);
         }
+        .btn-mode:active { background: var(--primary-green); color: white; transform: scale(0.98); }
 
+        .btn-diff { background: var(--primary-green); color: white; }
         .btn-choice {
-            background: var(--white);
-            border: 2px solid var(--accent);
-            color: var(--primary-green);
-            width: 100%;
-            margin-bottom: 10px;
+            background: var(--button-dark); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--white); margin-bottom: 8px; font-size: 1.5rem;
         }
 
-        button:active { transform: scale(0.95); }
+        .btn-exit {
+            background: transparent; color: var(--accent-mint); 
+            opacity: 0.6; margin-top: 20px; font-size: 0.8rem; border: 1px solid rgba(165, 214, 167, 0.2);
+        }
+
+        .correct { background: var(--primary-green) !important; color: white !important; }
+        .wrong { background: var(--error-red) !important; color: white !important; }
 
         .hidden { display: none; }
-
-        #question-text { font-size: 2.5rem; margin: 20px 0; }
-
-        #feedback { font-weight: bold; height: 1.2rem; margin-bottom: 10px; }
+        #question-text { font-size: 4rem; margin: 15px 0; font-weight: 900; color: var(--white); }
+        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--accent-mint); margin-bottom: 10px; }
+        
+        #streak-pop {
+            position: absolute; top: -35px; background: #ff9800; color: white; 
+            padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; opacity: 0; transition: 0.3s;
+        }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div id="menu">
+    <div id="streak-pop">STREAK: 0 🔥</div>
+    <div id="timer-container"><div id="timer-bar"></div></div>
+
+    <div id="menu" class="view-section">
+        <img src="logo.png" class="app-logo" onerror="this.style.display='none'">
         <h1>Math Flow</h1>
-        <p>Pick your challenge:</p>
+        <p>Brain Work Essentials</p>
         <div class="menu-grid">
-            <button class="btn-mode" onclick="startGame('add')">Addition (+)</button>
-            <button class="btn-mode" onclick="startGame('sub')">Subtraction (-)</button>
-            <button class="btn-mode" onclick="startGame('mul')">Multiplication (×)</button>
-            <button class="btn-mode" onclick="startGame('mix')">Mixed (±×)</button>
+            <button class="btn-mode" onclick="pickMode('add')">ADDITION +</button>
+            <button class="btn-mode" onclick="pickMode('sub')">SUBTRACTION -</button>
+            <button class="btn-mode" onclick="pickMode('mul')">TIMES ×</button>
+            <button class="btn-mode" onclick="pickMode('mix')">MIXED ±×</button>
+        </div>
+        <div style="margin-top:25px; font-size: 0.7rem; color: var(--accent-mint); letter-spacing: 1px;">HIGH SCORE: <span id="high-score-display">0</span></div>
+    </div>
+
+    <div id="diff-menu" class="view-section hidden">
+        <h1>Select Level</h1>
+        <p>Choose your intensity</p>
+        <div class="menu-grid">
+            <button class="btn-diff" onclick="startGame('easy')">EASY</button>
+            <button class="btn-diff" style="background: #1b5e20" onclick="startGame('hard')">HARD</button>
+            <button class="btn-diff" style="background: #000; color: #ff5252; border: 1px solid #ff5252;" onclick="startGame('god')">GOD LEVEL</button>
+            <button class="btn-exit" onclick="showMenu()">← BACK</button>
         </div>
     </div>
 
-    <div id="game" class="hidden">
-        <div id="stats">Question: <span id="q-count">1</span>/10</div>
-        <div id="question-text">0 + 0</div>
-        <div id="feedback"></div>
-        <div id="choices">
-            </div>
+    <div id="game" class="view-section hidden">
+        <div class="stat-row">
+            <span>Q: <span id="q-count">1</span>/10</span>
+            <span>SCORE: <span id="score-count">0</span></span>
+        </div>
+        <div id="question-text">--</div>
+        <div id="choices" class="menu-grid"></div>
+        <button class="btn-exit" onclick="showMenu()">QUIT TO HOME</button>
     </div>
 
-    <div id="results" class="hidden">
-        <h2>Round Complete!</h2>
-        <p style="font-size: 1.5rem;">Score: <span id="final-score">0</span>/10</p>
-        <button class="btn-mode" onclick="showMenu()">Play Again</button>
+    <div id="results" class="view-section hidden">
+        <h2 id="result-title">Session Complete</h2>
+        <p style="font-size: 3rem; margin: 10px 0; color: white;"><span id="final-score">0</span><small style="font-size:1rem">/10</small></p>
+        <button class="btn-diff" onclick="showMenu()">PLAY AGAIN</button>
     </div>
 </div>
 
 <script>
-    let currentScore = 0;
-    let questionNumber = 0;
-    let correctAnswer = 0;
-    let gameMode = '';
+    let currentScore = 0, questionNumber = 0, correctAnswer = 0, streak = 0;
+    let selectedMode = '', selectedDiff = '', timerInterval, timeLeft, maxTime;
+    
+    // Web Audio API Synth
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(freq, type, duration) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.type = type; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+    }
 
-    function startGame(mode) {
-        gameMode = mode;
+    const difficultySettings = {
+        easy: { time: 15, range: 25 },
+        hard: { time: 7, range: 100 },
+        god:  { time: 3.2, range: 999 }
+    };
+
+    document.getElementById('high-score-display').innerText = localStorage.getItem('mathFlowHigh') || 0;
+
+    function showMenu() {
+        document.querySelectorAll('.view-section').forEach(d => d.classList.add('hidden'));
+        document.getElementById('menu').classList.remove('hidden');
+        document.getElementById('timer-container').style.display = 'none';
+        document.getElementById('streak-pop').style.opacity = 0;
+        streak = 0;
+        clearInterval(timerInterval);
+    }
+
+    function pickMode(mode) {
+        selectedMode = mode;
+        document.getElementById('menu').classList.add('hidden');
+        document.getElementById('diff-menu').classList.remove('hidden');
+    }
+
+    function startGame(diff) {
+        selectedDiff = diff;
         currentScore = 0;
         questionNumber = 1;
-        document.getElementById('menu').classList.add('hidden');
-        document.getElementById('results').classList.add('hidden');
+        maxTime = difficultySettings[diff].time;
+        document.getElementById('diff-menu').classList.add('hidden');
         document.getElementById('game').classList.remove('hidden');
+        document.getElementById('timer-container').style.display = 'block';
         nextQuestion();
     }
 
     function nextQuestion() {
-        if (questionNumber > 10) {
-            showResults();
-            return;
-        }
-        
+        if (questionNumber > 10) return showResults();
         document.getElementById('q-count').innerText = questionNumber;
-        document.getElementById('feedback').innerText = '';
+        document.getElementById('score-count').innerText = currentScore;
         
-        let type = gameMode === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : gameMode;
-        let n1, n2, symbol;
+        let type = selectedMode === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : selectedMode;
+        let n1, n2, symbol, range = difficultySettings[selectedDiff].range;
 
         if (type === 'add') {
-            n1 = Math.floor(Math.random() * 90) + 1;
-            n2 = Math.floor(Math.random() * (99 - n1)); // Ensures sum <= 99
-            correctAnswer = n1 + n2;
-            symbol = '+';
+            n1 = Math.floor(Math.random() * range) + 1;
+            n2 = Math.floor(Math.random() * range) + 1;
+            correctAnswer = n1 + n2; symbol = '+';
         } else if (type === 'sub') {
-            n1 = Math.floor(Math.random() * 90) + 10;
+            n1 = Math.floor(Math.random() * range) + 10;
             n2 = Math.floor(Math.random() * n1);
-            correctAnswer = n1 - n2;
-            symbol = '-';
+            correctAnswer = n1 - n2; symbol = '-';
         } else {
-            n1 = Math.floor(Math.random() * 12) + 1;
+            n1 = Math.floor(Math.random() * (selectedDiff === 'god' ? 40 : 12)) + 1;
             n2 = Math.floor(Math.random() * 12) + 1;
-            correctAnswer = n1 * n2;
-            symbol = '×';
+            correctAnswer = n1 * n2; symbol = '×';
         }
 
-        document.getElementById('question-text').innerText = `${n1} ${symbol} ${n2}`;
+        document.getElementById('question-text').innerText = `${n1}${symbol}${n2}`;
         generateChoices(correctAnswer);
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = maxTime;
+        const bar = document.getElementById('timer-bar');
+        timerInterval = setInterval(() => {
+            timeLeft -= 0.05;
+            bar.style.width = (timeLeft / maxTime) * 100 + "%";
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                playSound(120, 'sawtooth', 0.4); // Buzz
+                triggerFailure();
+            }
+        }, 50);
     }
 
     function generateChoices(correct) {
@@ -163,47 +263,63 @@
             let fake = correct + offset;
             if (fake >= 0 && fake !== correct) choices.add(fake);
         }
-
-        const choicesArea = document.getElementById('choices');
-        choicesArea.innerHTML = '';
+        const area = document.getElementById('choices');
+        area.innerHTML = '';
         Array.from(choices).sort(() => Math.random() - 0.5).forEach(val => {
             const btn = document.createElement('button');
             btn.className = 'btn-choice';
             btn.innerText = val;
-            btn.onclick = () => checkAnswer(val);
-            choicesArea.appendChild(btn);
+            btn.onclick = () => checkAnswer(val, btn);
+            area.appendChild(btn);
         });
     }
 
-    function checkAnswer(selected) {
-        const feedback = document.getElementById('feedback');
-        if (selected === correctAnswer) {
-            currentScore++;
-            feedback.innerText = "Correct! ✨";
-            feedback.style.color = "green";
-        } else {
-            feedback.innerText = `Incorrect! Answer: ${correctAnswer}`;
-            feedback.style.color = "red";
-        }
+    function checkAnswer(selected, btn) {
+        clearInterval(timerInterval);
+        document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
 
+        if (selected === correctAnswer) {
+            currentScore++; streak++;
+            playSound(550, 'sine', 0.15); // Ding
+            btn.classList.add('correct');
+            if (streak > 2) {
+                const sp = document.getElementById('streak-pop');
+                sp.innerText = `STREAK: ${streak} 🔥`;
+                sp.style.opacity = 1;
+            }
+        } else {
+            playSound(110, 'square', 0.3); // Wrong
+            btn.classList.add('wrong');
+            triggerFailure();
+        }
         questionNumber++;
         setTimeout(nextQuestion, 1000);
     }
 
+    function triggerFailure() {
+        streak = 0;
+        document.getElementById('streak-pop').style.opacity = 0;
+        document.getElementById('app').classList.add('shake');
+        setTimeout(() => document.getElementById('app').classList.remove('shake'), 400);
+        document.querySelectorAll('.btn-choice').forEach(b => {
+            if (parseInt(b.innerText) === correctAnswer) b.classList.add('correct');
+        });
+        if (timeLeft <= 0) {
+            questionNumber++;
+            setTimeout(nextQuestion, 1200);
+        }
+    }
+
     function showResults() {
         document.getElementById('game').classList.add('hidden');
+        document.getElementById('timer-container').style.display = 'none';
         document.getElementById('results').classList.remove('hidden');
         document.getElementById('final-score').innerText = currentScore;
-    }
-
-    function showMenu() {
-        document.getElementById('results').classList.add('hidden');
-        document.getElementById('menu').classList.remove('hidden');
-    }
-
-    // Service Worker for "Add to Home Screen"
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        let high = localStorage.getItem('mathFlowHigh') || 0;
+        if (currentScore > high) {
+            localStorage.setItem('mathFlowHigh', currentScore);
+            document.getElementById('result-title').innerText = "NEW BEST! 🏆";
+        }
     }
 </script>
 </body>
