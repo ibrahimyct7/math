@@ -16,7 +16,6 @@
             --cream: #f1f8e9;
             --mint: #a5d6a7;
             --btn-dark: #081209;
-            /* Portal Colors */
             --math: #4caf50; --word: #2196f3; --color: #ff5722; --seq: #ffeb3b; --patt: #9c27b0;
             --easy: #a5d6a7; --hard: #ffb74d; --god: #f44336;
         }
@@ -40,7 +39,6 @@
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
-        /* Portal List Layout */
         .portal-item {
             display: flex; align-items: center; width: 100%; 
             background: var(--btn-dark); border-radius: 25px; 
@@ -50,11 +48,9 @@
         .btn-main {
             flex-grow: 1; padding: 16px; border: none; border-radius: 18px;
             font-weight: 800; font-size: 1rem; cursor: pointer; text-align: left;
-            display: flex; align-items: center; gap: 15px;
-            letter-spacing: 1px;
+            display: flex; align-items: center; gap: 15px; letter-spacing: 1px;
         }
         
-        /* Clean Symbols instead of Emojis */
         .sym { font-family: serif; font-size: 1.4rem; font-weight: bold; width: 25px; text-align: center; }
 
         .prog-box { position: relative; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; margin-left: 10px; }
@@ -70,6 +66,7 @@
         
         button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
         .btn-choice { padding: 16px; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
+        .btn-choice:disabled { opacity: 0.8; }
 
         input[type="text"] { width: 100%; padding: 18px; border-radius: 20px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.3rem; text-align: center; outline: none; margin-bottom: 10px; box-sizing: border-box; }
 
@@ -149,7 +146,10 @@
         <h1 id="res-emoji" style="font-size:4rem; margin:0;">🏆</h1>
         <h2 id="res-title">Test Complete</h2>
         <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span><span style="font-size:1.5rem">/10</span></p>
-        <button class="btn-choice" style="width:100%; background:var(--math); color:black;" onclick="resetHub()">CONTINUE</button>
+        <div class="v-list">
+            <button class="btn-choice" style="background:var(--math); color:black;" onclick="tryAgain()">TRY AGAIN</button>
+            <button class="btn-nav" onclick="resetHub()">BACK TO HUB</button>
+        </div>
     </div>
 </div>
 
@@ -173,16 +173,22 @@
     function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
 
     function resetHub() {
-        // GLOBAL CLEANUP to prevent touchscreen freeze
         clearInterval(tInt);
-        document.querySelectorAll('button, input').forEach(el => { el.disabled = false; });
+        document.querySelectorAll('button, input').forEach(el => el.disabled = false);
         document.getElementById('ans-in').value = '';
         document.getElementById('app').className = '';
         document.getElementById('timer-box').style.display = 'none';
-        
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-hub').classList.remove('hidden');
         drawProg();
+    }
+
+    function tryAgain() {
+        curS = 0; qN = 1;
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('v-game').classList.remove('hidden');
+        if (curP === 'word') sessionWords = shuffle([...wordBank]).slice(0, 10);
+        nextQ();
     }
 
     function goPortal(p) {
@@ -227,8 +233,6 @@
 
     function nextQ() {
         if(qN > 10) return end();
-        
-        // Ensure UI is enabled and clean
         document.getElementById('app').className = '';
         document.getElementById('q-cur').innerText = qN;
         document.getElementById('text-area').classList.add('hidden');
@@ -331,10 +335,8 @@
     function check(v) {
         clearInterval(tInt);
         const app = document.getElementById('app'), qText = document.getElementById('q-text');
-        document.querySelectorAll('button, input').forEach(el => { el.disabled = true; });
-        
-        let isRight = (String(v) == String(cAns));
-        if(isRight) {
+        document.querySelectorAll('button, input').forEach(el => el.disabled = true);
+        if(String(v) == String(cAns)) {
             curS++; app.classList.add('f-right'); play(600, 'sine', 0.1); qText.innerText = "CORRECT!";
         } else {
             app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2);
