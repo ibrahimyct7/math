@@ -4,360 +4,373 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Neural Hub</title>
-    
     <style>
         :root {
-            --bg: #142616;
-            --panel: #1e3622;
+            --bg: #0d1a0f;
+            --panel: #162b1a;
             --cream: #f1f8e9;
-            --mint: #c8e6c9;
-            --btn-dark: #0c1a0e;
-            
+            --mint: #a5d6a7;
+            --btn-dark: #081209;
             /* Portal Colors */
-            --c-math: #81c784;
-            --c-word: #64b5f6;
-            --c-color: #e57373;
-            --c-seq: #ffd54f;
-            
-            /* Diff Colors */
-            --easy: #a5d6a7;
-            --hard: #ffb74d;
-            --god: #ef5350;
+            --math: #81c784; --word: #64b5f6; --color: #ff8a65; --seq: #ffd54f; --patt: #ce93d8; --ridd: #bcaaa4;
+            /* Difficulty Colors */
+            --easy: #a5d6a7; --hard: #ffb74d; --god: #ef5350;
         }
 
         body {
-            margin: 0; padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; color: var(--cream);
+            margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg); color: var(--cream);
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
             overflow: hidden; touch-action: manipulation;
         }
 
         #app {
-            background: var(--panel);
-            padding: 2rem 1rem;
-            border-radius: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            text-align: center;
-            width: 92%; max-width: 380px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            transition: transform 0.3s ease;
+            background: var(--panel); padding: 1.5rem 1rem; border-radius: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); text-align: center;
+            width: 92%; max-width: 380px; border: 1px solid rgba(255,255,255,0.05);
+            position: relative; transition: background 0.3s;
         }
+
+        #global-rank { font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; color: var(--seq); margin-bottom: 5px; text-transform: uppercase; }
 
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
-        /* Portal Button Styling */
         .portal-item {
-            display: flex; align-items: center; justify-content: space-between;
-            width: 100%; background: var(--btn-dark);
-            border-radius: 25px; padding: 10px 15px; margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-sizing: border-box;
+            display: flex; align-items: center; width: 100%; 
+            background: var(--btn-dark); border-radius: 25px; 
+            padding: 6px 10px; margin-bottom: 8px; box-sizing: border-box;
         }
-
         .btn-main {
-            flex-grow: 1; padding: 15px; border: none; border-radius: 18px;
-            font-weight: 800; font-size: 1rem; cursor: pointer;
-            text-align: left; transition: 0.2s;
+            flex-grow: 1; padding: 14px; border: none; border-radius: 18px;
+            font-weight: 800; font-size: 0.9rem; cursor: pointer; text-align: left;
         }
 
-        /* Progress Circle */
-        .progress-box {
-            position: relative; width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            margin-left: 10px;
-        }
-        .progress-svg { transform: rotate(-90deg); width: 50px; height: 50px; }
-        .progress-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 4; }
-        .progress-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
-        .progress-text { position: absolute; font-size: 0.65rem; font-weight: bold; color: var(--mint); }
+        .prog-box { position: relative; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-left: 8px; }
+        .prog-svg { transform: rotate(-90deg); width: 40px; height: 40px; }
+        .prog-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 4; }
+        .prog-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+        .prog-txt { position: absolute; font-size: 0.55rem; font-weight: bold; color: var(--mint); }
 
-        /* Game UI */
-        #question-text { font-size: 3rem; margin: 15px 0; font-weight: 900; min-height: 120px; display: flex; align-items: center; justify-content: center; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-        
-        button { cursor: pointer; font-family: inherit; }
-        .btn-choice {
-            padding: 16px; border: none; border-radius: 20px;
-            background: var(--btn-dark); color: var(--cream);
-            font-weight: 700; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.1);
-        }
+        #q-text { font-size: 2.2rem; margin: 10px 0; font-weight: 900; min-height: 140px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.3;}
+        .v-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        button { cursor: pointer; transition: 0.2s; font-family: inherit; }
+        .btn-choice { padding: 16px; border: none; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1rem; border: 1px solid rgba(255,255,255,0.05); }
 
-        input[type="text"] {
-            width: 100%; max-width: 100%; box-sizing: border-box;
-            padding: 18px; border-radius: 20px; border: 2px solid var(--mint);
-            background: var(--btn-dark); color: white; font-size: 1.4rem;
-            text-align: center; font-weight: bold; outline: none; margin-bottom: 10px;
-        }
+        #text-area { width: 100%; max-width: 300px; }
+        input[type="text"] { width: 100%; padding: 15px; border-radius: 15px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.2rem; text-align: center; outline: none; margin-bottom: 10px; }
 
-        /* Status colors */
-        .flash-correct { background-color: #2e7d32 !important; }
-        .flash-wrong { background-color: #8b0000 !important; }
+        .f-right { background-color: #1e4623 !important; }
+        .f-wrong { background-color: #4a1616 !important; }
         .shake { animation: shake 0.4s ease; }
-        @keyframes shake { 0%, 100% {transform:translateX(0)} 25% {transform:translateX(-10px)} 75% {transform:translateX(10px)} }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
 
-        #timer-container { width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 20px; overflow: hidden; display: none; }
+        #timer-box { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; }
         #timer-bar { height: 100%; background: var(--mint); width: 100%; }
-
-        .btn-back { background: transparent; color: var(--mint); opacity: 0.6; border: 1px solid rgba(255,255,255,0.1); padding: 10px; margin-top: 15px; font-size: 0.8rem; border-radius: 12px; }
+        .btn-back { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 8px; margin-top: 10px; font-size: 0.7rem; border-radius: 10px; opacity: 0.6; }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div id="timer-container"><div id="timer-bar"></div></div>
+    <div id="global-rank">RANK: SEEDLING</div>
+    <div id="timer-box"><div id="timer-bar"></div></div>
 
-    <div id="view-hub" class="view-section">
-        <h1 style="color:var(--mint); margin-bottom:5px;">Neural Hub</h1>
-        <p style="opacity:0.6; margin-bottom:20px; font-size:0.9rem;">Work your brain daily.</p>
-        
+    <div id="v-hub" class="view-section">
+        <h1 style="color:var(--mint); margin:0; font-size:1.5rem;">Neural Hub</h1>
+        <p style="opacity:0.5; font-size:0.7rem; margin-bottom:15px;">Brain Maintenance Required</p>
         <div class="v-list" id="portal-list">
-            <div class="portal-item">
-                <button class="btn-main" style="background:var(--c-math); color:#1b3320;" onclick="showPortal('math')">MATH</button>
-                <div class="progress-box" id="prog-math"></div>
-            </div>
-            <div class="portal-item">
-                <button class="btn-main" style="background:var(--c-word); color:#0d1b2a;" onclick="showPortal('word')">WORDS</button>
-                <div class="progress-box" id="prog-word"></div>
-            </div>
-            <div class="portal-item">
-                <button class="btn-main" style="background:var(--c-color); color:#2d0a0a;" onclick="showPortal('color')">COLOR CLASH</button>
-                <div class="progress-box" id="prog-color"></div>
-            </div>
-            <div class="portal-item">
-                <button class="btn-main" style="background:var(--c-seq); color:#2d240a;" onclick="showPortal('seq')">RECALL</button>
-                <div class="progress-box" id="prog-seq"></div>
-            </div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#1b3320;" onclick="goPortal('math')">MATH</button><div class="prog-box" id="p-math"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#0d1b2a;" onclick="goPortal('word')">WORDS</button><div class="prog-box" id="p-word"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--color); color:#2d0a0a;" onclick="goPortal('color')">COLOR CLASH</button><div class="prog-box" id="p-color"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--seq); color:#2d240a;" onclick="goPortal('seq')">RECALL</button><div class="prog-box" id="p-seq"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#2a0d2a;" onclick="goPortal('patt')">PATTERNS</button><div class="prog-box" id="p-patt"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--ridd); color:#2a1b1b;" onclick="goPortal('ridd')">RIDDLES</button><div class="prog-box" id="p-ridd"></div></div>
         </div>
     </div>
 
-    <div id="view-options" class="view-section hidden">
-        <h1 id="opt-title">Options</h1>
-        <div id="type-list" class="v-list" style="margin-top:20px;">
-            <button class="btn-choice" onclick="setOpt('type', 'zen')">ZEN (No Timer)</button>
-            <button class="btn-choice" style="background:#4e342e" onclick="setOpt('type', 'blitz')">BLITZ (Timed)</button>
+    <div id="v-opt" class="view-section hidden">
+        <h1 id="opt-title" style="font-size:1.1rem;">Select Mode</h1>
+        <div id="type-list" class="v-list" style="margin-top:15px;">
+            <button class="btn-choice" onclick="setOpt('zen')">ZEN (No Timer)</button>
+            <button class="btn-choice" style="border-color:var(--hard)" onclick="setOpt('blitz')">BLITZ (Timed)</button>
         </div>
-        <div id="diff-list" class="v-list hidden" style="margin-top:20px;">
-            <button class="btn-choice" style="color:var(--easy)" onclick="startGame('easy')">EASY</button>
-            <button class="btn-choice" style="color:var(--hard)" onclick="startGame('hard')">HARD</button>
-            <button class="btn-choice" style="color:var(--god)" onclick="startGame('god')">GOD MODE</button>
+        <div id="diff-list" class="v-list hidden" style="margin-top:15px;">
+            <button class="btn-choice" style="color:var(--easy)" onclick="start('easy')">EASY</button>
+            <button class="btn-choice" style="color:var(--hard)" onclick="start('hard')">HARD</button>
+            <button class="btn-choice" style="color:var(--god)" onclick="start('god')">GOD MODE</button>
         </div>
-        <button class="btn-back" onclick="resetToHub()">← BACK</button>
+        <button class="btn-back" onclick="resetHub()">← BACK</button>
     </div>
 
-    <div id="view-game" class="view-section hidden">
-        <div id="question-text">--</div>
+    <div id="v-game" class="view-section hidden">
+        <div id="q-text">--</div>
         <div id="input-area" class="v-list">
-            <div id="choices-area" class="v-list"></div>
+            <div id="choices" class="v-list"></div>
             <div id="text-area" class="hidden">
-                <input type="text" id="answer-input" placeholder="Type answer..." autocomplete="off">
-                <button class="btn-choice" style="background:var(--primary-green)" onclick="checkText()">SUBMIT</button>
+                <input type="text" id="ans-in" placeholder="..." autocomplete="off">
+                <button class="btn-choice" style="background:var(--primary-green); width:100%" onclick="checkText()">SUBMIT</button>
             </div>
         </div>
-        <button class="btn-back" onclick="resetToHub()">QUIT</button>
+        <button class="btn-back" onclick="resetHub()">QUIT</button>
     </div>
 
-    <div id="view-results" class="view-section hidden">
-        <h1>Finished</h1>
-        <p style="font-size: 4rem; margin: 10px 0;"><span id="res-score">0</span>/10</p>
-        <button class="btn-choice" style="width:100%" onclick="resetToHub()">CONTINUE</button>
+    <div id="v-res" class="view-section hidden">
+        <h1>Done!</h1>
+        <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span>/10</p>
+        <button class="btn-choice" style="width:100%" onclick="resetHub()">CONTINUE</button>
     </div>
 </div>
 
 <script>
-    let curPortal = '', curType = '', curDiff = '';
-    let curScore = 0, qNum = 0, correctAns = '', timerInt;
+    let curP = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt;
+    const names = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "WHITE"];
+    const hex = ["#ff5252", "#448aff", "#4caf50", "#ffeb3b", "#ff9800", "#ffffff"];
+    const words = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "TRAIN", "PHONE", "WATCH", "CHAIR"];
     
-    const colors = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "PINK", "WHITE"];
-    const hex = ["#ff5252", "#448aff", "#4caf50", "#ffeb3b", "#ff9800", "#e91e63", "#ffffff"];
-    const simpleWords = ["HOUSE", "APPLE", "WATER", "BREAD", "SMILE", "CLOCK", "TRAIN", "CLOUD", "DOOR", "PAPER"];
+    const riddleBank = {
+        easy: [
+            {q: "I have a long trunk and big ears. What am I?", a: "ELEPHANT"},
+            {q: "I am king of the jungle and I roar. What am I?", a: "LION"},
+            {q: "I am tall with a very long neck to eat leaves. What am I?", a: "GIRAFFE"},
+            {q: "I jump and have a pouch for my baby. What am I?", a: "KANGAROO"},
+            {q: "I bark and I am man's best friend. What am I?", a: "DOG"},
+            {q: "I am white and cold and fall from the sky.", a: "SNOW"}
+        ],
+        hard: [
+            {q: "The more of me there is, the less you see. What am I?", a: "DARKNESS"},
+            {q: "I have keys but no locks. I have a space but no room. What am I?", a: "KEYBOARD"},
+            {q: "I follow you all day but you can't catch me. What am I?", a: "SHADOW"},
+            {q: "I have a face and two hands, but no arms or legs.", a: "CLOCK"},
+            {q: "I'm tall when I'm young, and I'm short when I'm old.", a: "CANDLE"}
+        ],
+        god: [
+            {q: "What has to be broken before you can use it?", a: "EGG"},
+            {q: "What month of the year has 28 days?", a: "ALL"},
+            {q: "What is full of holes but still holds water?", a: "SPONGE"},
+            {q: "What question can you never answer yes to?", a: "ASLEEP"},
+            {q: "What gets wetter as it dries?", a: "TOWEL"}
+        ]
+    };
 
-    function resetToHub() {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-hub').classList.remove('hidden');
-        document.getElementById('app').className = '';
-        document.getElementById('timer-container').style.display = 'none';
-        clearInterval(timerInt);
-        drawProgress();
+    const aCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function play(f, t, d) {
+        const o = aCtx.createOscillator(), g = aCtx.createGain();
+        o.connect(g); g.connect(aCtx.destination); o.type = t; o.frequency.value = f;
+        g.gain.setValueAtTime(0.04, aCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, aCtx.currentTime + d);
+        o.start(); o.stop(aCtx.currentTime + d);
     }
 
-    function showPortal(p) {
-        curPortal = p;
+    function resetHub() {
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-options').classList.remove('hidden');
+        document.getElementById('v-hub').classList.remove('hidden');
+        document.getElementById('app').className = '';
+        document.getElementById('timer-box').style.display = 'none';
+        clearInterval(tInt); drawProg();
+    }
+
+    function goPortal(p) {
+        curP = p;
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('v-opt').classList.remove('hidden');
         document.getElementById('type-list').classList.remove('hidden');
         document.getElementById('diff-list').classList.add('hidden');
     }
 
-    function setOpt(key, val) {
-        if(key === 'type') {
-            curType = val;
-            document.getElementById('type-list').classList.add('hidden');
-            document.getElementById('diff-list').classList.remove('hidden');
-        }
+    function setOpt(t) {
+        curT = t;
+        document.getElementById('type-list').classList.add('hidden');
+        document.getElementById('diff-list').classList.remove('hidden');
     }
 
-    function startGame(d) {
-        curDiff = d; curScore = 0; qNum = 1;
+    function start(d) {
+        curD = d; curS = 0; qN = 1;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('view-game').classList.remove('hidden');
-        nextQuestion();
+        document.getElementById('v-game').classList.remove('hidden');
+        nextQ();
     }
 
-    function nextQuestion() {
-        if(qNum > 10) return endRound();
+    function nextQ() {
+        if(qN > 10) return end();
         document.getElementById('app').className = '';
         document.getElementById('text-area').classList.add('hidden');
-        document.getElementById('choices-area').classList.remove('hidden');
-        document.getElementById('choices-area').innerHTML = '';
-        
-        if(curPortal === 'math') genMath();
-        if(curPortal === 'word') genWord();
-        if(curPortal === 'color') genColor();
-        if(curPortal === 'seq') genSeq();
+        document.getElementById('choices').classList.remove('hidden');
+        document.getElementById('choices').innerHTML = '';
+        document.getElementById('ans-in').value = '';
+        document.getElementById('q-text').style.color = 'var(--cream)';
+        document.getElementById('q-text').style.fontSize = '2.2rem';
 
-        if(curType === 'blitz') startTimer();
+        if(curP === 'math') genMath();
+        if(curP === 'word') genWord();
+        if(curP === 'color') genColor();
+        if(curP === 'seq') genSeq();
+        if(curP === 'patt') genPatt();
+        if(curP === 'ridd') genRidd();
+
+        if(curT === 'blitz') startT();
     }
 
-    // --- GAME GENERATORS ---
-
     function genMath() {
-        let r = curDiff === 'god' ? 500 : 100;
+        let r = curD === 'god' ? 500 : 100;
         let n1 = Math.floor(Math.random()*r), n2 = Math.floor(Math.random()*r);
-        correctAns = n1 + n2;
-        document.getElementById('question-text').innerText = `${n1} + ${n2}`;
-        makeChoices(correctAns, 'num');
+        cAns = n1 + n2;
+        document.getElementById('q-text').innerText = `${n1} + ${n2}`;
+        makeChoices(cAns, 'num');
     }
 
     function genWord() {
         document.getElementById('text-area').classList.remove('hidden');
-        document.getElementById('choices-area').classList.add('hidden');
-        let w = simpleWords[Math.floor(Math.random()*simpleWords.length)];
-        correctAns = w;
+        document.getElementById('choices').classList.add('hidden');
+        let w = words[Math.floor(Math.random()*words.length)];
+        cAns = w;
         let s = w.split('').sort(()=>Math.random()-0.5).join('');
-        document.getElementById('question-text').innerText = s;
-        document.getElementById('answer-input').focus();
+        document.getElementById('q-text').innerText = s;
+        document.getElementById('ans-in').focus();
+    }
+
+    function genRidd() {
+        document.getElementById('text-area').classList.remove('hidden');
+        document.getElementById('choices').classList.add('hidden');
+        let list = riddleBank[curD];
+        let r = list[Math.floor(Math.random()*list.length)];
+        cAns = r.a;
+        document.getElementById('q-text').style.fontSize = '1.3rem';
+        document.getElementById('q-text').innerText = r.q;
+        document.getElementById('ans-in').focus();
     }
 
     function genColor() {
-        let wordIdx = Math.floor(Math.random()*colors.length);
-        let colorIdx = Math.floor(Math.random()*colors.length);
-        correctAns = hex[colorIdx];
-        let q = document.getElementById('question-text');
-        q.innerText = colors[wordIdx];
-        q.style.color = hex[colorIdx];
-        
-        // Show hex color choices as colored boxes
-        let set = new Set([colorIdx]);
-        while(set.size < 4) set.add(Math.floor(Math.random()*colors.length));
+        let wI = Math.floor(Math.random()*names.length);
+        let cI = Math.floor(Math.random()*names.length);
+        while(wI === cI) cI = Math.floor(Math.random()*names.length);
+        cAns = hex[cI];
+        let q = document.getElementById('q-text');
+        q.innerText = names[wI]; q.style.color = hex[cI];
+        let set = new Set([cI, wI]);
+        while(set.size < 4) set.add(Math.floor(Math.random()*hex.length));
         Array.from(set).sort(()=>Math.random()-0.5).forEach(i => {
             const b = document.createElement('button');
-            b.className = 'btn-choice';
-            b.style.backgroundColor = hex[i];
-            b.innerHTML = "&nbsp;";
-            b.onclick = () => check(hex[i]);
-            document.getElementById('choices-area').appendChild(b);
+            b.className = 'btn-choice'; b.style.backgroundColor = hex[i];
+            b.innerHTML = "&nbsp;"; b.onclick = () => check(hex[i]);
+            document.getElementById('choices').appendChild(b);
         });
     }
 
     function genSeq() {
-        let seq = [];
-        let len = curDiff === 'god' ? 6 : (curDiff === 'hard' ? 4 : 3);
-        for(let i=0; i<len; i++) seq.push(Math.floor(Math.random()*9));
-        
-        document.getElementById('question-text').innerText = seq.join(' ');
-        document.getElementById('choices-area').classList.add('hidden');
-        
+        let seq = []; let l = curD === 'god' ? 5 : (curD === 'hard' ? 4 : 3);
+        for(let i=0; i<l; i++) seq.push(Math.floor(Math.random()*10));
+        let sStr = seq.join(''); cAns = sStr;
+        document.getElementById('q-text').innerText = seq.join(' ');
+        document.getElementById('choices').classList.add('hidden');
         setTimeout(() => {
-            document.getElementById('question-text').innerText = "?";
-            document.getElementById('choices-area').classList.remove('hidden');
-            correctAns = seq[Math.floor(Math.random()*len)];
-            document.getElementById('question-text').innerText = "Find: " + correctAns;
-            makeChoices(correctAns, 'num');
+            document.getElementById('q-text').innerText = "???";
+            document.getElementById('choices').classList.remove('hidden');
+            let set = new Set([sStr]);
+            while(set.size < 4) {
+                let f = sStr.split('').sort(()=>Math.random()-0.5).join('');
+                if(f === sStr) f = (parseInt(sStr)+1).toString();
+                set.add(f);
+            }
+            Array.from(set).sort(()=>Math.random()-0.5).forEach(v => {
+                const b = document.createElement('button');
+                b.className = 'btn-choice'; b.innerText = v;
+                b.onclick = () => check(v);
+                document.getElementById('choices').appendChild(b);
+            });
         }, 1500);
     }
 
-    // --- LOGIC ---
+    function genPatt() {
+        let mode = Math.floor(Math.random()*2);
+        let qArea = document.getElementById('q-text');
+        qArea.style.fontSize = '1.8rem';
+        if(mode === 0) {
+            let start = Math.floor(Math.random()*10)+1; let step = Math.floor(Math.random()*5)+2;
+            let seq = [start, start + step, start + (step*2)]; cAns = start + (step*3);
+            qArea.innerText = seq.join(' ') + ' ?'; makeChoices(cAns, 'num');
+        } else {
+            let count = Math.floor(Math.random()*4)+1; let sym = ['○', '●', '◎'][Math.floor(Math.random()*3)];
+            let seq = [sym.repeat(count), sym.repeat(count+1), sym.repeat(count+2)]; cAns = sym.repeat(count+3);
+            qArea.innerText = seq.join(' ') + ' ?';
+            let set = new Set([cAns]); while(set.size < 4) set.add(sym.repeat(Math.floor(Math.random()*7)+1));
+            Array.from(set).sort(()=>Math.random()-0.5).forEach(v => {
+                const b = document.createElement('button');
+                b.className = 'btn-choice'; b.innerText = v;
+                b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
+            });
+        }
+    }
 
-    function makeChoices(c, mode) {
+    function makeChoices(c, m) {
         let s = new Set([c]);
-        while(s.size < 4) s.add(mode === 'num' ? c + (Math.floor(Math.random()*10)-5) : simpleWords[Math.floor(Math.random()*10)]);
+        while(s.size < 4) s.add(m === 'num' ? c + (Math.floor(Math.random()*10)-5) : words[Math.floor(Math.random()*words.length)]);
         Array.from(s).sort(()=>Math.random()-0.5).forEach(v => {
             const b = document.createElement('button');
             b.className = 'btn-choice'; b.innerText = v;
             b.onclick = () => check(v);
-            document.getElementById('choices-area').appendChild(b);
+            document.getElementById('choices').appendChild(b);
         });
     }
 
-    function checkText() { check(document.getElementById('answer-input').value.toUpperCase().trim()); }
+    function checkText() { check(document.getElementById('ans-in').value.toUpperCase().trim()); }
 
     function check(v) {
-        clearInterval(timerInt);
+        clearInterval(tInt);
         const app = document.getElementById('app');
-        if(v == correctAns) {
-            curScore++;
-            app.classList.add('flash-correct');
+        if(String(v) == String(cAns)) {
+            curS++; app.classList.add('f-right'); play(600, 'sine', 0.1);
         } else {
-            app.classList.add('flash-wrong', 'shake');
+            app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2);
+            document.getElementById('q-text').innerText = "IT WAS: " + cAns;
+            document.getElementById('q-text').style.color = "var(--god)";
         }
-        qNum++;
-        setTimeout(nextQuestion, 1000);
+        qN++; setTimeout(nextQ, 1200);
     }
 
-    function startTimer() {
-        let t = curDiff === 'god' ? 3 : 7;
-        let left = t;
-        document.getElementById('timer-container').style.display = 'block';
-        timerInt = setInterval(() => {
-            left -= 0.1;
-            document.getElementById('timer-bar').style.width = (left/t)*100 + "%";
-            if(left <= 0) { clearInterval(timerInt); check('MISS'); }
+    function startT() {
+        let t = curD === 'god' ? 4 : 8; let l = t;
+        document.getElementById('timer-box').style.display = 'block';
+        tInt = setInterval(() => {
+            l -= 0.1; document.getElementById('timer-bar').style.width = (l/t)*100 + "%";
+            if(l <= 0) { clearInterval(tInt); check('MISS'); }
         }, 100);
     }
 
-    function endRound() {
-        document.getElementById('view-game').classList.add('hidden');
-        document.getElementById('view-results').classList.remove('hidden');
-        document.getElementById('res-score').innerText = curScore;
-        saveProgress(curPortal, curScore);
+    function end() {
+        document.getElementById('v-game').classList.add('hidden');
+        document.getElementById('v-res').classList.remove('hidden');
+        document.getElementById('res-score').innerText = curS;
+        save(curP, curS);
     }
 
-    function saveProgress(p, score) {
-        let data = JSON.parse(localStorage.getItem('neural_stats') || '{}');
-        if(!data[p]) data[p] = { total: 0, correct: 0 };
-        data[p].total += 10;
-        data[p].correct += score;
-        localStorage.setItem('neural_stats', JSON.stringify(data));
+    function save(p, s) {
+        let d = JSON.parse(localStorage.getItem('neu_v3') || '{}');
+        if(!d[p]) d[p] = { t: 0, c: 0 };
+        d[p].t += 10; d[p].c += s;
+        localStorage.setItem('neu_v3', JSON.stringify(d));
     }
 
-    function drawProgress() {
-        const stats = JSON.parse(localStorage.getItem('neural_stats') || '{}');
-        const portals = ['math', 'word', 'color', 'seq'];
-        
-        portals.forEach(p => {
-            const container = document.getElementById('prog-' + p);
-            let percent = 0;
-            if(stats[p]) percent = Math.round((stats[p].correct / stats[p].total) * 100);
-            
-            const dash = (percent / 100) * 126; // Circumference of circle (r=20) is ~126
-            container.innerHTML = `
-                <svg class="progress-svg">
-                    <circle class="progress-bg" cx="25" cy="25" r="20"></circle>
-                    <circle class="progress-bar" cx="25" cy="25" r="20" 
-                        style="stroke: var(--c-${p}); stroke-dasharray: 126; stroke-dashoffset: ${126 - dash};"></circle>
-                </svg>
-                <div class="progress-text">${percent}%</div>
-            `;
+    function drawProg() {
+        const d = JSON.parse(localStorage.getItem('neu_v3') || '{}');
+        let totalP = 0, countP = 0;
+        ['math','word','color','seq','patt','ridd'].forEach(p => {
+            const c = document.getElementById('p-' + p);
+            let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0;
+            totalP += pct; countP++;
+            let off = 126 - (pct / 100) * 126;
+            c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="22" cy="22" r="20"></circle><circle class="prog-bar" cx="22" cy="22" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
         });
+        
+        let avg = totalP / countP;
+        let rank = "SEEDLING";
+        if(avg > 20) rank = "SPROUT"; if(avg > 40) rank = "SCHOLAR";
+        if(avg > 60) rank = "SAGE"; if(avg > 80) rank = "MASTER HUB";
+        document.getElementById('global-rank').innerText = "RANK: " + rank;
     }
 
-    drawProgress();
+    document.getElementById('ans-in').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkText(); });
+    drawProg();
 </script>
 </body>
 </html>
