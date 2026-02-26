@@ -17,7 +17,7 @@
         }
 
         body {
-            margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg); color: var(--cream);
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
             overflow: hidden; touch-action: manipulation;
@@ -46,6 +46,8 @@
             display: flex; align-items: center; gap: 12px;
         }
         
+        .app-logo { width: 60px; height: 60px; border-radius: 15px; margin-bottom: 10px; border: 2px solid var(--math); object-fit: cover; }
+
         .icon-span { 
             font-size: 1.5rem; 
             filter: drop-shadow(0 3px 2px rgba(0,0,0,0.4)); 
@@ -65,6 +67,7 @@
         
         button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
         .btn-choice { padding: 16px; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
+        .btn-choice:disabled { opacity: 0.8; cursor: default; }
 
         input[type="text"] { width: 100%; padding: 18px; border-radius: 20px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.3rem; text-align: center; outline: none; margin-bottom: 10px; box-sizing: border-box; }
 
@@ -86,8 +89,9 @@
     <div id="timer-box"><div id="timer-bar"></div></div>
 
     <div id="v-hub" class="view-section">
+        <img src="logo.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
         <h1 style="color:var(--mint); margin:0; font-size:1.6rem;">Neural Hub</h1>
-        <p style="opacity:0.5; font-size:0.75rem; margin-bottom:20px;">Core Mental Training</p>
+        <p style="opacity:0.5; font-size:0.75rem; margin-bottom:20px;">Personal Brain Maintenance</p>
         <div class="v-list">
             <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#000;" onclick="goPortal('math')"><span class="icon-span">🔢</span> MATH</button><div class="prog-box" id="p-math"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#fff;" onclick="goPortal('word')"><span class="icon-span">🔠</span> WORDS</button><div class="prog-box" id="p-word"></div></div>
@@ -97,14 +101,29 @@
         </div>
     </div>
 
+    <div id="v-math-ops" class="view-section hidden">
+        <h1 style="font-size:1.2rem;">Math Portal</h1>
+        <div class="v-list" style="margin-top:20px;">
+            <button class="btn-choice" onclick="pickMathOp('add')">ADDITION +</button>
+            <button class="btn-choice" onclick="pickMathOp('sub')">SUBTRACTION -</button>
+            <button class="btn-choice" onclick="pickMathOp('mul')">MULTIPLICATION ×</button>
+            <button class="btn-choice" onclick="pickMathOp('mix')">MIXED ±×</button>
+            <button class="btn-nav" onclick="resetHub()">← BACK TO HUB</button>
+        </div>
+    </div>
+
     <div id="v-opt" class="view-section hidden">
         <h1 id="opt-title" style="font-size:1.2rem;">Challenge Type</h1>
         <div id="type-list" class="v-list" style="margin-top:20px;">
             <button class="btn-choice" onclick="setOpt('relaxed')">RELAXED (No Timer)</button>
             <button class="btn-choice" style="background:#3e2723; color:white" onclick="setOpt('timed')">TIMED (High Pressure)</button>
-            <button class="btn-nav" onclick="resetHub()">← BACK TO HUB</button>
+            <button class="btn-nav" id="back-from-type" onclick="resetHub()">← BACK</button>
         </div>
-        <div id="diff-list" class="v-list hidden" style="margin-top:20px;">
+    </div>
+
+    <div id="v-diff" class="view-section hidden">
+        <h1 style="font-size:1.2rem;">Select Intensity</h1>
+        <div class="v-list" style="margin-top:20px;">
             <button class="btn-choice" style="color:var(--easy)" onclick="start('easy')">EASY MODE</button>
             <button class="btn-choice" style="color:var(--hard)" onclick="start('hard')">HARD MODE</button>
             <button class="btn-choice" style="color:var(--god)" onclick="start('god')">GOD MODE</button>
@@ -134,12 +153,12 @@
 </div>
 
 <script>
-    let curP = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt;
+    let curP = '', curM = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt;
     let sessionWords = [];
 
     const names = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "WHITE"];
     const vColors = ["#FF0000", "#0000FF", "#00FF00", "#FFFF00", "#FF9800", "#FFFFFF"];
-    const wordBank = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR"];
+    const wordBank = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR", "STREET", "FLOWER", "GARDEN", "COFFEE", "MUSIC", "PIZZA", "SHIRT"];
 
     const aCtx = new (window.AudioContext || window.webkitAudioContext)();
     function play(f, t, d) {
@@ -161,22 +180,37 @@
     }
 
     function goPortal(p) {
-        curP = p; sessionWords = shuffle([...wordBank]).slice(0, 10);
+        curP = p; 
+        sessionWords = shuffle([...wordBank]).slice(0, 10);
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        
+        if (p === 'math') {
+            document.getElementById('v-math-ops').classList.remove('hidden');
+        } else {
+            document.getElementById('v-opt').classList.remove('hidden');
+            document.getElementById('back-from-type').onclick = resetHub;
+        }
+    }
+
+    function pickMathOp(op) {
+        curM = op;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-opt').classList.remove('hidden');
-        document.getElementById('type-list').classList.remove('hidden');
-        document.getElementById('diff-list').classList.add('hidden');
+        document.getElementById('back-from-type').onclick = () => {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+            document.getElementById('v-math-ops').classList.remove('hidden');
+        };
     }
 
     function setOpt(t) {
         curT = t;
-        document.getElementById('type-list').classList.add('hidden');
-        document.getElementById('diff-list').classList.remove('hidden');
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('v-diff').classList.remove('hidden');
     }
 
     function backToType() {
-        document.getElementById('diff-list').classList.add('hidden');
-        document.getElementById('type-list').classList.remove('hidden');
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('v-opt').classList.remove('hidden');
     }
 
     function start(d) {
@@ -209,8 +243,14 @@
 
     function genMath() {
         let r = curD === 'god' ? 500 : 100;
-        let n1 = rand(r), n2 = rand(r);
-        cAns = n1 + n2; document.getElementById('q-text').innerText = `${n1} + ${n2}`;
+        let op = curM === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : curM;
+        let n1, n2, sym;
+        
+        if(op === 'add') { n1 = rand(r); n2 = rand(r); cAns = n1 + n2; sym = '+'; }
+        else if(op === 'sub') { n1 = rand(r) + 10; n2 = rand(n1); cAns = n1 - n2; sym = '-'; }
+        else { n1 = rand(curD === 'god' ? 30 : 12) + 1; n2 = rand(12) + 1; cAns = n1 * n2; sym = '×'; }
+        
+        document.getElementById('q-text').innerText = `${n1} ${sym} ${n2}`;
         makeChoices(cAns, 'num');
     }
 
@@ -324,21 +364,21 @@
     }
 
     function save(p, s) {
-        let d = JSON.parse(localStorage.getItem('neu_hub_final_v2') || '{}');
+        let d = JSON.parse(localStorage.getItem('neu_hub_vFinal_v3') || '{}');
         if(!d[p]) d[p] = { t: 0, c: 0 };
         d[p].t += 10; d[p].c += s;
-        localStorage.setItem('neu_hub_final_v2', JSON.stringify(d));
+        localStorage.setItem('neu_hub_vFinal_v3', JSON.stringify(d));
     }
 
     function drawProg() {
-        const d = JSON.parse(localStorage.getItem('neu_hub_final_v2') || '{}');
+        const d = JSON.parse(localStorage.getItem('neu_hub_vFinal_v3') || '{}');
         let totalP = 0, countP = 0;
         ['math','word','color','seq','patt'].forEach(p => {
             const c = document.getElementById('p-' + p);
             let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0;
             totalP += pct; countP++;
             let off = 126 - (pct / 100) * 126;
-            c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
+            c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray: 126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
         });
         let avg = totalP / countP, rank = "SEEDLING";
         if(avg > 25) rank = "SPROUT"; if(avg > 50) rank = "SCHOLAR"; if(avg > 75) rank = "SAGE"; if(avg > 90) rank = "HUB MASTER";
@@ -346,7 +386,6 @@
     }
 
     function rand(m) { return Math.floor(Math.random() * m); }
-
     document.getElementById('ans-in').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkText(); });
     drawProg();
 </script>
