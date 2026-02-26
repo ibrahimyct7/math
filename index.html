@@ -11,12 +11,7 @@
 
     <style>
         :root {
-            --bg: #0d1a0f;
-            --panel: #162b1a;
-            --cream: #f1f8e9;
-            --mint: #a5d6a7;
-            --btn-dark: #081209;
-            /* Portal Colors */
+            --bg: #0d1a0f; --panel: #162b1a; --cream: #f1f8e9; --mint: #a5d6a7; --btn-dark: #081209;
             --math: #4caf50; --word: #2196f3; --color: #ff5722; --seq: #ffeb3b; --patt: #9c27b0;
             --easy: #a5d6a7; --hard: #ffb74d; --god: #f44336;
         }
@@ -32,11 +27,10 @@
             background: var(--panel); padding: 1.8rem 1.2rem; border-radius: 40px;
             box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
             width: 92%; max-width: 380px; border: 1px solid rgba(255,255,255,0.08);
-            position: relative; transition: background-color 0.3s;
+            position: relative;
         }
 
         #global-rank { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--seq); margin-bottom: 15px; text-transform: uppercase; }
-
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
@@ -66,7 +60,9 @@
         
         button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
         .btn-choice { padding: 16px; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
-        .btn-choice:disabled { opacity: 0.8; }
+        
+        /* Ensures results buttons are always clickable */
+        .force-click { pointer-events: auto !important; opacity: 1 !important; }
 
         input[type="text"] { width: 100%; padding: 18px; border-radius: 20px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.3rem; text-align: center; outline: none; margin-bottom: 10px; box-sizing: border-box; }
 
@@ -147,8 +143,8 @@
         <h2 id="res-title">Test Complete</h2>
         <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span><span style="font-size:1.5rem">/10</span></p>
         <div class="v-list">
-            <button class="btn-choice" style="background:var(--math); color:black;" onclick="tryAgain()">TRY AGAIN</button>
-            <button class="btn-nav" onclick="resetHub()">BACK TO HUB</button>
+            <button class="btn-choice force-click" style="background:var(--math); color:black;" onclick="tryAgain()">TRY AGAIN</button>
+            <button class="btn-nav force-click" onclick="resetHub()">BACK TO HUB</button>
         </div>
     </div>
 </div>
@@ -170,20 +166,27 @@
         o.start(); o.stop(aCtx.currentTime + d);
     }
 
-    function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+    function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+    function forceUnlock() {
+        clearInterval(tInt);
+        document.querySelectorAll('button, input').forEach(el => {
+            el.disabled = false;
+            el.style.pointerEvents = 'auto';
+        });
+        document.getElementById('app').classList.remove('f-right', 'f-wrong', 'shake');
+        document.getElementById('timer-box').style.display = 'none';
+    }
 
     function resetHub() {
-        clearInterval(tInt);
-        document.querySelectorAll('button, input').forEach(el => el.disabled = false);
-        document.getElementById('ans-in').value = '';
-        document.getElementById('app').className = '';
-        document.getElementById('timer-box').style.display = 'none';
+        forceUnlock();
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-hub').classList.remove('hidden');
         drawProg();
     }
 
     function tryAgain() {
+        forceUnlock();
         curS = 0; qN = 1;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-game').classList.remove('hidden');
@@ -195,13 +198,17 @@
         curP = p; sessionWords = shuffle([...wordBank]).slice(0, 10);
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         if (p === 'math') { document.getElementById('v-math-ops').classList.remove('hidden'); }
-        else { document.getElementById('v-opt').classList.remove('hidden'); }
+        else { document.getElementById('v-opt').classList.remove('hidden'); document.getElementById('back-from-type').onclick = resetHub; }
     }
 
     function pickMathOp(op) {
         curM = op;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-opt').classList.remove('hidden');
+        document.getElementById('back-from-type').onclick = () => {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+            document.getElementById('v-math-ops').classList.remove('hidden');
+        };
     }
 
     function setOpt(t) {
@@ -215,12 +222,6 @@
         document.getElementById('v-opt').classList.remove('hidden');
     }
 
-    function backFromPace() {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        if(curP === 'math') document.getElementById('v-math-ops').classList.remove('hidden');
-        else document.getElementById('v-hub').classList.remove('hidden');
-    }
-
     function start(d) {
         curD = d; curS = 0; qN = 1;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
@@ -230,8 +231,7 @@
 
     function nextQ() {
         if(qN > 10) return end();
-        document.getElementById('app').className = '';
-        document.querySelectorAll('button, input').forEach(el => el.disabled = false);
+        forceUnlock(); 
         document.getElementById('q-cur').innerText = qN;
         document.getElementById('text-area').classList.add('hidden');
         document.getElementById('choices').classList.remove('hidden');
@@ -240,10 +240,10 @@
         document.getElementById('q-text').style.color = 'var(--cream)';
 
         if(curP === 'math') genMath();
-        if(curP === 'word') genWord();
-        if(curP === 'color') genColor();
-        if(curP === 'seq') genSeq();
-        if(curP === 'patt') genPatt();
+        else if(curP === 'word') genWord();
+        else if(curP === 'color') genColor();
+        else if(curP === 'seq') genSeq();
+        else genPatt();
 
         if(curT === 'timed') startT();
     }
@@ -263,8 +263,7 @@
         document.getElementById('text-area').classList.remove('hidden');
         document.getElementById('choices').classList.add('hidden');
         let w = sessionWords[qN - 1]; cAns = w;
-        let s = w.split('').sort(()=>Math.random()-0.5).join('');
-        document.getElementById('q-text').innerText = s;
+        document.getElementById('q-text').innerText = shuffle(w.split('')).join('');
         document.getElementById('ans-in').focus();
     }
 
@@ -274,13 +273,10 @@
         cAns = vColors[cI];
         let q = document.getElementById('q-text'); q.innerText = names[wI]; q.style.color = vColors[cI];
         let set = new Set([cI, wI]); while(set.size < 4) set.add(rand(vColors.length));
-        
-        // SHUFFLE APPLIED HERE
         shuffle(Array.from(set)).forEach(i => {
-            const b = document.createElement('button');
-            b.className = 'btn-choice'; b.style.backgroundColor = vColors[i];
-            b.innerHTML = "&nbsp;"; b.onclick = () => check(vColors[i]);
-            document.getElementById('choices').appendChild(b);
+            const b = document.createElement('button'); b.className = 'btn-choice'; 
+            b.style.backgroundColor = vColors[i]; b.innerHTML = "&nbsp;"; 
+            b.onclick = () => check(vColors[i]); document.getElementById('choices').appendChild(b);
         });
     }
 
@@ -291,16 +287,12 @@
         document.getElementById('q-text').innerText = seq.join(' ');
         document.getElementById('choices').classList.add('hidden');
         setTimeout(() => {
-            document.getElementById('q-text').innerText = "RECALL?";
+            document.getElementById('q-text').innerText = "???";
             document.getElementById('choices').classList.remove('hidden');
-            let set = new Set([sStr]);
-            while(set.size < 4) set.add((parseInt(sStr)+rand(100)).toString());
-            
-            // SHUFFLE APPLIED HERE
+            let set = new Set([sStr]); while(set.size < 4) set.add((parseInt(sStr)+rand(100)).toString());
             shuffle(Array.from(set)).forEach(v => {
-                const b = document.createElement('button');
-                b.className = 'btn-choice'; b.innerText = v;
-                b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
+                const b = document.createElement('button'); b.className = 'btn-choice'; 
+                b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
             });
         }, 1500);
     }
@@ -317,12 +309,9 @@
             let seq = [sym.repeat(count), sym.repeat(count+1), sym.repeat(count+2)]; cAns = sym.repeat(count+3);
             qArea.innerText = seq.join(' ') + ' ?';
             let set = new Set([cAns]); while(set.size < 4) set.add(sym.repeat(rand(7)+1));
-            
-            // SHUFFLE APPLIED HERE
             shuffle(Array.from(set)).forEach(v => {
-                const b = document.createElement('button');
-                b.className = 'btn-choice'; b.innerText = v;
-                b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
+                const b = document.createElement('button'); b.className = 'btn-choice'; 
+                b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
             });
         }
     }
@@ -330,28 +319,24 @@
     function makeChoices(c, m) {
         let s = new Set([c]);
         while(s.size < 4) s.add(m === 'num' ? c + (rand(11)-5) : wordBank[rand(wordBank.length)]);
-        
-        // SHUFFLE APPLIED HERE
         shuffle(Array.from(s)).forEach(v => {
-            const b = document.createElement('button');
-            b.className = 'btn-choice'; b.innerText = v;
-            b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
+            const b = document.createElement('button'); b.className = 'btn-choice'; 
+            b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
         });
     }
 
-    function checkText() { check(document.getElementById('ans-in').value.toUpperCase().trim()); }
+    function checkText() { if(document.getElementById('ans-in').value !== "") check(document.getElementById('ans-in').value.toUpperCase().trim()); }
 
     function check(v) {
         clearInterval(tInt);
-        const app = document.getElementById('app'), qText = document.getElementById('q-text');
         document.querySelectorAll('button, input').forEach(el => el.disabled = true);
+        const app = document.getElementById('app'), qText = document.getElementById('q-text');
         if(String(v) == String(cAns)) {
             curS++; app.classList.add('f-right'); play(600, 'sine', 0.1); qText.innerText = "CORRECT!";
         } else {
             app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2);
-            let displayAns = cAns;
-            if(curP === 'color') displayAns = names[vColors.indexOf(cAns)];
-            qText.innerText = "WRONG! WAS: " + displayAns; qText.style.color = "#ff8a80";
+            let dAns = cAns; if(curP === 'color') dAns = names[vColors.indexOf(cAns)];
+            qText.innerText = "WRONG! WAS: " + dAns; qText.style.color = "#ff8a80";
         }
         qN++; setTimeout(nextQ, 1500);
     }
@@ -366,6 +351,7 @@
     }
 
     function end() {
+        forceUnlock();
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-res').classList.remove('hidden');
         document.getElementById('res-score').innerText = curS;
@@ -375,25 +361,23 @@
     }
 
     function save(p, s) {
-        let d = JSON.parse(localStorage.getItem('neu_hub_final_vFinal') || '{}');
-        if(!d[p]) d[p] = { t: 0, c: 0 };
-        d[p].t += 10; d[p].c += s;
-        localStorage.setItem('neu_hub_final_vFinal', JSON.stringify(d));
+        let d = JSON.parse(localStorage.getItem('neu_vFinal_v4') || '{}');
+        if(!d[p]) d[p] = { t: 0, c: 0 }; d[p].t += 10; d[p].c += s;
+        localStorage.setItem('neu_vFinal_v4', JSON.stringify(d));
     }
 
     function drawProg() {
-        const d = JSON.parse(localStorage.getItem('neu_hub_final_vFinal') || '{}');
-        let totalP = 0;
+        const d = JSON.parse(localStorage.getItem('neu_vFinal_v4') || '{}');
+        let tP = 0;
         ['math','word','color','seq','patt'].forEach(p => {
             const c = document.getElementById('p-' + p);
-            let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0;
-            totalP += pct;
+            let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0; tP += pct;
             let off = 126 - (pct / 100) * 126;
             c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
         });
-        let avg = totalP / 5;
-        let rank = avg > 90 ? "HUB MASTER" : avg > 75 ? "SAGE" : avg > 50 ? "SCHOLAR" : avg > 25 ? "SPROUT" : "SEEDLING";
-        document.getElementById('global-rank').innerText = "RANK: " + rank;
+        let avg = tP / 5, r = "SEEDLING";
+        if(avg > 25) r = "SPROUT"; if(avg > 50) r = "SCHOLAR"; if(avg > 75) r = "SAGE"; if(avg > 90) r = "HUB MASTER";
+        document.getElementById('global-rank').innerText = "RANK: " + r;
     }
 
     function rand(m) { return Math.floor(Math.random() * m); }
