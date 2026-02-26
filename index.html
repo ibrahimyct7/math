@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Neural Hub</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="manifest" href='data:application/json,{"name":"Neural Hub","short_name":"Hub","start_url":".","display":"standalone","background_color":"#0d1a0f","theme_color":"#162b1a","icons":[{"src":"logo.png","sizes":"192x192","type":"image/png"},{"src":"logo.png","sizes":"512x512","type":"image/png"}]}'>
+
     <style>
         :root {
             --bg: #0d1a0f;
@@ -17,42 +22,40 @@
         }
 
         body {
-            margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: var(--bg); color: var(--cream);
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
             overflow: hidden; touch-action: manipulation;
         }
 
         #app {
-            background: var(--panel); padding: 1.5rem 1.2rem; border-radius: 40px;
+            background: var(--panel); padding: 1.8rem 1.2rem; border-radius: 40px;
             box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
             width: 92%; max-width: 380px; border: 1px solid rgba(255,255,255,0.08);
             position: relative; transition: background-color 0.3s;
         }
 
-        #global-rank { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--seq); margin-bottom: 8px; text-transform: uppercase; }
+        #global-rank { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--seq); margin-bottom: 15px; text-transform: uppercase; }
 
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
+        /* Portal List Layout */
         .portal-item {
             display: flex; align-items: center; width: 100%; 
             background: var(--btn-dark); border-radius: 25px; 
-            padding: 8px 12px; margin-bottom: 10px; box-sizing: border-box;
+            padding: 8px 12px; margin-bottom: 12px; box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.02);
         }
         .btn-main {
-            flex-grow: 1; padding: 15px; border: none; border-radius: 18px;
+            flex-grow: 1; padding: 16px; border: none; border-radius: 18px;
             font-weight: 800; font-size: 1rem; cursor: pointer; text-align: left;
-            display: flex; align-items: center; gap: 12px;
+            display: flex; align-items: center; gap: 15px;
+            letter-spacing: 1px;
         }
         
-        .app-logo { width: 60px; height: 60px; border-radius: 15px; margin-bottom: 10px; border: 2px solid var(--math); object-fit: cover; }
-
-        .icon-span { 
-            font-size: 1.5rem; 
-            filter: drop-shadow(0 3px 2px rgba(0,0,0,0.4)); 
-            display: inline-block;
-        }
+        /* Clean Symbols instead of Emojis */
+        .sym { font-family: serif; font-size: 1.4rem; font-weight: bold; width: 25px; text-align: center; }
 
         .prog-box { position: relative; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; margin-left: 10px; }
         .prog-svg { transform: rotate(-90deg); width: 42px; height: 42px; }
@@ -67,7 +70,6 @@
         
         button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
         .btn-choice { padding: 16px; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
-        .btn-choice:disabled { opacity: 0.8; cursor: default; }
 
         input[type="text"] { width: 100%; padding: 18px; border-radius: 20px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.3rem; text-align: center; outline: none; margin-bottom: 10px; box-sizing: border-box; }
 
@@ -79,7 +81,7 @@
         #timer-box { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; }
         #timer-bar { height: 100%; background: var(--mint); width: 100%; }
         
-        .btn-nav { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 12px; font-size: 0.8rem; border-radius: 15px; font-weight: bold; margin-top: 10px; }
+        .btn-nav { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 12px; font-size: 0.8rem; border-radius: 15px; font-weight: bold; margin-top: 10px; width: 100%; }
     </style>
 </head>
 <body>
@@ -89,43 +91,42 @@
     <div id="timer-box"><div id="timer-bar"></div></div>
 
     <div id="v-hub" class="view-section">
-        <img src="logo.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
         <h1 style="color:var(--mint); margin:0; font-size:1.6rem;">Neural Hub</h1>
-        <p style="opacity:0.5; font-size:0.75rem; margin-bottom:20px;">Personal Brain Maintenance</p>
+        <p style="opacity:0.4; font-size:0.7rem; margin-bottom:20px; letter-spacing: 1px;">CORE COGNITION TRAINER</p>
         <div class="v-list">
-            <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#000;" onclick="goPortal('math')"><span class="icon-span">🔢</span> MATH</button><div class="prog-box" id="p-math"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#fff;" onclick="goPortal('word')"><span class="icon-span">🔠</span> WORDS</button><div class="prog-box" id="p-word"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--color); color:#fff;" onclick="goPortal('color')"><span class="icon-span">🎨</span> COLORS</button><div class="prog-box" id="p-color"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--seq); color:#000;" onclick="goPortal('seq')"><span class="icon-span">🧠</span> RECALL</button><div class="prog-box" id="p-seq"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#fff;" onclick="goPortal('patt')"><span class="icon-span">🧩</span> PATTERN</button><div class="prog-box" id="p-patt"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#000;" onclick="goPortal('math')"><span class="sym">∑</span> MATH</button><div class="prog-box" id="p-math"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#fff;" onclick="goPortal('word')"><span class="sym">Aa</span> WORDS</button><div class="prog-box" id="p-word"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--color); color:#fff;" onclick="goPortal('color')"><span class="sym">◐</span> COLORS</button><div class="prog-box" id="p-color"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--seq); color:#000;" onclick="goPortal('seq')"><span class="sym">◰</span> RECALL</button><div class="prog-box" id="p-seq"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#fff;" onclick="goPortal('patt')"><span class="sym">▤</span> PATTERN</button><div class="prog-box" id="p-patt"></div></div>
         </div>
     </div>
 
     <div id="v-math-ops" class="view-section hidden">
-        <h1 style="font-size:1.2rem;">Math Portal</h1>
+        <h1 style="font-size:1.2rem;">Select Operation</h1>
         <div class="v-list" style="margin-top:20px;">
             <button class="btn-choice" onclick="pickMathOp('add')">ADDITION +</button>
             <button class="btn-choice" onclick="pickMathOp('sub')">SUBTRACTION -</button>
             <button class="btn-choice" onclick="pickMathOp('mul')">MULTIPLICATION ×</button>
-            <button class="btn-choice" onclick="pickMathOp('mix')">MIXED ±×</button>
+            <button class="btn-choice" onclick="pickMathOp('mix')">MIXED MODE ±×</button>
             <button class="btn-nav" onclick="resetHub()">← BACK TO HUB</button>
         </div>
     </div>
 
     <div id="v-opt" class="view-section hidden">
-        <h1 id="opt-title" style="font-size:1.2rem;">Challenge Type</h1>
+        <h1 id="opt-title" style="font-size:1.2rem;">Challenge Pace</h1>
         <div id="type-list" class="v-list" style="margin-top:20px;">
-            <button class="btn-choice" onclick="setOpt('relaxed')">RELAXED (No Timer)</button>
-            <button class="btn-choice" style="background:#3e2723; color:white" onclick="setOpt('timed')">TIMED (High Pressure)</button>
+            <button class="btn-choice" onclick="setOpt('relaxed')">RELAXED</button>
+            <button class="btn-choice" style="background:#3e2723; color:white" onclick="setOpt('timed')">TIMED</button>
             <button class="btn-nav" id="back-from-type" onclick="resetHub()">← BACK</button>
         </div>
     </div>
 
     <div id="v-diff" class="view-section hidden">
-        <h1 style="font-size:1.2rem;">Select Intensity</h1>
+        <h1 style="font-size:1.2rem;">Difficulty</h1>
         <div class="v-list" style="margin-top:20px;">
-            <button class="btn-choice" style="color:var(--easy)" onclick="start('easy')">EASY MODE</button>
-            <button class="btn-choice" style="color:var(--hard)" onclick="start('hard')">HARD MODE</button>
+            <button class="btn-choice" style="color:var(--easy)" onclick="start('easy')">EASY</button>
+            <button class="btn-choice" style="color:var(--hard)" onclick="start('hard')">HARD</button>
             <button class="btn-choice" style="color:var(--god)" onclick="start('god')">GOD MODE</button>
             <button class="btn-nav" onclick="backToType()">← PREVIOUS PAGE</button>
         </div>
@@ -137,18 +138,18 @@
         <div id="input-area" class="v-list">
             <div id="choices" class="v-list"></div>
             <div id="text-area" class="hidden">
-                <input type="text" id="ans-in" placeholder="Type answer..." autocomplete="off">
+                <input type="text" id="ans-in" placeholder="..." autocomplete="off">
                 <button id="text-submit" class="btn-choice" style="background:var(--math); color:#000; width:100%" onclick="checkText()">SUBMIT</button>
             </div>
         </div>
-        <button class="btn-nav" style="margin-top:25px;" onclick="resetHub()">QUIT TO HOME</button>
+        <button class="btn-nav" style="margin-top:20px;" onclick="resetHub()">QUIT TO HUB</button>
     </div>
 
     <div id="v-res" class="view-section hidden">
         <h1 id="res-emoji" style="font-size:4rem; margin:0;">🏆</h1>
         <h2 id="res-title">Test Complete</h2>
         <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span><span style="font-size:1.5rem">/10</span></p>
-        <button class="btn-choice" style="width:100%; background:var(--math); color:black;" onclick="resetHub()">RETURN TO HUB</button>
+        <button class="btn-choice" style="width:100%; background:var(--math); color:black;" onclick="resetHub()">CONTINUE</button>
     </div>
 </div>
 
@@ -172,18 +173,22 @@
     function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
 
     function resetHub() {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('v-hub').classList.remove('hidden');
+        // GLOBAL CLEANUP to prevent touchscreen freeze
+        clearInterval(tInt);
+        document.querySelectorAll('button, input').forEach(el => { el.disabled = false; });
+        document.getElementById('ans-in').value = '';
         document.getElementById('app').className = '';
         document.getElementById('timer-box').style.display = 'none';
-        clearInterval(tInt); drawProg();
+        
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('v-hub').classList.remove('hidden');
+        drawProg();
     }
 
     function goPortal(p) {
         curP = p; 
         sessionWords = shuffle([...wordBank]).slice(0, 10);
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        
         if (p === 'math') {
             document.getElementById('v-math-ops').classList.remove('hidden');
         } else {
@@ -222,6 +227,8 @@
 
     function nextQ() {
         if(qN > 10) return end();
+        
+        // Ensure UI is enabled and clean
         document.getElementById('app').className = '';
         document.getElementById('q-cur').innerText = qN;
         document.getElementById('text-area').classList.add('hidden');
@@ -245,11 +252,9 @@
         let r = curD === 'god' ? 500 : 100;
         let op = curM === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : curM;
         let n1, n2, sym;
-        
         if(op === 'add') { n1 = rand(r); n2 = rand(r); cAns = n1 + n2; sym = '+'; }
         else if(op === 'sub') { n1 = rand(r) + 10; n2 = rand(n1); cAns = n1 - n2; sym = '-'; }
         else { n1 = rand(curD === 'god' ? 30 : 12) + 1; n2 = rand(12) + 1; cAns = n1 * n2; sym = '×'; }
-        
         document.getElementById('q-text').innerText = `${n1} ${sym} ${n2}`;
         makeChoices(cAns, 'num');
     }
@@ -321,16 +326,12 @@
         });
     }
 
-    function checkText() { 
-        const val = document.getElementById('ans-in').value.toUpperCase().trim();
-        if(val !== "") check(val); 
-    }
+    function checkText() { check(document.getElementById('ans-in').value.toUpperCase().trim()); }
 
     function check(v) {
         clearInterval(tInt);
         const app = document.getElementById('app'), qText = document.getElementById('q-text');
-        document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
-        document.getElementById('ans-in').disabled = true;
+        document.querySelectorAll('button, input').forEach(el => { el.disabled = true; });
         
         let isRight = (String(v) == String(cAns));
         if(isRight) {
@@ -364,21 +365,21 @@
     }
 
     function save(p, s) {
-        let d = JSON.parse(localStorage.getItem('neu_hub_vFinal_v3') || '{}');
+        let d = JSON.parse(localStorage.getItem('neu_hub_final_vFinal') || '{}');
         if(!d[p]) d[p] = { t: 0, c: 0 };
         d[p].t += 10; d[p].c += s;
-        localStorage.setItem('neu_hub_vFinal_v3', JSON.stringify(d));
+        localStorage.setItem('neu_hub_final_vFinal', JSON.stringify(d));
     }
 
     function drawProg() {
-        const d = JSON.parse(localStorage.getItem('neu_hub_vFinal_v3') || '{}');
+        const d = JSON.parse(localStorage.getItem('neu_hub_final_vFinal') || '{}');
         let totalP = 0, countP = 0;
         ['math','word','color','seq','patt'].forEach(p => {
             const c = document.getElementById('p-' + p);
             let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0;
             totalP += pct; countP++;
             let off = 126 - (pct / 100) * 126;
-            c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray: 126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
+            c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
         });
         let avg = totalP / countP, rank = "SEEDLING";
         if(avg > 25) rank = "SPROUT"; if(avg > 50) rank = "SCHOLAR"; if(avg > 75) rank = "SAGE"; if(avg > 90) rank = "HUB MASTER";
