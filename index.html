@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Flow | Brain Trainer</title>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1hdGggRmxvdyIsCiAgInNob3J0X25hbWUiIjogIk1hdGgiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI2YwZjhmZiIsCiAgInRoZW1lX2NvbG9yIjogIiM0Q0FGNTAiCn0=">
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #e8f5e9;
+            --white: #ffffff;
+            --accent: #4caf50;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-green);
+            background-image:  linear-gradient(30deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(150deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(30deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(150deg, #c8e6c9 12%, transparent 12.5%, transparent 87%, #c8e6c9 87.5%, #c8e6c9), linear-gradient(60deg, #a5d6a7 25%, transparent 25.5%, transparent 75%, #a5d6a7 75%, #a5d6a7), linear-gradient(60deg, #a5d6a7 25%, transparent 25.5%, transparent 75%, #a5d6a7 75%, #a5d6a7);
+            background-size: 80px 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--primary-green);
+        }
+
+        #app {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 { margin-top: 0; font-size: 2rem; }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-mode {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .btn-choice {
+            background: var(--white);
+            border: 2px solid var(--accent);
+            color: var(--primary-green);
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        button:active { transform: scale(0.95); }
+
+        .hidden { display: none; }
+
+        #question-text { font-size: 2.5rem; margin: 20px 0; }
+
+        #feedback { font-weight: bold; height: 1.2rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="menu">
+        <h1>Math Flow</h1>
+        <p>Pick your challenge:</p>
+        <div class="menu-grid">
+            <button class="btn-mode" onclick="startGame('add')">Addition (+)</button>
+            <button class="btn-mode" onclick="startGame('sub')">Subtraction (-)</button>
+            <button class="btn-mode" onclick="startGame('mul')">Multiplication (×)</button>
+            <button class="btn-mode" onclick="startGame('mix')">Mixed (±×)</button>
+        </div>
+    </div>
+
+    <div id="game" class="hidden">
+        <div id="stats">Question: <span id="q-count">1</span>/10</div>
+        <div id="question-text">0 + 0</div>
+        <div id="feedback"></div>
+        <div id="choices">
+            </div>
+    </div>
+
+    <div id="results" class="hidden">
+        <h2>Round Complete!</h2>
+        <p style="font-size: 1.5rem;">Score: <span id="final-score">0</span>/10</p>
+        <button class="btn-mode" onclick="showMenu()">Play Again</button>
+    </div>
+</div>
+
+<script>
+    let currentScore = 0;
+    let questionNumber = 0;
+    let correctAnswer = 0;
+    let gameMode = '';
+
+    function startGame(mode) {
+        gameMode = mode;
+        currentScore = 0;
+        questionNumber = 1;
+        document.getElementById('menu').classList.add('hidden');
+        document.getElementById('results').classList.add('hidden');
+        document.getElementById('game').classList.remove('hidden');
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        if (questionNumber > 10) {
+            showResults();
+            return;
+        }
+        
+        document.getElementById('q-count').innerText = questionNumber;
+        document.getElementById('feedback').innerText = '';
+        
+        let type = gameMode === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : gameMode;
+        let n1, n2, symbol;
+
+        if (type === 'add') {
+            n1 = Math.floor(Math.random() * 90) + 1;
+            n2 = Math.floor(Math.random() * (99 - n1)); // Ensures sum <= 99
+            correctAnswer = n1 + n2;
+            symbol = '+';
+        } else if (type === 'sub') {
+            n1 = Math.floor(Math.random() * 90) + 10;
+            n2 = Math.floor(Math.random() * n1);
+            correctAnswer = n1 - n2;
+            symbol = '-';
+        } else {
+            n1 = Math.floor(Math.random() * 12) + 1;
+            n2 = Math.floor(Math.random() * 12) + 1;
+            correctAnswer = n1 * n2;
+            symbol = '×';
+        }
+
+        document.getElementById('question-text').innerText = `${n1} ${symbol} ${n2}`;
+        generateChoices(correctAnswer);
+    }
+
+    function generateChoices(correct) {
+        let choices = new Set([correct]);
+        while(choices.size < 4) {
+            let offset = Math.floor(Math.random() * 10) - 5;
+            let fake = correct + offset;
+            if (fake >= 0 && fake !== correct) choices.add(fake);
+        }
+
+        const choicesArea = document.getElementById('choices');
+        choicesArea.innerHTML = '';
+        Array.from(choices).sort(() => Math.random() - 0.5).forEach(val => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-choice';
+            btn.innerText = val;
+            btn.onclick = () => checkAnswer(val);
+            choicesArea.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected) {
+        const feedback = document.getElementById('feedback');
+        if (selected === correctAnswer) {
+            currentScore++;
+            feedback.innerText = "Correct! ✨";
+            feedback.style.color = "green";
+        } else {
+            feedback.innerText = `Incorrect! Answer: ${correctAnswer}`;
+            feedback.style.color = "red";
+        }
+
+        questionNumber++;
+        setTimeout(nextQuestion, 1000);
+    }
+
+    function showResults() {
+        document.getElementById('game').classList.add('hidden');
+        document.getElementById('results').classList.remove('hidden');
+        document.getElementById('final-score').innerText = currentScore;
+    }
+
+    function showMenu() {
+        document.getElementById('results').classList.add('hidden');
+        document.getElementById('menu').classList.remove('hidden');
+    }
+
+    // Service Worker for "Add to Home Screen"
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+</script>
+</body>
+</html>
