@@ -12,7 +12,7 @@
             --mint: #a5d6a7;
             --btn-dark: #081209;
             /* Portal Colors */
-            --math: #4caf50; --word: #2196f3; --color: #ff5722; --seq: #ffeb3b; --patt: #9c27b0; --ridd: #a1887f;
+            --math: #4caf50; --word: #2196f3; --color: #ff5722; --seq: #ffeb3b; --patt: #9c27b0;
             --easy: #a5d6a7; --hard: #ffb74d; --god: #f44336;
         }
 
@@ -35,7 +35,6 @@
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
-        /* Hub List */
         .portal-item {
             display: flex; align-items: center; width: 100%; 
             background: var(--btn-dark); border-radius: 25px; 
@@ -46,19 +45,22 @@
             font-weight: 800; font-size: 1rem; cursor: pointer; text-align: left;
             display: flex; align-items: center; gap: 12px;
         }
-        .icon-span { font-size: 1.3rem; }
+        
+        .icon-span { 
+            font-size: 1.5rem; 
+            filter: drop-shadow(0 3px 2px rgba(0,0,0,0.4)); 
+            display: inline-block;
+        }
 
-        /* Progress Circles */
         .prog-box { position: relative; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; margin-left: 10px; }
         .prog-svg { transform: rotate(-90deg); width: 42px; height: 42px; }
         .prog-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 4; }
         .prog-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
         .prog-txt { position: absolute; font-size: 0.65rem; font-weight: 800; color: var(--mint); }
 
-        /* Game Header */
         .game-header { font-size: 0.75rem; font-weight: 800; color: var(--mint); margin-bottom: 10px; opacity: 0.8; letter-spacing: 1px; }
 
-        #q-text { font-size: 2.2rem; margin: 10px 0; font-weight: 900; min-height: 130px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        #q-text { font-size: 2.2rem; margin: 15px 0; font-weight: 900; min-height: 130px; display: flex; align-items: center; justify-content: center; text-align: center; }
         .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         
         button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
@@ -74,8 +76,7 @@
         #timer-box { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; }
         #timer-bar { height: 100%; background: var(--mint); width: 100%; }
         
-        .nav-buttons { display: flex; gap: 10px; width: 100%; margin-top: 15px; }
-        .btn-nav { flex: 1; background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 12px; font-size: 0.8rem; border-radius: 15px; font-weight: bold; }
+        .btn-nav { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 12px; font-size: 0.8rem; border-radius: 15px; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -86,22 +87,21 @@
 
     <div id="v-hub" class="view-section">
         <h1 style="color:var(--mint); margin:0; font-size:1.6rem;">Neural Hub</h1>
-        <p style="opacity:0.5; font-size:0.75rem; margin-bottom:20px;">Personal Brain Maintenance</p>
+        <p style="opacity:0.5; font-size:0.75rem; margin-bottom:20px;">Core Mental Training</p>
         <div class="v-list">
             <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#000;" onclick="goPortal('math')"><span class="icon-span">🔢</span> MATH</button><div class="prog-box" id="p-math"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#fff;" onclick="goPortal('word')"><span class="icon-span">🔠</span> WORDS</button><div class="prog-box" id="p-word"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--color); color:#fff;" onclick="goPortal('color')"><span class="icon-span">🎨</span> COLORS</button><div class="prog-box" id="p-color"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--seq); color:#000;" onclick="goPortal('seq')"><span class="icon-span">🧠</span> RECALL</button><div class="prog-box" id="p-seq"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#fff;" onclick="goPortal('patt')"><span class="icon-span">🧩</span> PATTERN</button><div class="prog-box" id="p-patt"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--ridd); color:#fff;" onclick="goPortal('ridd')"><span class="icon-span">📜</span> RIDDLE</button><div class="prog-box" id="p-ridd"></div></div>
         </div>
     </div>
 
     <div id="v-opt" class="view-section hidden">
         <h1 id="opt-title" style="font-size:1.2rem;">Challenge Type</h1>
         <div id="type-list" class="v-list" style="margin-top:20px;">
-            <button class="btn-choice" onclick="setOpt('zen')">ZEN FLOW (Relaxed)</button>
-            <button class="btn-choice" style="background:#3e2723; color:white" onclick="setOpt('blitz')">BLITZ PULSE (Timed)</button>
+            <button class="btn-choice" onclick="setOpt('relaxed')">RELAXED (No Timer)</button>
+            <button class="btn-choice" style="background:#3e2723; color:white" onclick="setOpt('timed')">TIMED (High Pressure)</button>
             <button class="btn-nav" onclick="resetHub()">← BACK TO HUB</button>
         </div>
         <div id="diff-list" class="v-list hidden" style="margin-top:20px;">
@@ -113,13 +113,13 @@
     </div>
 
     <div id="v-game" class="view-section hidden">
-        <div class="game-header">QUESTION <span id="q-cur">1</span> OF <span id="q-tot">10</span></div>
+        <div class="game-header">QUESTION <span id="q-cur">1</span> OF 10</div>
         <div id="q-text">--</div>
         <div id="input-area" class="v-list">
             <div id="choices" class="v-list"></div>
             <div id="text-area" class="hidden">
                 <input type="text" id="ans-in" placeholder="Type answer..." autocomplete="off">
-                <button class="btn-choice" style="background:var(--math); color:#000; width:100%" onclick="checkText()">SUBMIT</button>
+                <button id="text-submit" class="btn-choice" style="background:var(--math); color:#000; width:100%" onclick="checkText()">SUBMIT</button>
             </div>
         </div>
         <button class="btn-nav" style="margin-top:25px;" onclick="resetHub()">QUIT TO HOME</button>
@@ -128,23 +128,18 @@
     <div id="v-res" class="view-section hidden">
         <h1 id="res-emoji" style="font-size:4rem; margin:0;">🏆</h1>
         <h2 id="res-title">Test Complete</h2>
-        <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span><span id="res-limit" style="font-size:1.5rem">/10</span></p>
+        <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span><span style="font-size:1.5rem">/10</span></p>
         <button class="btn-choice" style="width:100%; background:var(--math); color:black;" onclick="resetHub()">RETURN TO HUB</button>
     </div>
 </div>
 
 <script>
-    let curP = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt, qLimit = 10;
-    let sessionWords = [], sessionRiddles = [];
+    let curP = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt;
+    let sessionWords = [];
 
     const names = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "WHITE"];
     const vColors = ["#FF0000", "#0000FF", "#00FF00", "#FFFF00", "#FF9800", "#FFFFFF"];
-    const wordBank = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR", "STREET", "FLOWER", "GARDEN", "COFFEE", "MUSIC", "PIZZA", "SHIRT"];
-    const riddleBank = {
-        easy: [{q: "I have a long trunk and big ears.", a: "ELEPHANT"}, {q: "I bark and I am man's best friend.", a: "DOG"}, {q: "I hop and have a pouch for my baby.", a: "KANGAROO"}],
-        hard: [{q: "I follow you all day but you can't touch me.", a: "SHADOW"}, {q: "I have hands and a face, but no arms.", a: "CLOCK"}, {q: "The more of me there is, the less you see.", a: "DARKNESS"}],
-        god: [{q: "What is full of holes but holds water?", a: "SPONGE"}, {q: "What gets wetter as it dries?", a: "TOWEL"}, {q: "What belongs to you, but others use it?", a: "NAME"}]
-    };
+    const wordBank = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR"];
 
     const aCtx = new (window.AudioContext || window.webkitAudioContext)();
     function play(f, t, d) {
@@ -166,8 +161,7 @@
     }
 
     function goPortal(p) {
-        curP = p; qLimit = (p === 'ridd') ? 5 : 10;
-        sessionWords = shuffle([...wordBank]).slice(0, 10);
+        curP = p; sessionWords = shuffle([...wordBank]).slice(0, 10);
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-opt').classList.remove('hidden');
         document.getElementById('type-list').classList.remove('hidden');
@@ -187,21 +181,21 @@
 
     function start(d) {
         curD = d; curS = 0; qN = 1;
-        if(curP === 'ridd') sessionRiddles = shuffle([...riddleBank[d]]).slice(0, 5);
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-game').classList.remove('hidden');
         nextQ();
     }
 
     function nextQ() {
-        if(qN > qLimit) return end();
+        if(qN > 10) return end();
         document.getElementById('app').className = '';
         document.getElementById('q-cur').innerText = qN;
-        document.getElementById('q-tot').innerText = qLimit;
         document.getElementById('text-area').classList.add('hidden');
         document.getElementById('choices').classList.remove('hidden');
         document.getElementById('choices').innerHTML = '';
         document.getElementById('ans-in').value = '';
+        document.getElementById('ans-in').disabled = false;
+        document.getElementById('text-submit')?.removeAttribute('disabled');
         document.getElementById('q-text').style.color = 'var(--cream)';
 
         if(curP === 'math') genMath();
@@ -209,14 +203,13 @@
         if(curP === 'color') genColor();
         if(curP === 'seq') genSeq();
         if(curP === 'patt') genPatt();
-        if(curP === 'ridd') genRidd();
 
-        if(curT === 'blitz') startT();
+        if(curT === 'timed') startT();
     }
 
     function genMath() {
         let r = curD === 'god' ? 500 : 100;
-        let n1 = Math.floor(Math.random()*r), n2 = Math.floor(Math.random()*r);
+        let n1 = rand(r), n2 = rand(r);
         cAns = n1 + n2; document.getElementById('q-text').innerText = `${n1} + ${n2}`;
         makeChoices(cAns, 'num');
     }
@@ -230,22 +223,12 @@
         document.getElementById('ans-in').focus();
     }
 
-    function genRidd() {
-        document.getElementById('text-area').classList.remove('hidden');
-        document.getElementById('choices').classList.add('hidden');
-        let r = sessionRiddles[qN - 1] || sessionRiddles[0]; cAns = r.a;
-        document.getElementById('q-text').style.fontSize = '1.3rem';
-        document.getElementById('q-text').innerText = r.q;
-        document.getElementById('ans-in').focus();
-    }
-
     function genColor() {
-        let wI = Math.floor(Math.random()*names.length);
-        let cI = Math.floor(Math.random()*names.length);
-        while(wI === cI) cI = Math.floor(Math.random()*names.length);
+        let wI = rand(names.length), cI = rand(names.length);
+        while(wI === cI) cI = rand(names.length);
         cAns = vColors[cI];
         let q = document.getElementById('q-text'); q.innerText = names[wI]; q.style.color = vColors[cI];
-        let set = new Set([cI, wI]); while(set.size < 4) set.add(Math.floor(Math.random()*vColors.length));
+        let set = new Set([cI, wI]); while(set.size < 4) set.add(rand(vColors.length));
         Array.from(set).sort(()=>Math.random()-0.5).forEach(i => {
             const b = document.createElement('button'); b.className = 'btn-choice'; 
             b.style.backgroundColor = vColors[i]; b.innerHTML = "&nbsp;"; 
@@ -255,14 +238,14 @@
 
     function genSeq() {
         let seq = []; let l = curD === 'god' ? 5 : 3;
-        for(let i=0; i<l; i++) seq.push(Math.floor(Math.random()*10));
+        for(let i=0; i<l; i++) seq.push(rand(10));
         let sStr = seq.join(''); cAns = sStr;
         document.getElementById('q-text').innerText = seq.join(' ');
         document.getElementById('choices').classList.add('hidden');
         setTimeout(() => {
             document.getElementById('q-text').innerText = "???";
             document.getElementById('choices').classList.remove('hidden');
-            let set = new Set([sStr]); while(set.size < 4) set.add((parseInt(sStr)+Math.floor(Math.random()*100)).toString());
+            let set = new Set([sStr]); while(set.size < 4) set.add((parseInt(sStr)+rand(100)).toString());
             Array.from(set).sort(()=>Math.random()-0.5).forEach(v => {
                 const b = document.createElement('button'); b.className = 'btn-choice'; 
                 b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
@@ -271,17 +254,17 @@
     }
 
     function genPatt() {
-        let mode = Math.floor(Math.random()*2);
+        let mode = rand(2);
         let qArea = document.getElementById('q-text');
         if(mode === 0) {
-            let start = Math.floor(Math.random()*10)+1, step = Math.floor(Math.random()*5)+2;
+            let start = rand(10)+1, step = rand(5)+2;
             let seq = [start, start + step, start + (step*2)]; cAns = start + (step*3);
             qArea.innerText = seq.join(' ') + ' ?'; makeChoices(cAns, 'num');
         } else {
-            let count = Math.floor(Math.random()*4)+1, sym = ['○', '●', '◎'][Math.floor(Math.random()*3)];
+            let count = rand(4)+1, sym = ['○', '●', '◎'][rand(3)];
             let seq = [sym.repeat(count), sym.repeat(count+1), sym.repeat(count+2)]; cAns = sym.repeat(count+3);
             qArea.innerText = seq.join(' ') + ' ?';
-            let set = new Set([cAns]); while(set.size < 4) set.add(sym.repeat(Math.floor(Math.random()*7)+1));
+            let set = new Set([cAns]); while(set.size < 4) set.add(sym.repeat(rand(7)+1));
             Array.from(set).sort(()=>Math.random()-0.5).forEach(v => {
                 const b = document.createElement('button'); b.className = 'btn-choice'; 
                 b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
@@ -291,20 +274,26 @@
 
     function makeChoices(c, m) {
         let s = new Set([c]);
-        while(s.size < 4) s.add(m === 'num' ? c + (Math.floor(Math.random()*10)-5) : wordBank[Math.floor(Math.random()*wordBank.length)]);
+        while(s.size < 4) s.add(m === 'num' ? c + (rand(11)-5) : wordBank[rand(wordBank.length)]);
         Array.from(s).sort(()=>Math.random()-0.5).forEach(v => {
             const b = document.createElement('button'); b.className = 'btn-choice'; 
             b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
         });
     }
 
-    function checkText() { check(document.getElementById('ans-in').value.toUpperCase().trim()); }
+    function checkText() { 
+        const val = document.getElementById('ans-in').value.toUpperCase().trim();
+        if(val !== "") check(val); 
+    }
 
     function check(v) {
         clearInterval(tInt);
         const app = document.getElementById('app'), qText = document.getElementById('q-text');
         document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
-        if(String(v) == String(cAns)) {
+        document.getElementById('ans-in').disabled = true;
+        
+        let isRight = (String(v) == String(cAns));
+        if(isRight) {
             curS++; app.classList.add('f-right'); play(600, 'sine', 0.1); qText.innerText = "CORRECT!";
         } else {
             app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2);
@@ -328,24 +317,23 @@
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-res').classList.remove('hidden');
         document.getElementById('res-score').innerText = curS;
-        document.getElementById('res-limit').innerText = "/" + qLimit;
-        let pct = curS / qLimit, em = "🪴";
+        let pct = curS / 10, em = "🪴";
         if(pct === 1) em = "🏆"; else if(pct >= 0.8) em = "🔥"; else if(pct >= 0.5) em = "😎";
         document.getElementById('res-emoji').innerText = em;
-        save(curP, curS, qLimit);
+        save(curP, curS);
     }
 
-    function save(p, s, lim) {
-        let d = JSON.parse(localStorage.getItem('neu_hub_v6') || '{}');
+    function save(p, s) {
+        let d = JSON.parse(localStorage.getItem('neu_hub_final_v2') || '{}');
         if(!d[p]) d[p] = { t: 0, c: 0 };
-        d[p].t += lim; d[p].c += s;
-        localStorage.setItem('neu_hub_v6', JSON.stringify(d));
+        d[p].t += 10; d[p].c += s;
+        localStorage.setItem('neu_hub_final_v2', JSON.stringify(d));
     }
 
     function drawProg() {
-        const d = JSON.parse(localStorage.getItem('neu_hub_v6') || '{}');
+        const d = JSON.parse(localStorage.getItem('neu_hub_final_v2') || '{}');
         let totalP = 0, countP = 0;
-        ['math','word','color','seq','patt','ridd'].forEach(p => {
+        ['math','word','color','seq','patt'].forEach(p => {
             const c = document.getElementById('p-' + p);
             let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0;
             totalP += pct; countP++;
@@ -356,6 +344,8 @@
         if(avg > 25) rank = "SPROUT"; if(avg > 50) rank = "SCHOLAR"; if(avg > 75) rank = "SAGE"; if(avg > 90) rank = "HUB MASTER";
         document.getElementById('global-rank').innerText = "RANK: " + rank;
     }
+
+    function rand(m) { return Math.floor(Math.random() * m); }
 
     document.getElementById('ans-in').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkText(); });
     drawProg();
