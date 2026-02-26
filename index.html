@@ -11,27 +11,28 @@
             --cream: #f1f8e9;
             --mint: #a5d6a7;
             --btn-dark: #081209;
-            /* Portal Colors */
-            --math: #81c784; --word: #64b5f6; --color: #ff8a65; --seq: #ffd54f; --patt: #ce93d8; --ridd: #bcaaa4;
-            /* Difficulty Colors */
-            --easy: #a5d6a7; --hard: #ffb74d; --god: #ef5350;
+            /* Portal Colors - Clean & Vibrant */
+            --math: #4caf50; --word: #2196f3; --color: #ff5722; --seq: #ffeb3b; --patt: #9c27b0; --ridd: #a1887f;
+            /* Vivid Game Colors for Color Clash */
+            --v-red: #ff0000; --v-blue: #0000ff; --v-green: #00ff00; --v-yellow: #ffff00; --v-orange: #ff9800; --v-white: #ffffff;
+            --easy: #a5d6a7; --hard: #ffb74d; --god: #f44336;
         }
 
         body {
-            margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: var(--bg); color: var(--cream);
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
             overflow: hidden; touch-action: manipulation;
         }
 
         #app {
-            background: var(--panel); padding: 1.5rem 1rem; border-radius: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5); text-align: center;
-            width: 92%; max-width: 380px; border: 1px solid rgba(255,255,255,0.05);
+            background: var(--panel); padding: 1.5rem 1.2rem; border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
+            width: 92%; max-width: 380px; border: 1px solid rgba(255,255,255,0.08);
             position: relative; transition: background 0.3s;
         }
 
-        #global-rank { font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; color: var(--seq); margin-bottom: 5px; text-transform: uppercase; }
+        #global-rank { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--seq); margin-bottom: 8px; text-transform: uppercase; }
 
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
@@ -39,35 +40,40 @@
         .portal-item {
             display: flex; align-items: center; width: 100%; 
             background: var(--btn-dark); border-radius: 25px; 
-            padding: 6px 10px; margin-bottom: 8px; box-sizing: border-box;
+            padding: 8px 12px; margin-bottom: 10px; box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.03);
         }
         .btn-main {
-            flex-grow: 1; padding: 14px; border: none; border-radius: 18px;
-            font-weight: 800; font-size: 0.9rem; cursor: pointer; text-align: left;
+            flex-grow: 1; padding: 15px; border: none; border-radius: 18px;
+            font-weight: 800; font-size: 0.95rem; cursor: pointer; text-align: left;
         }
 
-        .prog-box { position: relative; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-left: 8px; }
-        .prog-svg { transform: rotate(-90deg); width: 40px; height: 40px; }
+        .prog-box { position: relative; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; margin-left: 10px; }
+        .prog-svg { transform: rotate(-90deg); width: 42px; height: 42px; }
         .prog-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 4; }
-        .prog-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
-        .prog-txt { position: absolute; font-size: 0.55rem; font-weight: bold; color: var(--mint); }
+        .prog-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+        .prog-txt { position: absolute; font-size: 0.6rem; font-weight: 800; color: var(--mint); }
 
-        #q-text { font-size: 2.2rem; margin: 10px 0; font-weight: 900; min-height: 140px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.3;}
-        .v-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        #q-text { font-size: 2.2rem; margin: 15px 0; font-weight: 900; min-height: 140px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.3; }
+        .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         button { cursor: pointer; transition: 0.2s; font-family: inherit; }
-        .btn-choice { padding: 16px; border: none; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1rem; border: 1px solid rgba(255,255,255,0.05); }
+        .btn-choice { padding: 16px; border: none; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
 
-        #text-area { width: 100%; max-width: 300px; }
-        input[type="text"] { width: 100%; padding: 15px; border-radius: 15px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.2rem; text-align: center; outline: none; margin-bottom: 10px; }
+        #text-area { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        input[type="text"] { 
+            width: 100%; padding: 18px; border-radius: 20px; border: 2px solid var(--mint); 
+            background: var(--btn-dark); color: white; font-size: 1.3rem; text-align: center; 
+            outline: none; margin-bottom: 12px; box-sizing: border-box;
+        }
 
-        .f-right { background-color: #1e4623 !important; }
-        .f-wrong { background-color: #4a1616 !important; }
+        .f-right { background-color: #1b4d21 !important; }
+        .f-wrong { background-color: #5d1a1a !important; }
         .shake { animation: shake 0.4s ease; }
-        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-10px)} 80%{transform:translateX(10px)} }
 
         #timer-box { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; }
         #timer-bar { height: 100%; background: var(--mint); width: 100%; }
-        .btn-back { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 8px; margin-top: 10px; font-size: 0.7rem; border-radius: 10px; opacity: 0.6; }
+        .btn-back { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 10px; margin-top: 15px; font-size: 0.8rem; border-radius: 12px; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -77,25 +83,25 @@
     <div id="timer-box"><div id="timer-bar"></div></div>
 
     <div id="v-hub" class="view-section">
-        <h1 style="color:var(--mint); margin:0; font-size:1.5rem;">Neural Hub</h1>
-        <p style="opacity:0.5; font-size:0.7rem; margin-bottom:15px;">Brain Maintenance Required</p>
+        <h1 style="color:var(--mint); margin:0; font-size:1.6rem;">Neural Hub</h1>
+        <p style="opacity:0.5; font-size:0.75rem; margin-bottom:15px;">Advanced Brain Maintenance</p>
         <div class="v-list" id="portal-list">
-            <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#1b3320;" onclick="goPortal('math')">MATH</button><div class="prog-box" id="p-math"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#0d1b2a;" onclick="goPortal('word')">WORDS</button><div class="prog-box" id="p-word"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--color); color:#2d0a0a;" onclick="goPortal('color')">COLOR CLASH</button><div class="prog-box" id="p-color"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--seq); color:#2d240a;" onclick="goPortal('seq')">RECALL</button><div class="prog-box" id="p-seq"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#2a0d2a;" onclick="goPortal('patt')">PATTERNS</button><div class="prog-box" id="p-patt"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--ridd); color:#2a1b1b;" onclick="goPortal('ridd')">RIDDLES</button><div class="prog-box" id="p-ridd"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#0a1a0b;" onclick="goPortal('math')">MATH</button><div class="prog-box" id="p-math"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#051421;" onclick="goPortal('word')">WORDS</button><div class="prog-box" id="p-word"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--color); color:#210802;" onclick="goPortal('color')">COLOR CLASH</button><div class="prog-box" id="p-color"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--seq); color:#211c05;" onclick="goPortal('seq')">RECALL</button><div class="prog-box" id="p-seq"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#1a051d;" onclick="goPortal('patt')">PATTERNS</button><div class="prog-box" id="p-patt"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--ridd); color:#1a0f0d;" onclick="goPortal('ridd')">RIDDLES</button><div class="prog-box" id="p-ridd"></div></div>
         </div>
     </div>
 
     <div id="v-opt" class="view-section hidden">
         <h1 id="opt-title" style="font-size:1.1rem;">Select Mode</h1>
-        <div id="type-list" class="v-list" style="margin-top:15px;">
+        <div id="type-list" class="v-list" style="margin-top:20px;">
             <button class="btn-choice" onclick="setOpt('zen')">ZEN (No Timer)</button>
             <button class="btn-choice" style="border-color:var(--hard)" onclick="setOpt('blitz')">BLITZ (Timed)</button>
         </div>
-        <div id="diff-list" class="v-list hidden" style="margin-top:15px;">
+        <div id="diff-list" class="v-list hidden" style="margin-top:20px;">
             <button class="btn-choice" style="color:var(--easy)" onclick="start('easy')">EASY</button>
             <button class="btn-choice" style="color:var(--hard)" onclick="start('hard')">HARD</button>
             <button class="btn-choice" style="color:var(--god)" onclick="start('god')">GOD MODE</button>
@@ -108,16 +114,16 @@
         <div id="input-area" class="v-list">
             <div id="choices" class="v-list"></div>
             <div id="text-area" class="hidden">
-                <input type="text" id="ans-in" placeholder="..." autocomplete="off">
-                <button class="btn-choice" style="background:var(--primary-green); width:100%" onclick="checkText()">SUBMIT</button>
+                <input type="text" id="ans-in" placeholder="Type answer..." autocomplete="off">
+                <button class="btn-choice" style="background:var(--math); color:#000; width:100%" onclick="checkText()">SUBMIT</button>
             </div>
         </div>
         <button class="btn-back" onclick="resetHub()">QUIT</button>
     </div>
 
     <div id="v-res" class="view-section hidden">
-        <h1>Done!</h1>
-        <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span>/10</p>
+        <h1>Finished</h1>
+        <p style="font-size: 4rem; margin: 10px 0;"><span id="res-score">0</span>/10</p>
         <button class="btn-choice" style="width:100%" onclick="resetHub()">CONTINUE</button>
     </div>
 </div>
@@ -125,31 +131,30 @@
 <script>
     let curP = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt;
     const names = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "WHITE"];
-    const hex = ["#ff5252", "#448aff", "#4caf50", "#ffeb3b", "#ff9800", "#ffffff"];
-    const words = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "TRAIN", "PHONE", "WATCH", "CHAIR"];
+    const vColors = ["#FF0000", "#0000FF", "#00FF00", "#FFFF00", "#FF9800", "#FFFFFF"];
+    const words = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR", "STREET", "FLOWER", "GARDEN", "SCHOOL", "FRIEND", "COFFEE", "MUSIC", "PIZZA", "SHIRT"];
     
     const riddleBank = {
         easy: [
             {q: "I have a long trunk and big ears. What am I?", a: "ELEPHANT"},
             {q: "I am king of the jungle and I roar. What am I?", a: "LION"},
-            {q: "I am tall with a very long neck to eat leaves. What am I?", a: "GIRAFFE"},
-            {q: "I jump and have a pouch for my baby. What am I?", a: "KANGAROO"},
             {q: "I bark and I am man's best friend. What am I?", a: "DOG"},
-            {q: "I am white and cold and fall from the sky.", a: "SNOW"}
+            {q: "I have a very long neck to reach high leaves.", a: "GIRAFFE"},
+            {q: "I hop around and carry my baby in a pouch.", a: "KANGAROO"}
         ],
         hard: [
-            {q: "The more of me there is, the less you see. What am I?", a: "DARKNESS"},
-            {q: "I have keys but no locks. I have a space but no room. What am I?", a: "KEYBOARD"},
-            {q: "I follow you all day but you can't catch me. What am I?", a: "SHADOW"},
-            {q: "I have a face and two hands, but no arms or legs.", a: "CLOCK"},
-            {q: "I'm tall when I'm young, and I'm short when I'm old.", a: "CANDLE"}
+            {q: "I follow you all day but you can't touch me.", a: "SHADOW"},
+            {q: "I have hands but no arms, and a face but no eyes.", a: "CLOCK"},
+            {q: "The more of me there is, the less you see.", a: "DARKNESS"},
+            {q: "I have keys but no locks. I have a space but no room.", a: "KEYBOARD"},
+            {q: "I'm tall when young, and short when old.", a: "CANDLE"}
         ],
         god: [
             {q: "What has to be broken before you can use it?", a: "EGG"},
-            {q: "What month of the year has 28 days?", a: "ALL"},
             {q: "What is full of holes but still holds water?", a: "SPONGE"},
-            {q: "What question can you never answer yes to?", a: "ASLEEP"},
-            {q: "What gets wetter as it dries?", a: "TOWEL"}
+            {q: "What gets wetter as it dries?", a: "TOWEL"},
+            {q: "What has legs but cannot walk?", a: "TABLE"},
+            {q: "What belongs to you, but others use it more?", a: "NAME"}
         ]
     };
 
@@ -157,7 +162,7 @@
     function play(f, t, d) {
         const o = aCtx.createOscillator(), g = aCtx.createGain();
         o.connect(g); g.connect(aCtx.destination); o.type = t; o.frequency.value = f;
-        g.gain.setValueAtTime(0.04, aCtx.currentTime);
+        g.gain.setValueAtTime(0.05, aCtx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01, aCtx.currentTime + d);
         o.start(); o.stop(aCtx.currentTime + d);
     }
@@ -244,15 +249,20 @@
         let wI = Math.floor(Math.random()*names.length);
         let cI = Math.floor(Math.random()*names.length);
         while(wI === cI) cI = Math.floor(Math.random()*names.length);
-        cAns = hex[cI];
+        
+        cAns = vColors[cI];
         let q = document.getElementById('q-text');
-        q.innerText = names[wI]; q.style.color = hex[cI];
+        q.innerText = names[wI]; 
+        q.style.color = vColors[cI]; // Vivid clean color
+        
+        // Tricky Logic: Include both ink and name in options
         let set = new Set([cI, wI]);
-        while(set.size < 4) set.add(Math.floor(Math.random()*hex.length));
+        while(set.size < 4) set.add(Math.floor(Math.random()*vColors.length));
+        
         Array.from(set).sort(()=>Math.random()-0.5).forEach(i => {
             const b = document.createElement('button');
-            b.className = 'btn-choice'; b.style.backgroundColor = hex[i];
-            b.innerHTML = "&nbsp;"; b.onclick = () => check(hex[i]);
+            b.className = 'btn-choice'; b.style.backgroundColor = vColors[i];
+            b.innerHTML = "&nbsp;"; b.onclick = () => check(vColors[i]);
             document.getElementById('choices').appendChild(b);
         });
     }
@@ -264,7 +274,7 @@
         document.getElementById('q-text').innerText = seq.join(' ');
         document.getElementById('choices').classList.add('hidden');
         setTimeout(() => {
-            document.getElementById('q-text').innerText = "???";
+            document.getElementById('q-text').innerText = "RECALL?";
             document.getElementById('choices').classList.remove('hidden');
             let set = new Set([sStr]);
             while(set.size < 4) {
@@ -318,14 +328,23 @@
     function check(v) {
         clearInterval(tInt);
         const app = document.getElementById('app');
+        const qText = document.getElementById('q-text');
+        
+        // Disable all buttons immediately
+        document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
+        
         if(String(v) == String(cAns)) {
             curS++; app.classList.add('f-right'); play(600, 'sine', 0.1);
+            qText.innerText = "CORRECT!";
         } else {
             app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2);
-            document.getElementById('q-text').innerText = "IT WAS: " + cAns;
-            document.getElementById('q-text').style.color = "var(--god)";
+            qText.innerText = "WRONG! IT WAS: " + cAns;
+            qText.style.color = "#ff8a80";
         }
-        qN++; setTimeout(nextQ, 1200);
+        
+        qN++; 
+        // AUTOMATIC TRANSITION after feedback
+        setTimeout(nextQ, 1500);
     }
 
     function startT() {
@@ -345,27 +364,27 @@
     }
 
     function save(p, s) {
-        let d = JSON.parse(localStorage.getItem('neu_v3') || '{}');
+        let d = JSON.parse(localStorage.getItem('neural_hub_v4') || '{}');
         if(!d[p]) d[p] = { t: 0, c: 0 };
         d[p].t += 10; d[p].c += s;
-        localStorage.setItem('neu_v3', JSON.stringify(d));
+        localStorage.setItem('neural_hub_v4', JSON.stringify(d));
     }
 
     function drawProg() {
-        const d = JSON.parse(localStorage.getItem('neu_v3') || '{}');
+        const d = JSON.parse(localStorage.getItem('neural_hub_v4') || '{}');
         let totalP = 0, countP = 0;
         ['math','word','color','seq','patt','ridd'].forEach(p => {
             const c = document.getElementById('p-' + p);
             let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0;
             totalP += pct; countP++;
             let off = 126 - (pct / 100) * 126;
-            c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="22" cy="22" r="20"></circle><circle class="prog-bar" cx="22" cy="22" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
+            c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
         });
         
         let avg = totalP / countP;
         let rank = "SEEDLING";
-        if(avg > 20) rank = "SPROUT"; if(avg > 40) rank = "SCHOLAR";
-        if(avg > 60) rank = "SAGE"; if(avg > 80) rank = "MASTER HUB";
+        if(avg > 25) rank = "SPROUT"; if(avg > 50) rank = "SCHOLAR";
+        if(avg > 75) rank = "SAGE"; if(avg > 90) rank = "HUB MASTER";
         document.getElementById('global-rank').innerText = "RANK: " + rank;
     }
 
