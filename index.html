@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Math Flow | Overgrowth</title>
+    <title>Neural Hub | Brain Trainer</title>
     
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
-    
+
     <style>
         :root {
             --bg-dark: #051408;
@@ -32,18 +32,18 @@
 
         #app {
             background: var(--panel-dark);
-            padding: 2rem 1.5rem;
+            padding: 2rem 1.2rem;
             border-radius: 35px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             text-align: center;
-            width: 88%; max-width: 380px;
+            width: 90%; max-width: 380px;
             border: 1px solid rgba(255,255,255,0.05);
             position: relative;
             display: flex; flex-direction: column; align-items: center;
         }
 
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .hidden { display: none; }
+        .hidden { display: none !important; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -52,166 +52,167 @@
         }
         .shake { animation: shake 0.3s ease-in-out; }
 
-        .app-logo { width: 65px; height: 65px; border-radius: 18px; margin-bottom: 10px; border: 2px solid var(--primary-green); }
+        .app-logo { width: 60px; height: 60px; border-radius: 15px; margin-bottom: 10px; border: 2px solid var(--primary-green); }
 
-        /* Timer Bar */
         #timer-container {
             width: 100%; height: 6px; background: rgba(255,255,255,0.1); 
             border-radius: 10px; margin-bottom: 20px; overflow: hidden; display: none;
         }
         #timer-bar { height: 100%; background: var(--primary-green); width: 100%; }
 
-        h1 { margin: 0; color: var(--accent-mint); font-size: 1.8rem; }
-        p { color: var(--accent-mint); opacity: 0.7; margin-bottom: 20px; font-size: 0.9rem; }
+        h1 { margin: 0; color: var(--accent-mint); font-size: 1.6rem; letter-spacing: 1px; }
+        p { color: var(--accent-mint); opacity: 0.7; margin-bottom: 20px; font-size: 0.85rem; }
 
-        /* Vertical Button List */
-        .v-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 
         button {
-            padding: 18px; border: none; border-radius: 20px;
+            padding: 16px; border: none; border-radius: 18px;
             font-weight: 700; cursor: pointer; transition: 0.2s;
-            font-size: 1.1rem; width: 100%;
+            font-size: 1rem; width: 100%;
             background: var(--button-dark); color: var(--accent-mint);
             border: 1px solid var(--primary-green);
         }
 
         button:active { transform: scale(0.96); background: var(--primary-green); color: white; }
 
-        .btn-action { background: var(--primary-green); color: white; border: none; }
-        .btn-choice { font-size: 1.6rem; color: var(--white); border-color: rgba(255,255,255,0.1); }
-        
-        .btn-secondary { 
-            background: transparent; color: var(--accent-mint); 
-            opacity: 0.6; margin-top: 15px; font-size: 0.8rem; border: 1px solid rgba(165,214,167,0.2);
-        }
+        .btn-portal { background: #1b5e20; border: none; color: white; margin-bottom: 15px; padding: 22px; font-size: 1.2rem; }
+        .btn-choice { font-size: 1.4rem; color: var(--white); border-color: rgba(255,255,255,0.1); }
+        .btn-secondary { background: transparent; color: var(--accent-mint); opacity: 0.6; margin-top: 15px; font-size: 0.8rem; border: 1px solid rgba(165,214,167,0.1); }
 
-        /* Result Styles */
         .correct { background: var(--primary-green) !important; color: white !important; }
         .wrong { background: var(--error-red) !important; color: white !important; }
 
-        #question-text { font-size: 4rem; margin: 15px 0; font-weight: 900; }
-        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--accent-mint); margin-bottom: 10px; }
-        
-        #streak-pop {
-            position: absolute; top: -35px; background: #ff9800; color: white; 
-            padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; opacity: 0; transition: 0.3s;
-        }
-
-        .sound-toggle { margin-top: 15px; font-size: 0.7rem; color: var(--accent-mint); cursor: pointer; opacity: 0.5; }
+        #question-text { font-size: 2.8rem; margin: 15px 0; font-weight: 900; min-height: 80px; display: flex; align-items: center; justify-content: center;}
+        .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--accent-mint); margin-bottom: 10px; font-weight: bold;}
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div id="streak-pop">STREAK: 0 🔥</div>
     <div id="timer-container"><div id="timer-bar"></div></div>
 
-    <div id="menu" class="view-section">
+    <div id="view-hub" class="view-section">
         <img src="logo.png" class="app-logo" onerror="this.style.display='none'">
-        <h1>Math Flow</h1>
-        <p>Vertical Forest Edition</p>
+        <h1>Neural Hub</h1>
+        <p>Select your training portal</p>
         <div class="v-list">
-            <button onclick="pickOp('add')">ADDITION +</button>
-            <button onclick="pickOp('sub')">SUBTRACTION -</button>
-            <button onclick="pickOp('mul')">MULTIPLICATION ×</button>
-            <button onclick="pickOp('mix')">MIXED MODE ±×</button>
+            <button class="btn-portal" onclick="showPortal('math')">🔢 NUMBER LAB</button>
+            <button class="btn-portal" onclick="showPortal('word')">🔠 LINGO LEXICON</button>
+            <button class="btn-portal" onclick="showPortal('logic')">🧩 PATTERN PULSE</button>
         </div>
-        <div class="sound-toggle" onclick="toggleSound()">SOUND: <span id="sound-status">ON</span></div>
-        <div style="margin-top:20px; font-size: 0.7rem; color: var(--accent-mint);">BEST SCORE: <span id="high-score">0</span></div>
+        <div style="margin-top:20px; font-size: 0.7rem; color: var(--accent-mint);">STAY SHARP.</div>
     </div>
 
-    <div id="type-menu" class="view-section hidden">
+    <div id="view-portal-menu" class="view-section hidden">
+        <h1 id="portal-title">Portal</h1>
+        <p>Choose your operation</p>
+        <div id="op-list" class="v-list"></div>
+        <button class="btn-secondary" onclick="resetToHub()">← BACK TO HUB</button>
+    </div>
+
+    <div id="view-type" class="view-section hidden">
         <h1>Challenge Type</h1>
-        <p>How do you want to play?</p>
+        <p>Pick your pace</p>
         <div class="v-list">
-            <button class="btn-action" onclick="pickType('zen')">ZEN FLOW<br><small style="font-weight:normal">No timer, pure focus</small></button>
-            <button class="btn-action" style="background:#4e342e" onclick="pickType('blitz')">BLITZ PULSE<br><small style="font-weight:normal">Timed, high pressure</small></button>
-            <button class="btn-secondary" onclick="showMenu()">← BACK</button>
+            <button style="background: var(--primary-green); color: white;" onclick="pickType('zen')">ZEN FLOW (No Timer)</button>
+            <button style="background: #4e342e; color: white;" onclick="pickType('blitz')">BLITZ PULSE (Timed)</button>
+            <button class="btn-secondary" onclick="showPortal(currentPortal)">← BACK</button>
         </div>
     </div>
 
-    <div id="diff-menu" class="view-section hidden">
+    <div id="view-diff" class="view-section hidden">
         <h1>Intensity</h1>
-        <p>Set your forest level</p>
         <div class="v-list">
             <button onclick="startGame('easy')">SPROUT (Easy)</button>
             <button onclick="startGame('hard')">TIMBER (Hard)</button>
-            <button style="background: #000; color: #ff5252; border: 1px solid #ff5252;" onclick="startGame('god')">OVERGROWTH (God)</button>
-            <button class="btn-secondary" onclick="pickOp(selectedOp)">← BACK</button>
+            <button style="background: #000; border: 1px solid #ff5252; color: #ff5252;" onclick="startGame('god')">OVERGROWTH (God)</button>
+            <button class="btn-secondary" onclick="pickType(selectedType)">← BACK</button>
         </div>
     </div>
 
-    <div id="game" class="view-section hidden">
+    <div id="view-game" class="view-section hidden">
         <div class="stat-row">
             <span>Q: <span id="q-count">1</span>/10</span>
-            <span id="game-mode-label">ZEN</span>
+            <span id="game-label">MODAL</span>
             <span>SCORE: <span id="score-count">0</span></span>
         </div>
         <div id="question-text">--</div>
         <div id="choices" class="v-list"></div>
-        <button class="btn-secondary" onclick="showMenu()">QUIT TO HOME</button>
+        <button class="btn-secondary" onclick="resetToHub()">QUIT TO HOME</button>
     </div>
 
-    <div id="results" class="view-section hidden">
-        <h2 id="result-title">Session Complete</h2>
-        <p style="font-size: 3rem; margin: 10px 0; color: white;"><span id="final-score">0</span><small style="font-size:1rem">/10</small></p>
-        <button class="btn-action" onclick="showMenu()">CONTINUE</button>
+    <div id="view-results" class="view-section hidden">
+        <h1>Round Done</h1>
+        <p style="font-size: 3rem; margin: 10px 0; color: white;"><span id="final-score">0</span>/10</p>
+        <button style="background: var(--primary-green); color: white;" onclick="resetToHub()">HUB HOME</button>
     </div>
 </div>
 
 <script>
-    let currentScore = 0, questionNumber = 0, correctAnswer = 0, streak = 0;
-    let selectedOp = '', selectedType = '', selectedDiff = '';
-    let timerInterval, timeLeft, maxTime, soundEnabled = true;
-    
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(freq, type, duration) {
-        if(!soundEnabled) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.type = type; osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        osc.start(); osc.stop(audioCtx.currentTime + duration);
-    }
+    let currentPortal = '', selectedOp = '', selectedType = '', selectedDiff = '';
+    let currentScore = 0, questionNumber = 0, correctAnswer = '', timerInterval, timeLeft, maxTime;
 
-    const difficultySettings = {
-        easy: { time: 15, range: 25 },
-        hard: { time: 7, range: 100 },
-        god:  { time: 3.2, range: 999 }
+    const portals = {
+        math: { title: "Number Lab", ops: ["Add +", "Sub -", "Mul ×", "Mixed ±×"] },
+        word: { title: "Lingo Lexicon", ops: ["Scramble", "Missing Letter"] },
+        logic: { title: "Pattern Pulse", ops: ["Sequences", "Next Shape"] }
     };
 
-    document.getElementById('high-score').innerText = localStorage.getItem('mathFlowHigh') || 0;
+    const words = ["FOREST", "EMERALD", "BRAIN", "LOGIC", "MATH", "GROWTH", "FLOW", "NEURAL", "FOCUS", "SHARP", "SMART", "LEVEL"];
 
-    function showMenu() {
-        document.querySelectorAll('.view-section').forEach(d => d.classList.add('hidden'));
-        document.getElementById('menu').classList.remove('hidden');
+    // Sound Synth
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(f, t, d) {
+        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+        o.connect(g); g.connect(audioCtx.destination);
+        o.type = t; o.frequency.value = f;
+        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
+        o.start(); o.stop(audioCtx.currentTime + d);
+    }
+
+    function resetToHub() {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('view-hub').classList.remove('hidden');
         document.getElementById('timer-container').style.display = 'none';
-        document.getElementById('streak-pop').style.opacity = 0;
         clearInterval(timerInterval);
     }
 
-    function pickOp(op) {
-        selectedOp = op;
-        document.querySelectorAll('.view-section').forEach(d => d.classList.add('hidden'));
-        document.getElementById('type-menu').classList.remove('hidden');
+    function showPortal(pKey) {
+        currentPortal = pKey;
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        const view = document.getElementById('view-portal-menu');
+        view.classList.remove('hidden');
+        document.getElementById('portal-title').innerText = portals[pKey].title;
+        
+        const list = document.getElementById('op-list');
+        list.innerHTML = '';
+        portals[pKey].ops.forEach(op => {
+            const btn = document.createElement('button');
+            btn.innerText = op.toUpperCase();
+            btn.onclick = () => { selectedOp = op; showType(); };
+            list.appendChild(btn);
+        });
+    }
+
+    function showType() {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('view-type').classList.remove('hidden');
     }
 
     function pickType(type) {
         selectedType = type;
-        document.getElementById('type-menu').classList.add('hidden');
-        document.getElementById('diff-menu').classList.remove('hidden');
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('view-diff').classList.remove('hidden');
     }
 
     function startGame(diff) {
-        selectedDiff = diff;
-        currentScore = 0; questionNumber = 1; streak = 0;
-        maxTime = difficultySettings[diff].time;
+        selectedDiff = diff; currentScore = 0; questionNumber = 1;
+        maxTime = (diff === 'god' ? 3.5 : (diff === 'hard' ? 7 : 15));
         
-        document.getElementById('diff-menu').classList.add('hidden');
-        document.getElementById('game').classList.remove('hidden');
-        document.getElementById('game-mode-label').innerText = selectedType === 'blitz' ? 'BLITZ' : 'ZEN';
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('view-game').classList.remove('hidden');
+        document.getElementById('game-label').innerText = `${selectedOp.toUpperCase()} | ${selectedType.toUpperCase()}`;
         
         if(selectedType === 'blitz') document.getElementById('timer-container').style.display = 'block';
         else document.getElementById('timer-container').style.display = 'none';
@@ -224,26 +225,91 @@
         document.getElementById('q-count').innerText = questionNumber;
         document.getElementById('score-count').innerText = currentScore;
         
-        let type = selectedOp === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : selectedOp;
-        let n1, n2, symbol, range = difficultySettings[selectedDiff].range;
+        if (currentPortal === 'math') generateMath();
+        else if (currentPortal === 'word') generateWord();
+        else generateLogic();
 
-        if (type === 'add') {
-            n1 = Math.floor(Math.random() * range) + 1;
-            n2 = Math.floor(Math.random() * range) + 1;
-            correctAnswer = n1 + n2; symbol = '+';
-        } else if (type === 'sub') {
-            n1 = Math.floor(Math.random() * range) + 10;
-            n2 = Math.floor(Math.random() * n1);
-            correctAnswer = n1 - n2; symbol = '-';
-        } else {
-            n1 = Math.floor(Math.random() * (selectedDiff === 'god' ? 40 : 12)) + 1;
-            n2 = Math.floor(Math.random() * 12) + 1;
-            correctAnswer = n1 * n2; symbol = '×';
-        }
+        if (selectedType === 'blitz') startTimer();
+    }
 
+    // --- GENERATORS ---
+    function generateMath() {
+        let n1, n2, symbol, range = (selectedDiff === 'god' ? 999 : 100);
+        let op = selectedOp.includes('Add') ? 'add' : selectedOp.includes('Sub') ? 'sub' : 'mul';
+        if(selectedOp.includes('Mixed')) op = ['add','sub','mul'][Math.floor(Math.random()*3)];
+
+        if(op === 'add'){ n1=rand(range); n2=rand(range); correctAnswer = n1+n2; symbol='+'; }
+        else if(op === 'sub'){ n1=rand(range)+10; n2=rand(n1); correctAnswer = n1-n2; symbol='-'; }
+        else { n1=rand(selectedDiff==='god'?40:12)+1; n2=rand(12)+1; correctAnswer = n1*n2; symbol='×'; }
+        
         document.getElementById('question-text').innerText = `${n1}${symbol}${n2}`;
-        generateChoices(correctAnswer);
-        if(selectedType === 'blitz') startTimer();
+        makeChoices(correctAnswer, 'num');
+    }
+
+    function generateWord() {
+        let word = words[Math.floor(Math.random()*words.length)];
+        correctAnswer = word;
+        if(selectedOp === 'Scramble') {
+            let scrambled = word.split('').sort(()=>Math.random()-0.5).join('');
+            document.getElementById('question-text').style.fontSize = "2rem";
+            document.getElementById('question-text').innerText = scrambled;
+            makeChoices(word, 'word');
+        } else {
+            let idx = Math.floor(Math.random()*word.length);
+            let display = word.split(''); display[idx] = '_';
+            document.getElementById('question-text').innerText = display.join(' ');
+            makeChoices(word, 'word');
+        }
+    }
+
+    function generateLogic() {
+        let start = rand(20), step = rand(5)+1, seq = [];
+        let type = rand(2);
+        for(let i=0; i<3; i++) {
+            seq.push(type === 0 ? start + (step * i) : start * Math.pow(2, i));
+        }
+        correctAnswer = type === 0 ? start + (step * 3) : start * Math.pow(2, 3);
+        document.getElementById('question-text').style.fontSize = "2rem";
+        document.getElementById('question-text').innerText = seq.join(', ') + ', ?';
+        makeChoices(correctAnswer, 'num');
+    }
+
+    function makeChoices(correct, type) {
+        let set = new Set([correct]);
+        while(set.size < 4) {
+            if(type === 'num') {
+                let fake = correct + (Math.floor(Math.random()*10)-5);
+                if(fake >= 0 && fake !== correct) set.add(fake);
+            } else {
+                set.add(words[Math.floor(Math.random()*words.length)]);
+            }
+        }
+        const area = document.getElementById('choices');
+        area.innerHTML = '';
+        Array.from(set).sort(()=>Math.random()-0.5).forEach(val => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-choice';
+            btn.innerText = val;
+            btn.onclick = () => check(val, btn);
+            area.appendChild(btn);
+        });
+    }
+
+    function check(val, btn) {
+        clearInterval(timerInterval);
+        document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
+        if(val == correctAnswer) {
+            currentScore++; playSound(600, 'sine', 0.2);
+            btn.classList.add('correct');
+        } else {
+            playSound(150, 'square', 0.3);
+            btn.classList.add('wrong');
+            document.querySelectorAll('.btn-choice').forEach(b => { if(b.innerText == correctAnswer) b.classList.add('correct'); });
+            document.getElementById('app').classList.add('shake');
+            setTimeout(()=>document.getElementById('app').classList.remove('shake'), 400);
+        }
+        questionNumber++;
+        setTimeout(nextQuestion, 1200);
     }
 
     function startTimer() {
@@ -252,85 +318,22 @@
         const bar = document.getElementById('timer-bar');
         timerInterval = setInterval(() => {
             timeLeft -= 0.05;
-            bar.style.width = (timeLeft / maxTime) * 100 + "%";
-            if (timeLeft <= 0) {
+            bar.style.width = (timeLeft/maxTime)*100 + "%";
+            if(timeLeft <= 0) {
                 clearInterval(timerInterval);
-                playSound(120, 'sawtooth', 0.4);
-                triggerFailure();
+                playSound(100, 'sawtooth', 0.4);
+                check('TIMEOUT', null);
             }
         }, 50);
     }
 
-    function generateChoices(correct) {
-        let choices = new Set([correct]);
-        while(choices.size < 4) {
-            let offset = Math.floor(Math.random() * 10) - 5;
-            let fake = correct + offset;
-            if (fake >= 0 && fake !== correct) choices.add(fake);
-        }
-        const area = document.getElementById('choices');
-        area.innerHTML = '';
-        Array.from(choices).sort(() => Math.random() - 0.5).forEach(val => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-choice';
-            btn.innerText = val;
-            btn.onclick = () => checkAnswer(val, btn);
-            area.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(selected, btn) {
-        clearInterval(timerInterval);
-        document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
-
-        if (selected === correctAnswer) {
-            currentScore++; streak++;
-            playSound(550, 'sine', 0.15);
-            btn.classList.add('correct');
-            if (streak > 2) {
-                const sp = document.getElementById('streak-pop');
-                sp.innerText = `STREAK: ${streak} 🔥`;
-                sp.style.opacity = 1;
-            }
-        } else {
-            playSound(110, 'square', 0.3);
-            btn.classList.add('wrong');
-            triggerFailure();
-        }
-        questionNumber++;
-        setTimeout(nextQuestion, 1000);
-    }
-
-    function triggerFailure() {
-        streak = 0;
-        document.getElementById('streak-pop').style.opacity = 0;
-        document.getElementById('app').classList.add('shake');
-        setTimeout(() => document.getElementById('app').classList.remove('shake'), 400);
-        document.querySelectorAll('.btn-choice').forEach(b => {
-            if (parseInt(b.innerText) === correctAnswer) b.classList.add('correct');
-        });
-        if (selectedType === 'blitz' && timeLeft <= 0) {
-            questionNumber++;
-            setTimeout(nextQuestion, 1200);
-        }
-    }
-
     function showResults() {
-        document.getElementById('game').classList.add('hidden');
-        document.getElementById('timer-container').style.display = 'none';
-        document.getElementById('results').classList.remove('hidden');
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById('view-results').classList.remove('hidden');
         document.getElementById('final-score').innerText = currentScore;
-        let high = localStorage.getItem('mathFlowHigh') || 0;
-        if (currentScore > high) {
-            localStorage.setItem('mathFlowHigh', currentScore);
-            document.getElementById('result-title').innerText = "NEW BEST! 🏆";
-        }
     }
 
-    function toggleSound() {
-        soundEnabled = !soundEnabled;
-        document.getElementById('sound-status').innerText = soundEnabled ? "ON" : "OFF";
-    }
+    function rand(max) { return Math.floor(Math.random()*max); }
 </script>
 </body>
 </html>
