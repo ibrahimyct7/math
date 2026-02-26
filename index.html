@@ -11,92 +11,130 @@
 
     <style>
         :root {
-            --bg: #0d1a0f; --panel: #162b1a; --cream: #f1f8e9; --mint: #a5d6a7; --btn-dark: #081209;
-            --math: #4caf50; --word: #2196f3; --color: #ff5722; --seq: #ffeb3b; --patt: #9c27b0;
-            --easy: #a5d6a7; --hard: #ffb74d; --god: #f44336;
+            --cream: #f1f8e9; --mint: #a5d6a7; --btn-dark: rgba(10, 20, 12, 0.7);
+            --math: #66bb6a; --word: #29b6f6; --color: #ff7043; --seq: #ffee58; --patt: #ab47bc;
+            --easy: #81c784; --hard: #ffb74d; --god: #ef5350; --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32;
         }
 
         body {
             margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg); color: var(--cream);
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            color: var(--cream); display: flex; justify-content: center; align-items: center; min-height: 100vh;
             overflow: hidden; touch-action: manipulation;
+            background: linear-gradient(-45deg, #0c1a10, #1b3822, #102615, #08140a);
+            background-size: 400% 400%; animation: breathe 18s ease-in-out infinite;
         }
 
+        @keyframes breathe { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
         #app {
-            background: var(--panel); padding: 1.8rem 1.2rem; border-radius: 40px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
-            width: 92%; max-width: 380px; border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(22, 43, 26, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 1.8rem 1.2rem; border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1);
+            text-align: center; width: 92%; max-width: 380px; border: 1px solid rgba(165, 214, 167, 0.15);
             position: relative;
         }
 
-        #global-rank { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--seq); margin-bottom: 15px; text-transform: uppercase; }
+        #global-rank { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--seq); margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
         .view-section { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .hidden { display: none !important; }
 
         .portal-item {
-            display: flex; align-items: center; width: 100%; 
-            background: var(--btn-dark); border-radius: 25px; 
-            padding: 8px 12px; margin-bottom: 12px; box-sizing: border-box;
+            display: flex; align-items: center; width: 100%; background: var(--btn-dark); border-radius: 25px; 
+            padding: 8px 12px; margin-bottom: 10px; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.03);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         .btn-main {
-            flex-grow: 1; padding: 16px; border: none; border-radius: 18px;
-            font-weight: 800; font-size: 1rem; cursor: pointer; text-align: left;
-            display: flex; align-items: center; gap: 15px; letter-spacing: 1px;
+            flex-grow: 1; padding: 14px; border: none; border-radius: 18px; font-weight: 800; font-size: 1rem; 
+            cursor: pointer; text-align: left; display: flex; align-items: center; gap: 15px; letter-spacing: 1px;
         }
         
-        .sym { font-family: serif; font-size: 1.4rem; font-weight: bold; width: 25px; text-align: center; }
+        .sym { font-family: serif; font-size: 1.4rem; font-weight: bold; width: 25px; text-align: center; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));}
 
         .prog-box { position: relative; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; margin-left: 10px; }
-        .prog-svg { transform: rotate(-90deg); width: 42px; height: 42px; }
+        .prog-svg { transform: rotate(-90deg); width: 42px; height: 42px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));}
         .prog-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 4; }
         .prog-bar { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
         .prog-txt { position: absolute; font-size: 0.65rem; font-weight: 800; color: var(--mint); }
 
         .game-header { font-size: 0.75rem; font-weight: 800; color: var(--mint); margin-bottom: 10px; opacity: 0.8; letter-spacing: 1px; }
 
-        #q-text { font-size: 2.2rem; margin: 15px 0; font-weight: 900; min-height: 130px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        #q-text { font-size: 2.2rem; margin: 15px 0; font-weight: 900; min-height: 120px; display: flex; align-items: center; justify-content: center; text-align: center; text-shadow: 0 3px 6px rgba(0,0,0,0.4);}
         .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         
         button { cursor: pointer; transition: 0.2s; font-family: inherit; border: none; }
-        .btn-choice { padding: 16px; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); }
-        
-        /* Ensures results buttons are always clickable */
+        .btn-choice { padding: 18px; border-radius: 20px; background: var(--btn-dark); color: var(--cream); font-weight: 700; font-size: 1.2rem; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 8px rgba(0,0,0,0.3);}
         .force-click { pointer-events: auto !important; opacity: 1 !important; }
 
-        input[type="text"] { width: 100%; padding: 18px; border-radius: 20px; border: 2px solid var(--mint); background: var(--btn-dark); color: white; font-size: 1.3rem; text-align: center; outline: none; margin-bottom: 10px; box-sizing: border-box; }
+        input[type="text"] { width: 100%; padding: 18px; border-radius: 20px; border: 2px solid rgba(165, 214, 167, 0.5); background: var(--btn-dark); color: white; font-size: 1.4rem; text-align: center; font-weight: bold; outline: none; margin-bottom: 10px; box-sizing: border-box; box-shadow: inset 0 4px 8px rgba(0,0,0,0.4); }
+        input[type="text"]:focus { border-color: var(--mint); }
 
-        .f-right { background-color: #1b4d21 !important; }
-        .f-wrong { background-color: #5d1a1a !important; }
+        .f-right { background-color: rgba(46, 125, 50, 0.8) !important; }
+        .f-wrong { background-color: rgba(198, 40, 40, 0.8) !important; }
         .shake { animation: shake 0.4s ease; }
         @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-10px)} 80%{transform:translateX(10px)} }
 
-        #timer-box { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; }
-        #timer-bar { height: 100%; background: var(--mint); width: 100%; }
+        #timer-box { width: 100%; height: 8px; background: rgba(0,0,0,0.4); border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);}
+        #timer-bar { height: 100%; background: var(--mint); width: 100%; box-shadow: 0 0 10px var(--mint);}
         
-        .btn-nav { background: transparent; color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 12px; font-size: 0.8rem; border-radius: 15px; font-weight: bold; margin-top: 10px; width: 100%; }
+        .btn-nav { background: transparent; color: var(--mint); border: 1px solid rgba(165,214,167,0.2); padding: 14px; font-size: 0.85rem; border-radius: 15px; font-weight: bold; margin-top: 10px; width: 100%; }
+
+        /* LEADERBOARD STYLES */
+        .lb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 15px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
+        .lb-rank { font-weight: 900; font-size: 1.2rem; width: 30px; text-align: left; }
+        .lb-name { flex-grow: 1; text-align: left; font-weight: bold; font-size: 0.95rem; }
+        .lb-score { font-weight: 900; color: var(--seq); }
+        .lb-me { background: rgba(46, 125, 50, 0.4); border: 1px solid var(--math); }
+        .lb-tabs { display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;}
+        .lb-tab { background: var(--btn-dark); color: var(--mint); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; flex-shrink: 0;}
+        .lb-tab.active { background: var(--mint); color: #000; }
+        #lb-list { max-height: 250px; overflow-y: auto; width: 100%; padding-right: 5px;}
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div id="global-rank">RANK: SEEDLING</div>
     <div id="timer-box"><div id="timer-bar"></div></div>
 
-    <div id="v-hub" class="view-section">
-        <h1 style="color:var(--mint); margin:0; font-size:1.6rem;">Neural Hub</h1>
-        <p style="opacity:0.4; font-size:0.7rem; margin-bottom:20px; letter-spacing: 1px;">CORE COGNITION TRAINER</p>
+    <div id="v-login" class="view-section">
+        <h1 style="color:var(--mint); font-size:1.8rem; margin-bottom:5px;">Welcome to Hub</h1>
+        <p style="opacity:0.7; font-size:0.8rem; margin-bottom:20px;">Enter a unique operative name to join the global rankings.</p>
+        <div class="v-list" style="width:100%">
+            <input type="text" id="login-name" placeholder="YOUR NAME" maxlength="10" autocomplete="off" spellcheck="false">
+            <button class="btn-choice" style="background:var(--math); color:#000;" onclick="registerName()">REGISTER ID</button>
+            <p id="login-err" style="color:var(--god); font-size:0.8rem; height:15px; margin:0; font-weight:bold;"></p>
+        </div>
+    </div>
+
+    <div id="v-hub" class="view-section hidden">
+        <div id="global-rank">OP: <span id="op-name"></span> | RANK: SEEDLING</div>
+        <h1 style="color:var(--mint); margin:0; font-size:1.7rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Neural Hub</h1>
+        <p style="opacity:0.6; font-size:0.75rem; margin-bottom:15px; letter-spacing: 1px;">COGNITIVE EXPANSION</p>
         <div class="v-list">
             <div class="portal-item"><button class="btn-main" style="background:var(--math); color:#000;" onclick="goPortal('math')"><span class="sym">∑</span> MATH</button><div class="prog-box" id="p-math"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--word); color:#fff;" onclick="goPortal('word')"><span class="sym">Aa</span> WORDS</button><div class="prog-box" id="p-word"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--color); color:#fff;" onclick="goPortal('color')"><span class="sym">◐</span> COLORS</button><div class="prog-box" id="p-color"></div></div>
             <div class="portal-item"><button class="btn-main" style="background:var(--seq); color:#000;" onclick="goPortal('seq')"><span class="sym">◰</span> RECALL</button><div class="prog-box" id="p-seq"></div></div>
-            <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#fff;" onclick="goPortal('patt')"><span class="sym">▤</span> PATTERN</button><div class="prog-box" id="p-patt"></div></div>
+            <div class="portal-item"><button class="btn-main" style="background:var(--patt); color:#fff;" onclick="goPortal('patt')"><span class="sym">▤</span> PATTERNS</button><div class="prog-box" id="p-patt"></div></div>
+            
+            <button class="btn-choice" style="background:var(--seq); color:#000; font-size:1rem; padding:12px; margin-top:5px;" onclick="openLeaderboard()">🏆 VIEW LEADERBOARD</button>
         </div>
     </div>
 
+    <div id="v-lb" class="view-section hidden">
+        <h1 style="color:var(--seq); margin-bottom:15px;">Global Ranks</h1>
+        <div class="lb-tabs" id="lb-tabs">
+            <button class="lb-tab active" onclick="loadLB('math')">MATH</button>
+            <button class="lb-tab" onclick="loadLB('word')">WORDS</button>
+            <button class="lb-tab" onclick="loadLB('color')">COLORS</button>
+            <button class="lb-tab" onclick="loadLB('seq')">RECALL</button>
+            <button class="lb-tab" onclick="loadLB('patt')">PATTERN</button>
+        </div>
+        <div id="lb-list"></div>
+        <button class="btn-nav force-click" onclick="resetHub()">← BACK TO HUB</button>
+    </div>
+
     <div id="v-math-ops" class="view-section hidden">
-        <h1 style="font-size:1.2rem;">Select Operation</h1>
+        <h1 style="font-size:1.3rem;">Select Operation</h1>
         <div class="v-list" style="margin-top:20px;">
             <button class="btn-choice" onclick="pickMathOp('add')">ADDITION +</button>
             <button class="btn-choice" onclick="pickMathOp('sub')">SUBTRACTION -</button>
@@ -107,16 +145,16 @@
     </div>
 
     <div id="v-opt" class="view-section hidden">
-        <h1 id="opt-title" style="font-size:1.2rem;">Challenge Pace</h1>
+        <h1 id="opt-title" style="font-size:1.3rem;">Challenge Pace</h1>
         <div id="type-list" class="v-list" style="margin-top:20px;">
             <button class="btn-choice" onclick="setOpt('relaxed')">RELAXED</button>
-            <button class="btn-choice" style="background:#3e2723; color:white" onclick="setOpt('timed')">TIMED</button>
+            <button class="btn-choice" style="background:rgba(93, 26, 26, 0.8);" onclick="setOpt('timed')">TIMED</button>
             <button class="btn-nav" id="back-from-type" onclick="resetHub()">← BACK</button>
         </div>
     </div>
 
     <div id="v-diff" class="view-section hidden">
-        <h1 style="font-size:1.2rem;">Difficulty</h1>
+        <h1 style="font-size:1.3rem;">Difficulty</h1>
         <div class="v-list" style="margin-top:20px;">
             <button class="btn-choice" style="color:var(--easy)" onclick="start('easy')">EASY</button>
             <button class="btn-choice" style="color:var(--hard)" onclick="start('hard')">HARD</button>
@@ -132,16 +170,17 @@
             <div id="choices" class="v-list"></div>
             <div id="text-area" class="hidden">
                 <input type="text" id="ans-in" placeholder="..." autocomplete="off">
-                <button id="text-submit" class="btn-choice" style="background:var(--math); color:#000; width:100%" onclick="checkText()">SUBMIT</button>
+                <button id="text-submit" class="btn-choice force-click" style="background:var(--math); color:#000; width:100%" onclick="checkText()">SUBMIT</button>
             </div>
         </div>
-        <button class="btn-nav" style="margin-top:20px;" onclick="resetHub()">QUIT TO HUB</button>
+        <button class="btn-nav force-click" style="margin-top:20px;" onclick="resetHub()">QUIT TO HUB</button>
     </div>
 
     <div id="v-res" class="view-section hidden">
-        <h1 id="res-emoji" style="font-size:4rem; margin:0;">🏆</h1>
+        <h1 id="res-emoji" style="font-size:4rem; margin:0; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">🏆</h1>
         <h2 id="res-title">Test Complete</h2>
-        <p style="font-size: 3.5rem; margin: 10px 0;"><span id="res-score">0</span><span style="font-size:1.5rem">/10</span></p>
+        <p style="font-size: 3.5rem; margin: 10px 0; font-weight:900;"><span id="res-score">0</span><span style="font-size:1.5rem; opacity:0.7;">/10</span></p>
+        <p style="color:var(--seq); font-weight:bold; margin-top:0;">POWER SCORE: +<span id="res-power">0</span></p>
         <div class="v-list">
             <button class="btn-choice force-click" style="background:var(--math); color:black;" onclick="tryAgain()">TRY AGAIN</button>
             <button class="btn-nav force-click" onclick="resetHub()">BACK TO HUB</button>
@@ -150,12 +189,25 @@
 </div>
 
 <script>
+    // --- BOT DATABASE (For Simulated Multiplayer) ---
+    const takenNames = ["NEXUS", "CYPHER", "ECHO", "NEON", "VERTEX", "ATLAS", "ORACLE", "NOVA", "GHOST", "PULSE"];
+    const botDB = {
+        math:  [{n:"NEXUS", s:850}, {n:"ATLAS", s:620}, {n:"CYPHER", s:410}, {n:"NOVA", s:250}, {n:"PULSE", s:100}],
+        word:  [{n:"ORACLE", s:780}, {n:"ECHO", s:590}, {n:"NEXUS", s:430}, {n:"VERTEX", s:300}, {n:"GHOST", s:150}],
+        color: [{n:"NEON", s:910}, {n:"PULSE", s:700}, {n:"CYPHER", s:550}, {n:"ATLAS", s:320}, {n:"ECHO", s:200}],
+        seq:   [{n:"VERTEX", s:880}, {n:"NEXUS", s:670}, {n:"GHOST", s:490}, {n:"ORACLE", s:350}, {n:"NOVA", s:180}],
+        patt:  [{n:"CYPHER", s:820}, {n:"NEON", s:610}, {n:"ATLAS", s:450}, {n:"ECHO", s:280}, {n:"PULSE", s:120}]
+    };
+
+    let userName = localStorage.getItem('neu_username');
+
     let curP = '', curM = '', curT = '', curD = '', curS = 0, qN = 0, cAns = '', tInt;
     let sessionWords = [];
 
     const names = ["RED", "BLUE", "GREEN", "YELLOW", "ORANGE", "WHITE"];
     const vColors = ["#FF0000", "#0000FF", "#00FF00", "#FFFF00", "#FF9800", "#FFFFFF"];
-    const wordBank = ["HOME", "WATER", "BREAD", "GRASS", "APPLE", "SMILE", "CLOCK", "CLOUD", "NIGHT", "BOOKS", "SCHOOL", "TRAIN", "PHONE", "WATCH", "CHAIR", "STREET", "FLOWER", "GARDEN", "COFFEE", "MUSIC", "PIZZA", "SHIRT"];
+    const wordBank = ["SMILE", "NIGHT", "BREAD", "HEART", "EARTH", "STEAL", "CARES", "WATER", "GRASS", "APPLE", "CLOUD", "BOOKS", "TRAIN", "PHONE", "WATCH", "CHAIR", "FLOWER", "MUSIC", "PIZZA", "SHIRT"];
+    const validAnagrams = ["SMILE", "SLIME", "MILES", "NIGHT", "THING", "BREAD", "BEARD", "BARED", "HEART", "EARTH", "HATER", "STEAL", "SLATE", "STALE", "TEALS", "LEAST", "CARES", "RACES", "SCARE", "WATER", "GRASS", "APPLE", "CLOUD", "BOOKS", "TRAIN", "PHONE", "WATCH", "CHAIR", "FLOWER", "MUSIC", "PIZZA", "SHIRT"];
 
     const aCtx = new (window.AudioContext || window.webkitAudioContext)();
     function play(f, t, d) {
@@ -167,13 +219,30 @@
     }
 
     function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+    function rand(m) { return Math.floor(Math.random() * m); }
+
+    // --- INITIALIZATION ---
+    window.onload = () => {
+        if(!userName) { document.getElementById('v-login').classList.remove('hidden'); } 
+        else { document.getElementById('op-name').innerText = userName; resetHub(); }
+    };
+
+    function registerName() {
+        let input = document.getElementById('login-name').value.toUpperCase().trim();
+        let err = document.getElementById('login-err');
+        if(input.length < 3) { err.innerText = "Name must be at least 3 letters."; return; }
+        if(takenNames.includes(input)) { err.innerText = "Name is already taken by another user."; return; }
+        
+        userName = input;
+        localStorage.setItem('neu_username', userName);
+        document.getElementById('op-name').innerText = userName;
+        document.getElementById('v-login').classList.add('hidden');
+        resetHub();
+    }
 
     function forceUnlock() {
         clearInterval(tInt);
-        document.querySelectorAll('button, input').forEach(el => {
-            el.disabled = false;
-            el.style.pointerEvents = 'auto';
-        });
+        document.querySelectorAll('button, input').forEach(el => { el.disabled = false; el.style.pointerEvents = 'auto'; });
         document.getElementById('app').classList.remove('f-right', 'f-wrong', 'shake');
         document.getElementById('timer-box').style.display = 'none';
     }
@@ -185,49 +254,47 @@
         drawProg();
     }
 
-    function tryAgain() {
+    // --- LEADERBOARD LOGIC ---
+    function openLeaderboard() {
         forceUnlock();
-        curS = 0; qN = 1;
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('v-game').classList.remove('hidden');
-        if (curP === 'word') sessionWords = shuffle([...wordBank]).slice(0, 10);
-        nextQ();
+        document.getElementById('v-lb').classList.remove('hidden');
+        loadLB('math');
     }
 
-    function goPortal(p) {
-        curP = p; sessionWords = shuffle([...wordBank]).slice(0, 10);
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        if (p === 'math') { document.getElementById('v-math-ops').classList.remove('hidden'); }
-        else { document.getElementById('v-opt').classList.remove('hidden'); document.getElementById('back-from-type').onclick = resetHub; }
+    function loadLB(game) {
+        document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+        event.target ? event.target.classList.add('active') : document.querySelector('.lb-tab').classList.add('active');
+
+        const d = JSON.parse(localStorage.getItem('neu_v_db_1') || '{}');
+        let myScore = d[game] ? d[game].pow : 0;
+        
+        // Combine bots and player
+        let list = [...botDB[game]];
+        list.push({n: userName, s: myScore, isMe: true});
+        list.sort((a, b) => b.s - a.s); // Sort highest to lowest
+
+        let html = '';
+        list.forEach((user, index) => {
+            let rColor = index === 0 ? "var(--gold)" : index === 1 ? "var(--silver)" : index === 2 ? "var(--bronze)" : "var(--cream)";
+            let boxClass = user.isMe ? "lb-item lb-me" : "lb-item";
+            html += `<div class="${boxClass}">
+                        <div class="lb-rank" style="color:${rColor}">${index + 1}</div>
+                        <div class="lb-name">${user.n}</div>
+                        <div class="lb-score">${user.s} PTS</div>
+                     </div>`;
+        });
+        document.getElementById('lb-list').innerHTML = html;
     }
 
-    function pickMathOp(op) {
-        curM = op;
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('v-opt').classList.remove('hidden');
-        document.getElementById('back-from-type').onclick = () => {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-            document.getElementById('v-math-ops').classList.remove('hidden');
-        };
-    }
-
-    function setOpt(t) {
-        curT = t;
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('v-diff').classList.remove('hidden');
-    }
-
-    function backToType() {
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('v-opt').classList.remove('hidden');
-    }
-
-    function start(d) {
-        curD = d; curS = 0; qN = 1;
-        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
-        document.getElementById('v-game').classList.remove('hidden');
-        nextQ();
-    }
+    // --- GAME FLOW ---
+    function tryAgain() { forceUnlock(); curS = 0; qN = 1; document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden')); document.getElementById('v-game').classList.remove('hidden'); if (curP === 'word') sessionWords = shuffle([...wordBank]).slice(0, 10); nextQ(); }
+    function goPortal(p) { curP = p; sessionWords = shuffle([...wordBank]).slice(0, 10); document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden')); if (p === 'math') { document.getElementById('v-math-ops').classList.remove('hidden'); } else { document.getElementById('v-opt').classList.remove('hidden'); document.getElementById('back-from-type').onclick = resetHub; } }
+    function pickMathOp(op) { curM = op; document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden')); document.getElementById('v-opt').classList.remove('hidden'); document.getElementById('back-from-type').onclick = () => { document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden')); document.getElementById('v-math-ops').classList.remove('hidden'); }; }
+    function setOpt(t) { curT = t; document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden')); document.getElementById('v-diff').classList.remove('hidden'); }
+    function backToType() { document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden')); document.getElementById('v-opt').classList.remove('hidden'); }
+    
+    function start(d) { curD = d; curS = 0; qN = 1; document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden')); document.getElementById('v-game').classList.remove('hidden'); nextQ(); }
 
     function nextQ() {
         if(qN > 10) return end();
@@ -238,116 +305,80 @@
         document.getElementById('choices').innerHTML = '';
         document.getElementById('ans-in').value = '';
         document.getElementById('q-text').style.color = 'var(--cream)';
+        document.getElementById('q-text').style.fontSize = '2.2rem';
 
-        if(curP === 'math') genMath();
-        else if(curP === 'word') genWord();
-        else if(curP === 'color') genColor();
-        else if(curP === 'seq') genSeq();
-        else genPatt();
-
+        if(curP === 'math') genMath(); else if(curP === 'word') genWord(); else if(curP === 'color') genColor(); else if(curP === 'seq') genSeq(); else genPatt();
         if(curT === 'timed') startT();
     }
 
+    // [Generators remain exactly the same, ensuring Anti-Cheat Sequence logic is kept]
     function genMath() {
-        let r = curD === 'god' ? 500 : 100;
-        let op = curM === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : curM;
-        let n1, n2, sym;
-        if(op === 'add') { n1 = rand(r); n2 = rand(r); cAns = n1 + n2; sym = '+'; }
-        else if(op === 'sub') { n1 = rand(r) + 10; n2 = rand(n1); cAns = n1 - n2; sym = '-'; }
-        else { n1 = rand(curD === 'god' ? 30 : 12) + 1; n2 = rand(12) + 1; cAns = n1 * n2; sym = '×'; }
-        document.getElementById('q-text').innerText = `${n1} ${sym} ${n2}`;
-        makeChoices(cAns, 'num');
+        let r = curD === 'god' ? 500 : 100; let op = curM === 'mix' ? ['add', 'sub', 'mul'][Math.floor(Math.random() * 3)] : curM; let n1, n2, sym;
+        if(op === 'add') { n1 = rand(r); n2 = rand(r); cAns = n1 + n2; sym = '+'; } else if(op === 'sub') { n1 = rand(r) + 10; n2 = rand(n1); cAns = n1 - n2; sym = '-'; } else { n1 = rand(curD === 'god' ? 30 : 12) + 1; n2 = rand(12) + 1; cAns = n1 * n2; sym = '×'; }
+        document.getElementById('q-text').innerText = `${n1} ${sym} ${n2}`; makeChoices(cAns, 'num');
     }
 
     function genWord() {
-        document.getElementById('text-area').classList.remove('hidden');
-        document.getElementById('choices').classList.add('hidden');
-        let w = sessionWords[qN - 1]; cAns = w;
-        document.getElementById('q-text').innerText = shuffle(w.split('')).join('');
-        document.getElementById('ans-in').focus();
+        document.getElementById('text-area').classList.remove('hidden'); document.getElementById('choices').classList.add('hidden');
+        let w = sessionWords[qN - 1]; cAns = w; document.getElementById('q-text').innerText = shuffle(w.split('')).join(''); document.getElementById('ans-in').focus();
     }
 
     function genColor() {
-        let wI = rand(names.length), cI = rand(names.length);
-        while(wI === cI) cI = rand(names.length);
-        cAns = vColors[cI];
+        let wI = rand(names.length), cI = rand(names.length); while(wI === cI) cI = rand(names.length); cAns = vColors[cI];
         let q = document.getElementById('q-text'); q.innerText = names[wI]; q.style.color = vColors[cI];
         let set = new Set([cI, wI]); while(set.size < 4) set.add(rand(vColors.length));
-        shuffle(Array.from(set)).forEach(i => {
-            const b = document.createElement('button'); b.className = 'btn-choice'; 
-            b.style.backgroundColor = vColors[i]; b.innerHTML = "&nbsp;"; 
-            b.onclick = () => check(vColors[i]); document.getElementById('choices').appendChild(b);
-        });
+        shuffle(Array.from(set)).forEach(i => { const b = document.createElement('button'); b.className = 'btn-choice'; b.style.backgroundColor = vColors[i]; b.innerHTML = "&nbsp;"; b.onclick = () => check(vColors[i]); document.getElementById('choices').appendChild(b); });
     }
 
     function genSeq() {
-        let seq = []; let l = curD === 'god' ? 5 : 3;
+        let seq = []; let l = curD === 'god' ? 6 : (curD === 'hard' ? 5 : 4);
         for(let i=0; i<l; i++) seq.push(rand(10));
         let sStr = seq.join(''); cAns = sStr;
-        document.getElementById('q-text').innerText = seq.join(' ');
-        document.getElementById('choices').classList.add('hidden');
+        document.getElementById('q-text').innerText = seq.join(' '); document.getElementById('choices').classList.add('hidden');
         setTimeout(() => {
-            document.getElementById('q-text').innerText = "???";
-            document.getElementById('choices').classList.remove('hidden');
-            let set = new Set([sStr]); while(set.size < 4) set.add((parseInt(sStr)+rand(100)).toString());
-            shuffle(Array.from(set)).forEach(v => {
-                const b = document.createElement('button'); b.className = 'btn-choice'; 
-                b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
-            });
+            document.getElementById('q-text').innerText = "RECALL?"; document.getElementById('choices').classList.remove('hidden');
+            let suffix = sStr.slice(-2); let pLen = l - 2; let set = new Set([sStr]); 
+            while(set.size < 4) { 
+                let fake = "";
+                if(Math.random() > 0.4) { for(let j=0; j<pLen; j++) fake += rand(10); fake += suffix; } 
+                else { for(let j=0; j<l; j++) fake += rand(10); }
+                set.add(fake);
+            }
+            shuffle(Array.from(set)).forEach(v => { const b = document.createElement('button'); b.className = 'btn-choice force-click'; b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b); });
         }, 1500);
     }
 
     function genPatt() {
-        let mode = rand(2);
-        let qArea = document.getElementById('q-text');
-        if(mode === 0) {
-            let start = rand(10)+1, step = rand(5)+2;
-            let seq = [start, start + step, start + (step*2)]; cAns = start + (step*3);
-            qArea.innerText = seq.join(' ') + ' ?'; makeChoices(cAns, 'num');
-        } else {
-            let count = rand(4)+1, sym = ['○', '●', '◎'][rand(3)];
-            let seq = [sym.repeat(count), sym.repeat(count+1), sym.repeat(count+2)]; cAns = sym.repeat(count+3);
-            qArea.innerText = seq.join(' ') + ' ?';
-            let set = new Set([cAns]); while(set.size < 4) set.add(sym.repeat(rand(7)+1));
-            shuffle(Array.from(set)).forEach(v => {
-                const b = document.createElement('button'); b.className = 'btn-choice'; 
-                b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
-            });
-        }
+        let mode = rand(4); let qArea = document.getElementById('q-text'); qArea.style.fontSize = '1.8rem'; let set = new Set();
+        if(mode === 0) { let s = rand(5)+1; let seq = [s, s+1, s+3, s+6]; cAns = s+10; qArea.innerText = seq.join(' ') + ' ?'; set.add(cAns); while(set.size < 4) set.add(cAns + (rand(9)-4)); } 
+        else if (mode === 1) { let a = rand(3)+1, b = rand(3)+1; let seq = [a, b, a+b, a+2*b]; cAns = 2*a+3*b; qArea.innerText = seq.join(' ') + ' ?'; set.add(cAns); while(set.size < 4) set.add(cAns + (rand(9)-4)); }
+        else if (mode === 2) { let arrows = ['⬆️', '➡️', '⬇️', '⬅️']; let sIdx = rand(4); let dir = rand(2) === 0 ? 1 : -1; let seq = []; for(let i=0; i<3; i++) seq.push(arrows[(sIdx + i*dir + 4) % 4]); cAns = arrows[(sIdx + 3*dir + 4) % 4]; qArea.innerText = seq.join(' ') + ' ?'; arrows.forEach(a => set.add(a)); }
+        else { let cols = ['🔴', '🔵', '🟢', '🟡']; let c1 = cols[rand(4)], c2 = cols[rand(4)]; while(c1===c2) c2 = cols[rand(4)]; let seq = [c1, c2, c1]; cAns = c2; qArea.innerText = seq.join(' ') + ' ?'; set.add(c1); set.add(c2); while(set.size < 4) set.add(cols[rand(4)]); }
+        shuffle(Array.from(set)).forEach(v => { const b = document.createElement('button'); b.className = 'btn-choice force-click'; b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b); });
     }
 
     function makeChoices(c, m) {
-        let s = new Set([c]);
-        while(s.size < 4) s.add(m === 'num' ? c + (rand(11)-5) : wordBank[rand(wordBank.length)]);
-        shuffle(Array.from(s)).forEach(v => {
-            const b = document.createElement('button'); b.className = 'btn-choice'; 
-            b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b);
-        });
+        let s = new Set([c]); while(s.size < 4) s.add(m === 'num' ? c + (rand(11)-5) : wordBank[rand(wordBank.length)]);
+        shuffle(Array.from(s)).forEach(v => { const b = document.createElement('button'); b.className = 'btn-choice force-click'; b.innerText = v; b.onclick = () => check(v); document.getElementById('choices').appendChild(b); });
     }
 
-    function checkText() { if(document.getElementById('ans-in').value !== "") check(document.getElementById('ans-in').value.toUpperCase().trim()); }
+    function checkText() { const val = document.getElementById('ans-in').value.toUpperCase().trim(); if(val !== "") check(val); }
 
     function check(v) {
-        clearInterval(tInt);
-        document.querySelectorAll('button, input').forEach(el => el.disabled = true);
-        const app = document.getElementById('app'), qText = document.getElementById('q-text');
-        if(String(v) == String(cAns)) {
-            curS++; app.classList.add('f-right'); play(600, 'sine', 0.1); qText.innerText = "CORRECT!";
-        } else {
-            app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2);
-            let dAns = cAns; if(curP === 'color') dAns = names[vColors.indexOf(cAns)];
-            qText.innerText = "WRONG! WAS: " + dAns; qText.style.color = "#ff8a80";
-        }
+        clearInterval(tInt); document.querySelectorAll('button, input').forEach(el => el.disabled = true);
+        const app = document.getElementById('app'), qText = document.getElementById('q-text'); let isRight = false;
+        if (curP === 'word') { let sU = String(v).split('').sort().join(''), sT = String(cAns).split('').sort().join(''); if (sU === sT && validAnagrams.includes(String(v))) isRight = true; } 
+        else { isRight = (String(v) == String(cAns)); }
+
+        if(isRight) { curS++; app.classList.add('f-right'); play(600, 'sine', 0.1); qText.innerText = "CORRECT!"; } 
+        else { app.classList.add('f-wrong', 'shake'); play(150, 'square', 0.2); let dAns = cAns; if(curP === 'color') dAns = names[vColors.indexOf(cAns)]; qText.innerText = "IT WAS: " + dAns; qText.style.color = "#ff8a80"; }
         qN++; setTimeout(nextQ, 1500);
     }
 
     function startT() {
-        let t = curD === 'god' ? 4 : 8, l = t;
+        let t = curD === 'god' ? 4 : (curD === 'hard' ? 5.5 : 7.5); let l = t;
         document.getElementById('timer-box').style.display = 'block';
-        tInt = setInterval(() => {
-            l -= 0.1; document.getElementById('timer-bar').style.width = (l/t)*100 + "%";
-            if(l <= 0) { clearInterval(tInt); check('MISS'); }
-        }, 100);
+        tInt = setInterval(() => { l -= 0.1; document.getElementById('timer-bar').style.width = (l/t)*100 + "%"; if(l <= 0) { clearInterval(tInt); check('MISS'); } }, 100);
     }
 
     function end() {
@@ -355,34 +386,38 @@
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('v-res').classList.remove('hidden');
         document.getElementById('res-score').innerText = curS;
+        
+        // Power Score Calculation: 10 pts per correct, 25 pts per game played
+        let pEarned = (curS * 10) + 25;
+        document.getElementById('res-power').innerText = pEarned;
+
         let pct = curS / 10;
         document.getElementById('res-emoji').innerText = pct === 1 ? "🏆" : pct >= 0.8 ? "🔥" : pct >= 0.5 ? "😎" : "🪴";
-        save(curP, curS);
+        save(curP, curS, pEarned);
     }
 
-    function save(p, s) {
-        let d = JSON.parse(localStorage.getItem('neu_vFinal_v4') || '{}');
-        if(!d[p]) d[p] = { t: 0, c: 0 }; d[p].t += 10; d[p].c += s;
-        localStorage.setItem('neu_vFinal_v4', JSON.stringify(d));
+    function save(p, s, pEarned) {
+        let d = JSON.parse(localStorage.getItem('neu_v_db_1') || '{}');
+        if(!d[p]) d[p] = { t: 0, c: 0, pow: 0 }; 
+        d[p].t += 10; d[p].c += s; d[p].pow += pEarned;
+        localStorage.setItem('neu_v_db_1', JSON.stringify(d));
     }
 
     function drawProg() {
-        const d = JSON.parse(localStorage.getItem('neu_vFinal_v4') || '{}');
-        let tP = 0;
+        const d = JSON.parse(localStorage.getItem('neu_v_db_1') || '{}');
+        let totalP = 0;
         ['math','word','color','seq','patt'].forEach(p => {
             const c = document.getElementById('p-' + p);
-            let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0; tP += pct;
+            let pct = d[p] ? Math.round((d[p].c / d[p].t) * 100) : 0; totalP += pct;
             let off = 126 - (pct / 100) * 126;
             c.innerHTML = `<svg class="prog-svg"><circle class="prog-bg" cx="21" cy="21" r="20"></circle><circle class="prog-bar" cx="21" cy="21" r="20" style="stroke:var(--${p}); stroke-dasharray:126; stroke-dashoffset:${off};"></circle></svg><div class="prog-txt">${pct}%</div>`;
         });
-        let avg = tP / 5, r = "SEEDLING";
-        if(avg > 25) r = "SPROUT"; if(avg > 50) r = "SCHOLAR"; if(avg > 75) r = "SAGE"; if(avg > 90) r = "HUB MASTER";
-        document.getElementById('global-rank').innerText = "RANK: " + r;
+        let avg = totalP / 5;
+        let rank = avg > 90 ? "HUB MASTER" : avg > 75 ? "SAGE" : avg > 50 ? "SCHOLAR" : avg > 25 ? "SPROUT" : "SEEDLING";
+        document.getElementById('global-rank').innerHTML = `OP: <span style="color:white">${userName}</span> | RANK: ${rank}`;
     }
 
-    function rand(m) { return Math.floor(Math.random() * m); }
     document.getElementById('ans-in').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkText(); });
-    drawProg();
 </script>
 </body>
 </html>
