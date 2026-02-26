@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neural Hub | Brain Trainer</title>
+    <title>Neural Hub | Pro Trainer</title>
     
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
@@ -17,6 +17,7 @@
             --white: #e8f5e9;
             --error-red: #c62828;
             --button-dark: #121212;
+            --focus-gold: #ffd740;
         }
 
         body {
@@ -61,7 +62,7 @@
         #timer-bar { height: 100%; background: var(--primary-green); width: 100%; }
 
         h1 { margin: 0; color: var(--accent-mint); font-size: 1.6rem; letter-spacing: 1px; }
-        p { color: var(--accent-mint); opacity: 0.7; margin-bottom: 20px; font-size: 0.85rem; }
+        p { color: var(--accent-mint); opacity: 0.7; margin-bottom: 15px; font-size: 0.85rem; }
 
         .v-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 
@@ -75,6 +76,15 @@
 
         button:active { transform: scale(0.96); background: var(--primary-green); color: white; }
 
+        /* Text Input Styling */
+        input[type="text"] {
+            width: 100%; padding: 18px; border-radius: 18px; border: 2px solid var(--primary-green);
+            background: var(--button-dark); color: var(--white); font-size: 1.4rem;
+            text-align: center; font-weight: bold; outline: none; margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus { border-color: var(--focus-gold); }
+
         .btn-portal { background: #1b5e20; border: none; color: white; margin-bottom: 15px; padding: 22px; font-size: 1.2rem; }
         .btn-choice { font-size: 1.4rem; color: var(--white); border-color: rgba(255,255,255,0.1); }
         .btn-secondary { background: transparent; color: var(--accent-mint); opacity: 0.6; margin-top: 15px; font-size: 0.8rem; border: 1px solid rgba(165,214,167,0.1); }
@@ -82,7 +92,7 @@
         .correct { background: var(--primary-green) !important; color: white !important; }
         .wrong { background: var(--error-red) !important; color: white !important; }
 
-        #question-text { font-size: 2.8rem; margin: 15px 0; font-weight: 900; min-height: 80px; display: flex; align-items: center; justify-content: center;}
+        #question-text { font-size: 2.8rem; margin: 15px 0; font-weight: 900; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;}
         .stat-row { width: 100%; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--accent-mint); margin-bottom: 10px; font-weight: bold;}
     </style>
 </head>
@@ -94,18 +104,17 @@
     <div id="view-hub" class="view-section">
         <img src="logo.png" class="app-logo" onerror="this.style.display='none'">
         <h1>Neural Hub</h1>
-        <p>Select your training portal</p>
+        <p>Brain Vitality Trainer</p>
         <div class="v-list">
             <button class="btn-portal" onclick="showPortal('math')">🔢 NUMBER LAB</button>
             <button class="btn-portal" onclick="showPortal('word')">🔠 LINGO LEXICON</button>
             <button class="btn-portal" onclick="showPortal('logic')">🧩 PATTERN PULSE</button>
         </div>
-        <div style="margin-top:20px; font-size: 0.7rem; color: var(--accent-mint);">STAY SHARP.</div>
     </div>
 
     <div id="view-portal-menu" class="view-section hidden">
         <h1 id="portal-title">Portal</h1>
-        <p>Choose your operation</p>
+        <p>Choose your exercise</p>
         <div id="op-list" class="v-list"></div>
         <button class="btn-secondary" onclick="resetToHub()">← BACK TO HUB</button>
     </div>
@@ -137,7 +146,15 @@
             <span>SCORE: <span id="score-count">0</span></span>
         </div>
         <div id="question-text">--</div>
-        <div id="choices" class="v-list"></div>
+        
+        <div id="input-area" class="v-list">
+            <div id="choices" class="v-list"></div>
+            <div id="text-input-wrap" class="hidden">
+                <input type="text" id="answer-input" placeholder="Type answer..." autocomplete="off">
+                <button class="btn-portal" onclick="submitTextAnswer()">SUBMIT</button>
+            </div>
+        </div>
+
         <button class="btn-secondary" onclick="resetToHub()">QUIT TO HOME</button>
     </div>
 
@@ -155,10 +172,20 @@
     const portals = {
         math: { title: "Number Lab", ops: ["Add +", "Sub -", "Mul ×", "Mixed ±×"] },
         word: { title: "Lingo Lexicon", ops: ["Scramble", "Missing Letter"] },
-        logic: { title: "Pattern Pulse", ops: ["Sequences", "Next Shape"] }
+        logic: { title: "Pattern Pulse", ops: ["Sequences"] }
     };
 
-    const words = ["FOREST", "EMERALD", "BRAIN", "LOGIC", "MATH", "GROWTH", "FLOW", "NEURAL", "FOCUS", "SHARP", "SMART", "LEVEL"];
+    // MASSIVE WORD LIST
+    const words = [
+        "FOREST", "EMERALD", "BRAIN", "LOGIC", "MATH", "GROWTH", "FLOW", "NEURAL", "FOCUS", "SHARP", "SMART", "LEVEL",
+        "VALLEY", "QUANTUM", "MEMORY", "SYSTEM", "THINK", "SOLVE", "FAST", "MIND", "GENIUS", "STREAK", "ENERGY", "BRIGHT",
+        "STORM", "WISDOM", "REASON", "PUZZLE", "GARDEN", "BRANCH", "THOUGHT", "STREAM", "OXYGEN", "PLANET", "COSMOS",
+        "NATURE", "SPIRIT", "ACTION", "SQUARE", "SILENT", "ANIMAL", "ACTIVE", "WONDER", "BRIDGE", "CHANCE", "CREATE",
+        "DREAMY", "EXPERT", "FUTURE", "GLOBAL", "HAPPEN", "IMPACT", "JOURNEY", "KINDLY", "LAUNCH", "MOMENT", "NOTICE",
+        "OBJECT", "PLAYER", "RECENT", "SELECT", "TARGET", "UNIQUE", "VISION", "WEALTH", "YELLOW", "ZEPHYR", "ADVENT",
+        "BEYOND", "CENTER", "DETAIL", "EFFORT", "FLIGHT", "GENTLE", "HEIGHT", "INSIDE", "JUNGLE", "KNIGHT", "LEGEND",
+        "MASTER", "NARROW", "ORCHID", "PATTERN", "QUARTZ", "RHYTHM", "SIGNAL", "THEORY", "UPWARD", "VESSEL", "WIZARD"
+    ];
 
     // Sound Synth
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -184,7 +211,6 @@
         const view = document.getElementById('view-portal-menu');
         view.classList.remove('hidden');
         document.getElementById('portal-title').innerText = portals[pKey].title;
-        
         const list = document.getElementById('op-list');
         list.innerHTML = '';
         portals[pKey].ops.forEach(op => {
@@ -208,7 +234,8 @@
 
     function startGame(diff) {
         selectedDiff = diff; currentScore = 0; questionNumber = 1;
-        maxTime = (diff === 'god' ? 3.5 : (diff === 'hard' ? 7 : 15));
+        maxTime = (diff === 'god' ? 4.5 : (diff === 'hard' ? 8 : 15));
+        if(currentPortal === 'word') maxTime += 5; // Extra time for typing
         
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById('view-game').classList.remove('hidden');
@@ -225,6 +252,12 @@
         document.getElementById('q-count').innerText = questionNumber;
         document.getElementById('score-count').innerText = currentScore;
         
+        // Reset Inputs
+        document.getElementById('choices').classList.remove('hidden');
+        document.getElementById('text-input-wrap').classList.add('hidden');
+        document.getElementById('answer-input').value = '';
+        document.getElementById('question-text').style.fontSize = "2.8rem";
+
         if (currentPortal === 'math') generateMath();
         else if (currentPortal === 'word') generateWord();
         else generateLogic();
@@ -232,57 +265,74 @@
         if (selectedType === 'blitz') startTimer();
     }
 
-    // --- GENERATORS ---
     function generateMath() {
         let n1, n2, symbol, range = (selectedDiff === 'god' ? 999 : 100);
-        let op = selectedOp.includes('Add') ? 'add' : selectedOp.includes('Sub') ? 'sub' : 'mul';
-        if(selectedOp.includes('Mixed')) op = ['add','sub','mul'][Math.floor(Math.random()*3)];
+        let op = selectedOp.toLowerCase();
+        if(op.includes('mixed')) op = ['add','sub','mul'][Math.floor(Math.random()*3)];
 
-        if(op === 'add'){ n1=rand(range); n2=rand(range); correctAnswer = n1+n2; symbol='+'; }
-        else if(op === 'sub'){ n1=rand(range)+10; n2=rand(n1); correctAnswer = n1-n2; symbol='-'; }
+        if(op.includes('add')){ n1=rand(range); n2=rand(range); correctAnswer = n1+n2; symbol='+'; }
+        else if(op.includes('sub')){ n1=rand(range)+10; n2=rand(n1); correctAnswer = n1-n2; symbol='-'; }
         else { n1=rand(selectedDiff==='god'?40:12)+1; n2=rand(12)+1; correctAnswer = n1*n2; symbol='×'; }
         
         document.getElementById('question-text').innerText = `${n1}${symbol}${n2}`;
-        makeChoices(correctAnswer, 'num');
+        makeChoices(correctAnswer);
     }
 
     function generateWord() {
+        document.getElementById('choices').classList.add('hidden');
+        document.getElementById('text-input-wrap').classList.remove('hidden');
+        document.getElementById('answer-input').focus();
+        
         let word = words[Math.floor(Math.random()*words.length)];
         correctAnswer = word;
-        if(selectedOp === 'Scramble') {
-            let scrambled = word.split('').sort(()=>Math.random()-0.5).join('');
+        
+        if(selectedOp.includes('Scramble')) {
+            let scrambled = word;
+            while(scrambled === word) scrambled = word.split('').sort(()=>Math.random()-0.5).join('');
             document.getElementById('question-text').style.fontSize = "2rem";
             document.getElementById('question-text').innerText = scrambled;
-            makeChoices(word, 'word');
         } else {
             let idx = Math.floor(Math.random()*word.length);
             let display = word.split(''); display[idx] = '_';
             document.getElementById('question-text').innerText = display.join(' ');
-            makeChoices(word, 'word');
         }
     }
 
     function generateLogic() {
-        let start = rand(20), step = rand(5)+1, seq = [];
-        let type = rand(2);
-        for(let i=0; i<3; i++) {
-            seq.push(type === 0 ? start + (step * i) : start * Math.pow(2, i));
+        let seq = [], ruleType = rand(4);
+        let start = rand(10)+1;
+        
+        if(ruleType === 0) { // Linear
+            let step = rand(8)+2;
+            for(let i=0; i<4; i++) seq.push(start + (step*i));
+            correctAnswer = start + (step*4);
+        } else if(ruleType === 1) { // Alternating
+            let s1 = rand(5)+1, s2 = rand(5)+1;
+            seq.push(start);
+            seq.push(seq[0]+s1);
+            seq.push(seq[1]+s2);
+            seq.push(seq[2]+s1);
+            correctAnswer = seq[3]+s2;
+        } else if(ruleType === 2) { // Fibonacci-ish
+            seq = [start, start + rand(3)+1];
+            for(let i=2; i<4; i++) seq.push(seq[i-1] + seq[i-2]);
+            correctAnswer = seq[3] + seq[2];
+        } else { // Squares
+            let s = rand(5)+1;
+            for(let i=0; i<4; i++) seq.push((s+i)*(s+i));
+            correctAnswer = (s+4)*(s+4);
         }
-        correctAnswer = type === 0 ? start + (step * 3) : start * Math.pow(2, 3);
+
         document.getElementById('question-text').style.fontSize = "2rem";
         document.getElementById('question-text').innerText = seq.join(', ') + ', ?';
-        makeChoices(correctAnswer, 'num');
+        makeChoices(correctAnswer);
     }
 
-    function makeChoices(correct, type) {
+    function makeChoices(correct) {
         let set = new Set([correct]);
         while(set.size < 4) {
-            if(type === 'num') {
-                let fake = correct + (Math.floor(Math.random()*10)-5);
-                if(fake >= 0 && fake !== correct) set.add(fake);
-            } else {
-                set.add(words[Math.floor(Math.random()*words.length)]);
-            }
+            let fake = correct + (Math.floor(Math.random()*10)-5);
+            if(fake >= 0 && fake != correct) set.add(fake);
         }
         const area = document.getElementById('choices');
         area.innerHTML = '';
@@ -295,21 +345,33 @@
         });
     }
 
-    function check(val, btn) {
+    function submitTextAnswer() {
+        let val = document.getElementById('answer-input').value.toUpperCase().trim();
+        check(val, document.getElementById('answer-input'));
+    }
+
+    function check(val, element) {
         clearInterval(timerInterval);
         document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
+        
         if(val == correctAnswer) {
             currentScore++; playSound(600, 'sine', 0.2);
-            btn.classList.add('correct');
+            if(element) element.classList.add('correct');
         } else {
             playSound(150, 'square', 0.3);
-            btn.classList.add('wrong');
+            if(element) element.classList.add('wrong');
+            
+            // Show correct answer if it's a choice button
             document.querySelectorAll('.btn-choice').forEach(b => { if(b.innerText == correctAnswer) b.classList.add('correct'); });
+            
+            // For text input, show correct answer in the question text
+            if(currentPortal === 'word') document.getElementById('question-text').innerHTML += `<br><span style="font-size:1rem; color:var(--accent-mint)">ANSWER: ${correctAnswer}</span>`;
+            
             document.getElementById('app').classList.add('shake');
             setTimeout(()=>document.getElementById('app').classList.remove('shake'), 400);
         }
         questionNumber++;
-        setTimeout(nextQuestion, 1200);
+        setTimeout(nextQuestion, 1500);
     }
 
     function startTimer() {
@@ -334,6 +396,11 @@
     }
 
     function rand(max) { return Math.floor(Math.random()*max); }
+
+    // Listen for Enter Key on text input
+    document.getElementById('answer-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') submitTextAnswer();
+    });
 </script>
 </body>
 </html>
